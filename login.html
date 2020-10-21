@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %} LOGIN {% endblock %}
+
+{% block main %}
+
+<div class="container logContainer text-cool">
+
+  <div class="container">
+    <h1>Welcome</h1>
+    <h5>
+      {% if not isreg %}
+        {% if not password %}
+          Please provide your {{ msg }}
+
+        {% else %}
+          Please provide your information.
+
+        {% endif %}
+      {% endif %}
+    </h5>
+  </div>
+
+  <form action="/login" method="post">
+    <div class="form-group ">
+      <label for="exampleInputEmail1" >Enter you username</label>
+      <input name="username"  class="form-control formIn" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{ username}}">
+      <small id="emailHelp" class="form-text ">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Enter your password</label>
+      <input name="password" type="password" class="form-control formIn" id="exampleInputPassword1">
+    </div>
+
+    {% if isreg %}
+    <div class="form-group">
+      <label for="exampleInputPassword1">Re-Enter your password</label>
+      <input name="password2" type="password" class="form-control formIn" id="exampleInputPassword1">
+    </div>
+    {% endif %}
+
+    {% if not isreg %}
+    <div><button type="submit" class="btn btn-dark btnSub">Login</button></div>
+    <a style="color: lightskyblue" href="/login?type=registerAcc">No account yet? Register here.</a>
+    {% else %}
+    <div><button type="submit" class="btn btn-dark btnSub">Register</button></div>
+    {% endif %}
+    </div>
+
+  </form>
+
+</div>
+
+<script>
+
+  const navbar = document.getElementById("navbar");
+  const regBtn = document.getElementById("regtn");
+
+  navbar.style.visibility = "hidden";
+  regBtn.style.visibility = "hidden";
+  
+</script>
+
+{% endblock %}
