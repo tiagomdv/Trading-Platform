@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, request
 from tempfile import mkdtemp
 from flask_session import Session
+import sqlite3
 
 from helper import lookup
 
@@ -19,8 +20,21 @@ Session(app)
 
 @app.route('/')
 def hello_world():
+    record = "NOTHING"
+
+    # Acess to database
+    dbConnection = sqlite3.connect('finance.db') # connection
+    cursor = dbConnection.cursor()
+            
+    cursor.execute("SELECT username FROM users;")
+    record = cursor.fetchall()
+
+    cursor.close()
+    dbConnection.close()
+
     quote = lookup("TSLA")
-    return render_template("index.html", quote=quote)
+
+    return render_template("index.html", quote=quote, record=record)
 
 @app.route('/market')
 def market_func():
@@ -32,11 +46,12 @@ def wallet():
     quote = lookup("AMZN")
     return render_template("wallet.html", quote=quote)
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"]) # LOGIN
 def login():
 
     if request.method == "POST":
 
+        # Checks for valid username and password
         username = request.form.get("username")
         if username == "":
             msg = "username."
@@ -46,6 +61,18 @@ def login():
         if password == "":
             msg = "password."
             return render_template("login.html", username=username, password=password, msg=msg)
+
+        # Acess to database
+        dbConnection = sqlite3.connect('finance.db') # connection
+        cursor = dbConnection.cursor()
+
+
+        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+        dbConnection.commit() # apply changes
+
+        # Closes connections to database
+        cursor.close()
+        dbConnection.close()
 
         
         return render_template("login.html", username=username, password=password)
