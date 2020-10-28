@@ -34,8 +34,9 @@
             <a class="btnToPres middleBtn" href="/market">Market <span class="sr-only">(current)</span></a>
             <a class="btnToPres middleBtn" href="/wallet">Wallet</a>
             <a class="btnToPres middleBtn" href="/wallet">Account Activity</a>
-            <a class="rightBtn logBtn"  href="/login">Login</a>
-            <a class="rightBtn regBtn" href="/login?type=register">Register</a>
+            <a class="rightBtn logBtn"  href="/login" id="logBtn">Login</a>
+            <a class="rightBtn regBtn" href="/register" id="regBtn">Register</a>
+            <a class="rightBtn logOBtn" style="visibility: hidden; display: none" href="/logout" id="logOBtn">Logout</a>
         </div>
         </div>
     </nav>
@@ -46,5 +47,26 @@
 
     {% endblock %}
 
-   </body>
+    </body>
+
+    {% if session.user_id %}<div id="loggedIn"></div>{% endif %}
+    <script>
+
+    const logged = document.getElementById("loggedIn");
+ 
+    if (logged !== null) {
+     
+    const logBtn = document.getElementById("logBtn");
+    const regBtn = document.getElementById("regBtn");
+    const logOBtn = document.getElementById("logOBtn");
+
+    logBtn.style.visibility = "hidden";
+    regBtn.style.visibility = "hidden";
+    regBtn.style.display = "none";
+
+    logOBtn.style.visibility = "visible";
+    logOBtn.style.display = "inline";
+    }
+     
+    </script>
 </html>

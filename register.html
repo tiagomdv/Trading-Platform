@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %} LOGIN {% endblock %}
+{% block title %} REGISTER {% endblock %}
 
 {% block main %}
 
@@ -13,13 +13,14 @@
       {% if logError %}
           {{ logError }}
 
-        {% else %}
+      {% else %}
           Please provide your information.
+
       {% endif %}
     </h5>
   </div>
 
-  <form action="/login" method="post">
+  <form action="/register" method="post">
     <div class="form-group ">
       <label for="exampleInputEmail1" >Enter you username</label>
       <input name="username"  class="form-control formIn" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{ username}}">
@@ -30,12 +31,15 @@
       <input name="password" type="password" class="form-control formIn" id="exampleInputPassword1">
     </div>
 
-    <div><button type="submit" class="btn btn-dark btnSub">Login</button></div>
-    <a style="color: lightskyblue" href="/register">No account yet? Register here.</a>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Re-Enter your password</label>
+      <input name="checkPass" type="password" class="form-control formIn" id="exampleInputPassword1">
+    </div>
+
+    <div><button type="submit" class="btn btn-dark btnSub">Register</button>
     </div>
 
   </form>
-
 </div>
 
 <script>

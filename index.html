@@ -4,11 +4,26 @@
 
 {% block main %}
 
+<div>
 
-<div class="bleki">
-  <h5 class="whity">hello, {{ quote["symbol"] }}</h5>
-  <h1> from {{ username }}</h1>
+  {% if session.user_id %}
+    <h1>Welcome back!</h1>
+    <h5>You can now keep working on your stuff!</h5>
+    <h3>You are logged as: {{ username }}</h3>
+    <h3>Your password is: {{ password }}</h3>
+  {% else %}
+    {% if isreg %}
+    <h1>Welcome!</h1>
+    <h5>You can now LOGIN and begin exploring the app!</h5>
+    <h3>You are registered as: {{ username }}</h3>
+    <h3>Your password is: {{ password }}</h3>
+    {% else %}
+    <h2>Usernames in database: {{ usernames }}</h2>
+    <h2>Stock you should buy for sure: {{ quote }}</h2>
+    {% endif %}
+  {% endif %}
+
+  
 </div>
-
 
 {% endblock %}
