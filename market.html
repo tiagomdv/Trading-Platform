@@ -4,18 +4,184 @@
 
 {% block main %}
 
-<form class="form-inline">
-  <div class="form-group">
-    <label for="inputPassword6">Quote</label>
-    <input type="password" id="inputPassword6" class="form-control mx-sm-3" aria-describedby="passwordHelpInline">
-    <small id="passwordHelpInline" class="text-light">
-      Must be 8-20 characters long.
-    </small>
-  </div>
-</form>
+<div class="container" style="display: flex">
+  <div class="row">
+    <div class="col">
 
-<script>
-  const btn-pressed = document.getElementById
-</script>
+      <!-- Table with the top 5 tech stocks -->
+      <div class="tableContainer">
+        <h3>Top 5 Tech Stocks</h1>
+
+          <table>
+            <tr>
+              <th>#</th>
+              <th>Stock</th>
+              <th>Price</th>
+              <th>YTD %</th>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>Tesla</td>
+              <td>{{ price[0] }}</td>
+              <td style="color:green">{{ ytdChange[0] }}%</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Apple</td>
+              <td>{{ price[1] }}</td>
+              <td style="color:green">{{ ytdChange[1] }}%</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Amazon</td>
+              <td>{{ price[2] }}</td>
+              <td style="color:green">{{ ytdChange[2] }}%</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Microsoft</td>
+              <td>{{ price[3] }}</td>
+              <td style="color:green">{{ ytdChange[3] }}%%</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Facebook</td>
+              <td>{{ price[4] }}</td>
+              <td style="color:green">{{ ytdChange[4] }}%</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+          </table>
+      </div>
+
+
+      <!-- Table with the top 5 non stock assets -->
+      <div class="tableContainer">
+        <h3>Top 5 Non Stock Assets</h1>
+          <table>
+            <tr>
+              <th>#</th>
+              <th>Stock</th>
+              <th>Price</th>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>Bitcoin</td>
+              <td>{{ price[5] }}</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Euro</td>
+              <td>{{ price[6] }}</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>10y Bond</td>
+              <td>{{ price[7] }}</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>30y Bond</td>
+              <td>{{ price[8] }}</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Oil</td>
+              <td>{{ price[9] }}</td>
+              <td class="noPad">
+                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
+              </td>
+              <td class="noPad">
+                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+              </td>
+            </tr>
+          </table>
+      </div>
+    </div>
+
+    <!-- Second column containing the graph -->
+    <div class="col">
+      <div class="GRAPH">GRAPH</div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col"></div>
+
+  <!-- Container with check quote and submit orders -->
+  <div class="col checkContainer">
+    <form action="/buy" method="post">      
+      <label class="lblChkCont">Check other quotes</label>
+
+      <div><input class="inputCheck" name="quote" placeholder="Ticker Symbol">
+        <button class="btnCheck" type="submit">Check</button>
+      </div>
+
+      <label class="lblChkCont">Tesla Inc. stock is valued at 440.54</label>
+      <hr color="lightgray">
+      <div class="divSub"><input class="inputQty" name="quantity" placeholder="Quantity"></div>
+      <div class="divSub"><button class="btnSubmit" type="submit">Submit Order</button></div>
+    </form>
+  </div>
+
+  <div class="col"></div>
+</div>
+
+</div>
 
 {% endblock %}

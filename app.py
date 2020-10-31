@@ -3,7 +3,7 @@ from tempfile import mkdtemp
 from flask_session import Session
 import sqlite3
 
-from helper import lookup
+from helper import lookup, login_req
 
 # Configure application
 app = Flask(__name__)
@@ -41,12 +41,29 @@ def hello_world():
 
     return render_template("index.html", quote="TESLA", usernames=usernames)
 
-@app.route('/market')
-def market_func():
-    quote = lookup("AAPL")
-    return render_template("market.html", quote=quote)
+@app.route('/market', methods=["GET", "POST"])
+def market():    
+
+    if request.method == "GET":
+
+        symbols = ["TSLA", "AAPL", "AMZN", "MSFT", "FB", "BTCUSD", "EURUSD", "DGS10", "DGS30", "DCOILWTICO"]
+
+        price = []
+        ytdChange = []
+        i = 0
+
+        for each in symbols:
+            i += 1
+            q = lookup(each)
+            if not q == None:
+                if i<=5:
+                    ytdChange.append(round(q["ytdChange"]*100, 2))
+                    price.append(round(q["price"], 2))
+            
+    return render_template("market.html", price=price, ytdChange=ytdChange)
 
 @app.route('/wallet')
+@login_req
 def wallet():
     quote = lookup("AMZN")
     return render_template("wallet.html", quote=quote)
