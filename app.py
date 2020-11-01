@@ -2,8 +2,9 @@ from flask import Flask, render_template, session, request, redirect
 from tempfile import mkdtemp
 from flask_session import Session
 import sqlite3
+import yfinance as yf
 
-from helper import lookup, login_req
+from helper import login_req
 
 # Configure application
 app = Flask(__name__)
@@ -17,10 +18,8 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-
 @app.route('/')
 def hello_world():
-    quote = lookup("TSLA")
     usernames = []
 
     # _______________________________
@@ -42,23 +41,42 @@ def hello_world():
     return render_template("index.html", quote="TESLA", usernames=usernames)
 
 @app.route('/market', methods=["GET", "POST"])
+@login_req
 def market():    
 
     if request.method == "GET":
 
-        symbols = ["TSLA", "AAPL", "AMZN", "MSFT", "FB", "BTCUSD", "EURUSD", "DGS10", "DGS30", "DCOILWTICO"]
+        #session["recentLog"] = 1 # Temporary TTTTTTTTTTTTTTTTTTTT
+
+        symbols = ["TSLA", "AAPL", "AMZN", "MSFT", "FB", "BTCUSD=X", "EURUSD=X", "^TNX", "CL=F", "GC=F"]
 
         price = []
         ytdChange = []
         i = 0
 
-        for each in symbols:
-            i += 1
-            q = lookup(each)
-            if not q == None:
-                if i<=5:
-                    ytdChange.append(round(q["ytdChange"]*100, 2))
-                    price.append(round(q["price"], 2))
+        if session["recentLog"] == 1: # Condition to prevent Market page to reload everytime. It slows alot the flow of the website
+            for each in symbols:
+                i += 1
+                q = yf.Ticker(each)
+                if not q == None:
+                    if i<=5:                        
+                        ytdChange.append(round(q.info["52WeekChange"]*100, 2))                        
+                        price.append(round(q.info["ask"], 2))
+                        
+                    else:
+                        if each in ["BTCUSD=X", "GC=F"]:
+                            price.append(round(q.info["open"]))
+                        else:
+                            price.append(round(q.info["open"], 4))
+            session["recentLog"] = 0
+
+        if not "priceMarket" in session:
+            session["priceMarket"] = price
+            session["ytdChange"] = ytdChange
+        else:
+            price = session["priceMarket"]
+            ytdChange = session["ytdChange"]
+        
             
     return render_template("market.html", price=price, ytdChange=ytdChange)
 
@@ -109,6 +127,7 @@ def login():
         # Checks if already exist username in database
         if len(user) > 0:
             session["user_id"] = user[0][0]
+            session["recentLog"] = 1
             checkPass = user[0][1]
         else:
             return render_template("login.html", logError="User does NOT exist!") 
@@ -116,8 +135,7 @@ def login():
         if not checkPass == password:
             session.clear()
             return render_template("login.html", logError="Password is INCORRECT!")              
- 
-
+         
         return render_template("index.html", username=username, password=password)   
 
 
