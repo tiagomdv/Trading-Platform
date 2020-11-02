@@ -1,15 +1,10 @@
-main
-{
+main {
     /* scroll horizontally as needed */
     overflow-x: auto;
-
-    /* center contents */
-    text-align: center;
-
-    max-width: 100%;
 }
 
 html {
+  width: 100%;
   height: 100%;
 }
 
@@ -190,7 +185,6 @@ tr:hover {
 }
 
 .GRAPH {
-  padding: 250px;
   border: 2px solid lightgray;
   border-radius: 8px;
   box-shadow: lightgray 10px;

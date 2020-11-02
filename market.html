@@ -19,7 +19,7 @@
               <th>Price</th>
               <th>YTD %</th>
             </tr>
-            <tr id="TSLA">
+            <tr id="TSLAt">
               <td>1</td>
               <td>Tesla</td>
               <td>{{ price[0] }}</td>
@@ -31,7 +31,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr>
+            <tr id="AAPL" onClick="doEver(this.id)">
               <td>2</td>
               <td>Apple</td>
               <td>{{ price[1] }}</td>
@@ -183,23 +183,63 @@
 
   <div class="col"></div>
 </div>
-
+<div id="FODACE"></div>
+<div id="COQIXO"></div>
 </div>
 
-<script>
-  
-  var yAxis = {{ yAxis|tojson }}; 
+<script>   
   var xAxis = {{ xAxis|tojson }};
+  var yAxis = {{ yAxis|tojson }};   
 
+  function doEver(id) {
+    //const xAxis2 = getData(id, 2)
+    //const yAxis2 = getData(id, 1)
+    let yAxis2 = ["crap"];
+    let xAxis2 = {};
+    getData(id, 1);
+    getData(id, 2)
+    console.log(xAxis2)
+    console.log(yAxis2)
+
+    //doGraph(xAxis2, yAxis2, id)
+
+    console.log("SIM??")
+    console.log(xAxis2)
+    console.log(yAxis2)
+    document.querySelector("#FODACE").innerText = xAxis2
+    document.querySelector("#COQIXO").innerText = yAxis2
+
+  }
+       
+  function getData(entry, xy) {
+      fetch("http://127.0.0.1:5000/fetchDo", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(entry + " " + xy),
+      cache:"no-cache",
+      headers: new Headers({
+      "content-type": "application/json"
+      })
+    })
+    .then(response => response.json())
+    .then(data => {   
+      xAxis2 = data
+      document.querySelector("#FODACE").innerText = data
+      console.log(xAxis2)
+      console.log(yAxis2)
+    })
+  }    
+
+  function doGraph(xData, yData, ticker) {
     var config = {
 			type: 'line',
 			data: {
-				labels: xAxis,
+				labels: xData,
 				datasets: [{
-					label: 'My First dataset',
+					label: 'Dataset: ' + ticker,
 					backgroundColor: "lightgray",
 					borderColor: "black",
-					data: yAxis,
+					data: yData,
 					fill: false,
 				}]
 			},
@@ -236,11 +276,13 @@
 			}
 		};
 
-		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-      window.myLine = new Chart(ctx, config);
-    };
+  var ctx = document.getElementById('canvas').getContext('2d');
+  window.myLine = new Chart(ctx, config);
+
+  }
 
 </script>
+
+
 
 {% endblock %}

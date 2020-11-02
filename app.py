@@ -1,10 +1,10 @@
-from flask import Flask, render_template, session, request, redirect
+from flask import Flask, render_template, session, request, redirect, jsonify, make_response
 from tempfile import mkdtemp
 from flask_session import Session
-import sqlite3, datetime
-import yfinance as yf
+from helper import login_req, buildGraphArray
 
-from helper import login_req
+import sqlite3, datetime
+import math
 
 # Configure application
 app = Flask(__name__)
@@ -54,7 +54,7 @@ def market():
         ytdChange = []
         i = 0
 
-        if session["recentLog"] == 1: # Condition to prevent Market page to reload everytime. It slows alot the flow of the website
+        if session["recentLog"] == 21: # Condition to prevent Market page to reload everytime. It slows alot the flow of the website
             for each in symbols:
                 i += 1
                 q = yf.Ticker(each)
@@ -77,33 +77,8 @@ def market():
             price = session["priceMarket"]
             ytdChange = session["ytdChange"]
 
-    ticker = "TSLA"
-
-    tickData = yf.Ticker(ticker)
-
-    tempData = tickData.history(period="5y", interval="1mo")
-
-    tempyAxis = tempData.Close.values
-    yAxis = []
-    xAxis = []
-
-    size = len(tempData.Close.values)
-
-    for each in tempyAxis:
-        yAxis.append(round(each, 2))
-
-    MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", "September", "October", "November", "December"]
-
-    date = datetime.datetime.now()
-    xAxis.append(MONTHS[date.month-1])
-    monN = int(date.strftime("%m"))
-
-    for i in range(size - 1):
-        monN = monN - 1        
-        if monN < 1: monN = 12
-        xAxis.append(MONTHS[monN-1])
-
-    xAxis.reverse()    
+    xAxis = buildGraphArray("TSLA")[0]
+    yAxis = buildGraphArray("TSLA")[1]
 
     return render_template("market.html", yAxis=yAxis, xAxis=xAxis, price=price, ytdChange=ytdChange)
 
@@ -254,3 +229,28 @@ def logout():
 
     session.clear()
     return redirect("/") 
+
+@app.route("/fetchDo", methods=["GET", "POST"])
+def fetchDo():
+
+    req = request.get_json()
+    temp = req.split()
+
+    ticker = req.split()[0]
+    xy = req.split()[1]
+
+    if xy == "1":
+        yAxis = buildGraphArray(ticker)[1]
+        i = 0
+        for n in yAxis:
+            if math.isnan(n):
+                yAxis[i] = 0      
+            else:
+                yAxis[i] = float(n)
+            i += 1
+        result = make_response(jsonify(yAxis))
+    else:
+        xAxis = buildGraphArray(ticker)[0]
+        result = make_response(jsonify(xAxis))
+
+    return result
