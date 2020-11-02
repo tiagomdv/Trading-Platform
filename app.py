@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, request, redirect
 from tempfile import mkdtemp
 from flask_session import Session
-import sqlite3
+import sqlite3, datetime
 import yfinance as yf
 
 from helper import login_req
@@ -76,15 +76,78 @@ def market():
         else:
             price = session["priceMarket"]
             ytdChange = session["ytdChange"]
-        
-            
-    return render_template("market.html", price=price, ytdChange=ytdChange)
+
+    ticker = "TSLA"
+
+    tickData = yf.Ticker(ticker)
+
+    tempData = tickData.history(period="5y", interval="1mo")
+
+    tempyAxis = tempData.Close.values
+    yAxis = []
+    xAxis = []
+
+    size = len(tempData.Close.values)
+
+    for each in tempyAxis:
+        yAxis.append(round(each, 2))
+
+    MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", "September", "October", "November", "December"]
+
+    date = datetime.datetime.now()
+    xAxis.append(MONTHS[date.month-1])
+    monN = int(date.strftime("%m"))
+
+    for i in range(size - 1):
+        monN = monN - 1        
+        if monN < 1: monN = 12
+        xAxis.append(MONTHS[monN-1])
+
+    xAxis.reverse()    
+
+    return render_template("market.html", yAxis=yAxis, xAxis=xAxis, price=price, ytdChange=ytdChange)
+
 
 @app.route('/wallet')
 @login_req
 def wallet():
-    quote = lookup("AMZN")
-    return render_template("wallet.html", quote=quote)
+
+    
+    ticker = "TSLA"
+
+
+    tickData = yf.Ticker(ticker)
+
+    tempData = tickData.history(period="5y", interval="1mo")
+
+    tempyAxis = tempData.Close.values
+    yAxis = []
+    xAxis = []
+
+    size = len(tempData.Close.values)
+
+    for each in tempyAxis:
+        yAxis.append(round(each, 2))
+
+    for share in yAxis:
+        test = share
+
+    MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", "September", "October", "November", "December"]
+
+    date = datetime.datetime.now()
+    xAxis.append(MONTHS[date.month-1])
+    monN = int(date.strftime("%m"))
+    year = 2020
+    for i in range(size - 1):
+        monN = monN - 1   
+        if monN < 1: 
+            monN = 12
+            year -= 1
+        xAxis.append(MONTHS[monN-1] + "/" + str(year - 2000))
+
+    xAxis.reverse()    
+
+    return render_template("wallet.html", yAxis=yAxis, xAxis=xAxis)
 
 @app.route("/login", methods=["GET", "POST"]) # LOGIN REGISTER
 def login(): 
