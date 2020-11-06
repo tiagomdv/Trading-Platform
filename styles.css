@@ -216,23 +216,42 @@ tr:hover {
   align-content: center;
 }
 
-.lblChkCont {
+.labelCheck {
   margin: 5px 0;
+  color: lightcyan;
 }
 
 .inputCheck {
   margin: 5px 0;
+  background-color: rgb(22, 54, 112);
+  color: lightcyan;
 }
 
-.inputQty {
-  margin: 5px 0;
-  width: 150px;
-}
-
-.btnCheck, .btnSubmit {
-  border-radius: 2px;
-  border: 1px solid white;
+.btnCheck {
+  border-radius: 5px;
+  border: 1px solid lightcyan;
   box-shadow: lightgray 2px;
+  background-color: rgb(22, 54, 112);
+  color: lightcyan;
+}
+
+.btnCheck:hover  {
+  background-color: lightcyan;
+  color: rgb(22, 54, 112);
+  transition: all 0.3s ease;
+}
+.mktBtn:hover {
+  background-color: lightcyan;
+  color: rgb(22, 54, 112);
+  transition: all 0.3s ease;
+}
+
+.mktBtn {
+  border-radius: 5px;
+  border: 1px solid lightcyan;
+  box-shadow: lightgray 2px;
+  background-color: rgb(22, 54, 112);
+  color: lightcyan;
 }
 
 .btnCheck:hover, .btnSubmit:hover {
@@ -244,4 +263,70 @@ tr:hover {
   justify-content: center;
   margin: 5px 0;
 }
+
+/* MODAL ELEMENTS */
+.bg-modal {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  width: 500px;
+  height: 300px;
+  background-image: linear-gradient(120deg, rgb(80, 80, 80), rgb(37, 71, 163));
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  box-shadow: lightgray 10px;  
+  justify-content: center;
+  align-items: center;
+}
+
+.crossX {
+  position: absolute;
+  top: 0;
+  font-size: 42px;
+  transform: rotate(45deg);
+  right: 10px;
+  cursor: pointer;
+}
+
+.crossX:hover {
+  transition: all 0.1s ease;
+  color: lightcyan;
+}
+
+.formModal {
+  padding: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputQty {
+  margin: 5px 0;
+  width: 150px;
+}
+
+.contBuySell {
+  display: flex;
+  margin-top: 15px;
+}
+
+.marginContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.marginBtn {
+  width: 60px;
+  height: 125%;
+  margin: 0 10px;
+}
+
 

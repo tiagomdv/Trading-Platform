@@ -59,28 +59,25 @@ def market():
                 i += 1
                 q = yf.Ticker(each)
                 if not q == None:
-                    if i<=5:                        
+                    if i<=5: # From the symbols list, only the first 5 have 52WeekChange attributes                       
                         ytdChange.append(round(q.info["52WeekChange"]*100, 2))                        
                         price.append(round(q.info["ask"], 2))
                         
-                    else:
+                    else: 
                         if each in ["BTCUSD=X", "GC=F"]:
                             price.append(round(q.info["open"]))
                         else:
                             price.append(round(q.info["open"], 4))
             session["recentLog"] = 0
 
-        if not "priceMarket" in session:
+        if not "priceMarket" in session: # If list does not exist, create
             session["priceMarket"] = price
             session["ytdChange"] = ytdChange
         else:
             price = session["priceMarket"]
             ytdChange = session["ytdChange"]
 
-    xAxis = buildGraphArray("TSLA")[0]
-    yAxis = buildGraphArray("TSLA")[1]
-
-    return render_template("market.html", yAxis=yAxis, xAxis=xAxis, price=price, ytdChange=ytdChange)
+    return render_template("market.html", price=price, ytdChange=ytdChange)
 
 
 @app.route('/wallet')
@@ -230,27 +227,49 @@ def logout():
     session.clear()
     return redirect("/") 
 
-@app.route("/fetchDo", methods=["GET", "POST"])
-def fetchDo():
+@app.route("/getHistoricalData", methods=["GET", "POST"])
+def getHistoricalData():
 
-    req = request.get_json()
-    temp = req.split()
+    ticker = request.get_json()
 
-    ticker = req.split()[0]
-    xy = req.split()[1]
+    tickerData = buildGraphArray(ticker)
 
-    if xy == "1":
-        yAxis = buildGraphArray(ticker)[1]
-        i = 0
-        for n in yAxis:
+    yAxis = tickerData[1]
+    xAxis = tickerData[0]
+
+    i = 0
+    for n in yAxis:
             if math.isnan(n):
-                yAxis[i] = 0      
+                yAxis[i] = yAxis[i-1]      
             else:
                 yAxis[i] = float(n)
             i += 1
-        result = make_response(jsonify(yAxis))
-    else:
-        xAxis = buildGraphArray(ticker)[0]
-        result = make_response(jsonify(xAxis))
+
+    result = make_response(jsonify({"xAxis": xAxis, "yAxis": yAxis}))
 
     return result
+
+
+@app.route("/getPrice", methods=["GET", "POST"])
+def getPrice():
+
+    ticker = request.get_json()
+
+    if not ticker == None:
+        tickerData = yf.Ticker(ticker)
+
+        price = tickerData.info["ask"]
+        companyName = tickerData.info["name"]
+    else:
+        result = make_response(jsonify({"price": Error, "companyName": Error}))
+
+    result = make_response(jsonify({"price": price, "companyName": companyName}))
+
+    return result
+
+
+@app.route("/buy", methods=["GET", "POST"])
+def buyStock():
+
+    ticker = request.form.items
+    return None

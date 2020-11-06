@@ -19,7 +19,7 @@
               <th>Price</th>
               <th>YTD %</th>
             </tr>
-            <tr id="TSLAt">
+            <tr id="TSLA" onClick="doEver(this.id)">
               <td>1</td>
               <td>Tesla</td>
               <td>{{ price[0] }}</td>
@@ -43,7 +43,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr>
+            <tr id="AMZN" onClick="doEver(this.id)">
               <td>3</td>
               <td>Amazon</td>
               <td>{{ price[2] }}</td>
@@ -55,7 +55,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr>
+            <tr id="MSFT" onClick="doEver(this.id)">
               <td>4</td>
               <td>Microsoft</td>
               <td>{{ price[3] }}</td>
@@ -67,7 +67,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr>
+            <tr id="FB" onClick="doEver(this.id)">
               <td>5</td>
               <td>Facebook</td>
               <td>{{ price[4] }}</td>
@@ -92,7 +92,7 @@
               <th>Stock</th>
               <th>Price</th>
             </tr>
-            <tr>
+            <tr id="BTCUSD=X" onClick="doEver(this.id)">
               <td>1</td>
               <td>Bitcoin</td>
               <td>{{ price[5] }}</td>
@@ -103,7 +103,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr>
+            <tr id="EURUSD=X" onClick="doEver(this.id)">
               <td>2</td>
               <td>Euro</td>
               <td>{{ price[6] }}</td>
@@ -114,7 +114,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr>
+            <tr id="^TNX" onClick="doEver(this.id)">
               <td>3</td>
               <td>10y Bond</td>
               <td>{{ price[7] }}</td>
@@ -125,7 +125,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr>
+            <tr id="CL=F" onClick="doEver(this.id)">
               <td>4</td>
               <td>Oil</td>
               <td>{{ price[8] }}</td>
@@ -136,7 +136,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr>
+            <tr id="GC=F" onClick="doEver(this.id)">
               <td>5</td>
               <td>Gold</td>
               <td>{{ price[9] }}</td>
@@ -153,8 +153,10 @@
 
     <!-- Second column containing the graph -->
     <div class="col">
-      <div class="GRAPH">
-        <canvas id="canvas" width="500px" height="500px"></canvas>
+      <div id ="GRAPH" class="GRAPH" style="align-items: center;">
+        <p id="paraG">PRESS AN ASSET TO BUILD A HISTORICAL GRAPH!</p>
+        <canvas id="canvas" width="500px" height="500px">       
+        </canvas>
       </div>
     </div>
 
@@ -167,55 +169,42 @@
 
   <!-- Container with check quote and submit orders -->
   <div class="col checkContainer">
-    <form action="/buy" method="post">      
-      <label class="lblChkCont">Check other quotes</label>
+    <div style="margin-right: 100px;">
+    <form action="#" method="post">      
+      <label class="labelCheck" style="font-weight: 300; font-size: 25px;">Check other quotes</label>
 
-      <div><input class="inputCheck" name="quote" placeholder="Ticker Symbol">
+      <div><input id="mModal" class="inputCheck" name="quote" placeholder="Ticker Symbol">
         <button class="btnCheck" type="submit">Check</button>
       </div>
 
-      <label class="lblChkCont">Tesla Inc. stock is valued at 440.54</label>
-      <hr color="lightgray">
-      <div class="divSub"><input class="inputQty" name="quantity" placeholder="Quantity"></div>
-      <div class="divSub"><button class="btnSubmit" type="submit">Submit Order</button></div>
+      <label id="mLabel" class="labelCheck">Tesla Inc. stock is valued at 440.54</label>
     </form>
+  </div>
+
+    <div class="divSub"><button id="orderBtn" class="mktBtn" type="submit" onclick="toggleModal(this.id)">Process Order</button></div>
+
   </div>
 
   <div class="col"></div>
 </div>
-<div id="FODACE"></div>
-<div id="COQIXO"></div>
+
 </div>
 
 <script>   
-  var xAxis = {{ xAxis|tojson }};
-  var yAxis = {{ yAxis|tojson }};   
 
   function doEver(id) {
-    //const xAxis2 = getData(id, 2)
-    //const yAxis2 = getData(id, 1)
-    let yAxis2 = ["crap"];
-    let xAxis2 = {};
-    getData(id, 1);
-    getData(id, 2)
-    console.log(xAxis2)
-    console.log(yAxis2)
+    let yAxis = {};
+    let xAxis = {};
 
-    //doGraph(xAxis2, yAxis2, id)
-
-    console.log("SIM??")
-    console.log(xAxis2)
-    console.log(yAxis2)
-    document.querySelector("#FODACE").innerText = xAxis2
-    document.querySelector("#COQIXO").innerText = yAxis2
-
+    document.getElementById("paraG").display = "none";
+    getData(id);
   }
        
-  function getData(entry, xy) {
-      fetch("http://127.0.0.1:5000/fetchDo", {
+  function getData(entry) {
+      fetch("http://127.0.0.1:5000/getHistoricalData", {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(entry + " " + xy),
+      body: JSON.stringify(entry),
       cache:"no-cache",
       headers: new Headers({
       "content-type": "application/json"
@@ -223,10 +212,11 @@
     })
     .then(response => response.json())
     .then(data => {   
-      xAxis2 = data
-      document.querySelector("#FODACE").innerText = data
-      console.log(xAxis2)
-      console.log(yAxis2)
+      xAxis = data["xAxis"]
+      yAxis = data["yAxis"]
+      
+      resetGraph();
+      doGraph(xAxis, yAxis, entry)      
     })
   }    
 
@@ -247,7 +237,7 @@
 				responsive: true,
 				title: {
 					display: true,
-					text: 'Chart.js Line Chart'
+					text: '5 year period historic performance'
 				},
 				tooltips: {
 					mode: 'index',
@@ -275,14 +265,132 @@
 				}
 			}
 		};
-
   var ctx = document.getElementById('canvas').getContext('2d');
   window.myLine = new Chart(ctx, config);
+  }
 
+  function resetGraph() {
+    document.getElementById("canvas").remove()
+
+    var divG = document.getElementById("GRAPH")
+    var canvas = document.createElement("canvas")
+
+    divG.appendChild(canvas)
+
+    canvas.setAttribute("id", "canvas")
+    canvas.setAttribute("width", "500px")
+    canvas.setAttribute("height", "500px")
   }
 
 </script>
 
+  <!-- Container with pop up window -->
+<div id="bgmodal" class="bg-modal">
+  <div class="modal-content">
+    <p id="closeModal" class="crossX" onclick="toggleModal()">+</p>
+  <div>
+    <label id="superLabel">The current share price of companyName is stockPrice.</label>
 
+        <!-- Windows form with info and input to submit orders -->
+      <form class="formModal" action="/buy" method="post">
+        <input id="qModal" class="inputCheck" name="quote" placeholder="Q" style="display: none">
+
+        <div class="container">
+          <div class="col">
+            <div class="row">
+              <label> Ytd%: </label>
+              <input id="qModal" class="inputCheck" name="quote" placeholder="Numer of shares" style="top: 50px;">
+            </div>
+          </div>
+         
+        </div>
+
+          <!-- Section with Buttons to BUY, SELL and SUMBIT ORDER -->
+          <div class="container contBuySell" style="display: flex; ">
+            <div class="row">
+              <div class="col">
+                <div class="row"><button class="mktBtn" type="submit">Buy</button></div>
+                <div class="row"><button class="mktBtn" type="submit">Sell</button></div>
+              </div>
+                <div class="col">
+                  <button class="mktBtn" type="submit">Submit Order</button>
+                </div>
+            </div>
+          </div>
+
+    </div>
+
+
+          <!-- Section with Buttons to margin buy -->
+        <div class="container marginContainer" style="display: flex">
+          <div class="row">
+            <div class="col"><button class="mktBtn marginBtn" type="submit" name="margin2x">x2</button></div>
+            <div class="col"><button class="mktBtn marginBtn" type="submit" name="margin5x">x5</button></div>
+            <div class="col"><button class="mktBtn marginBtn" type="submit" name="margin10x">x10</button></div>
+          </div>   
+          
+        </div>
+        
+      </form>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+
+// Hides pop up windows from load
+const modal = document.getElementById("bgmodal");
+modal.style.visibility = "hidden";
+
+// Function to make pop up windows appear. Windows to process orders.
+function toggleModal(id) {
+  const qModal = document.getElementById("qModal");
+  const mModal = document.getElementById("mModal");
+  const mLabel = document.getElementById("mLabel");
+
+  if (mModal.value === "") {
+    mLabel.innerHTML = "You need to insert a ticket symbol to continue!"
+  }
+  else {
+    event.preventDefault()
+    if (modal.style.visibility === "hidden") {
+      modal.style.visibility = "visible";
+      qModal.value = mModal.value;
+    }
+    else {
+      modal.style.visibility = "hidden";
+    }
+  }
+  
+  if (id === "orderBtn") {
+    getQuoteData();
+  }
+}
+
+// Function to get price and company name from the server
+function getQuoteData() {
+  ticker = document.getElementById("mModal").value;
+  console.log(ticker)
+
+  fetch("http://127.0.0.1:5000/getPrice", {
+    method: "POST",
+    credentials: "include",
+    body: JSON.stringify(ticker),
+    cache:"no-cache",
+    headers: new Headers({
+      "content-type": "application/json"
+    })
+  })
+  .then(response => response.json())
+  .then(data => {   
+    price = data["price"];
+    companyName = data["companyName"];
+
+    document.getElementById("superLabel").innerText = "The current price of the company " + companyName + " is: " + price + ".";        
+  })
+}
+
+</script>
 
 {% endblock %}
