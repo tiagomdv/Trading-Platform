@@ -5,6 +5,7 @@ from helper import login_req, buildGraphArray
 
 import sqlite3, datetime
 import math
+import yfinance as yf
 
 # Configure application
 app = Flask(__name__)
@@ -258,12 +259,12 @@ def getPrice():
     if not ticker == None:
         tickerData = yf.Ticker(ticker)
 
-        price = tickerData.info["ask"]
-        companyName = tickerData.info["name"]
+        price = tickerData.info["open"]
+        companyName = tickerData.info["longName"]
+        ytdChange = round(tickerData.info["52WeekChange"], 2)*100
+        result = make_response(jsonify({"price": price, "companyName": companyName, "ytdChange": ytdChange}))
     else:
-        result = make_response(jsonify({"price": Error, "companyName": Error}))
-
-    result = make_response(jsonify({"price": price, "companyName": companyName}))
+        result = make_response(jsonify({"price": "Error", "companyName": "Error", "52WeekChange": "Error"}))  
 
     return result
 
