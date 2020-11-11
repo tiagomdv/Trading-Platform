@@ -4,91 +4,45 @@
 
 {% block main %}
 
-<style>
-  canvas {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-  }
-</style>
-
-<div style="width:1000px">
-  <canvas id="canvas"></canvas>
+<div class="container">
+	<div class="col">
+		<div class="row">
+			{% if isBuy %}
+			<p>Congratulations! You´ve just bought {{ shares }} shares of {{ ticker }}.</p>
+			{% endif %}
+		</div>
+		<div class="row">
+			<table class="table">
+				<thead class="thead-light">
+						<tr>
+								<th scope="col">Name</th>
+								<th scope="col"># Shares</th>
+								<th scope="col">Price</th>
+						</tr>
+				</thead>
+				<tbody>
+			
+						{% for row in history %}
+			
+								<tr>
+										<th scope="col">{{ row[0] }}</th>
+										<td>{{ row[1] }}</td>
+										<td>{{ row[2] }}</td>
+										<td>{{ row[3] }}</td>
+								</tr>
+			
+						{% endfor %}
+			
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
-<p><a href=# id=calculate>calculate server side</a>
-
-<script>
 
 
 
-  var yAxis = {{ yAxis|tojson }}; 
-  var xAxis = {{ xAxis|tojson }};
-
-    var config = {
-			type: 'line',
-			data: {
-				labels: xAxis,
-				datasets: [{
-					label: 'My First dataset',
-					backgroundColor: "lightgray",
-					borderColor: "black",
-					data: yAxis,
-					fill: false,
-				}]
-			},
-			options: {
-				responsive: true,
-				title: {
-					display: true,
-					text: "5 year historical stock data",
-				},
-				tooltips: {
-					mode: 'index',
-					intersect: false,
-				},
-				hover: {
-					mode: 'nearest',
-					intersect: true
-				},
-				scales: {
-					xAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Month'
-						}
-					}],
-					yAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Value'
-						}
-					}]
-				}
-			}
-		};
-
-		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-      window.myLine = new Chart(ctx, config);
-    };
 
 
-		var entry = ["COCO", "XIXI", "TROTRO"]
-		var url = "http://127.0.0.1:5000/fetchDo"
 
-		let response = await fetch(url);
-
-		let result = response.json();
-
-		console.log(result)
-		console.log(result.message)
-		alert(result.message)
-
-		
-
-
-</script>
 
 {% endblock %}

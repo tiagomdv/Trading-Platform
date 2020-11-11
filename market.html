@@ -288,7 +288,6 @@
     <label class="labelModal" id="superLabel">The current share price of companyName is stockPrice.</label>
 
         <!-- Windows form with info and input to submit orders -->
-      <form class="formModal" action="/buy" method="post">
 
         <div class="container">
           <div class="col">
@@ -308,10 +307,11 @@
               </div>
                 <div class="col">
                   <!-- Form that submits all info related to buying order-->
-                  <form action="/market" method="post">
-                  <input id="tickerForm" style="display: none;">
-                  <input id="qModal" class="inputCheck" name="quote" placeholder="Numer of shares" style="top: 50px; width: 130px; ">
-                  <button class="mktBtn" type="submit" style="width: 130px;" onclick="getTicker()">Submit Order</button>
+                  <form id="buyForm" action="/buy" method="post">
+                    <input id="tickerInput" name="tickerSymbol" style="display: none;">
+                    <input id="nameInput" name="tickerName" style="display: none;">
+                    <input id="qModal" class="inputCheck" name="numberShares" placeholder="Numer of shares" style="top: 50px; width: 130px; ">
+                    <button class="mktBtn" type="submit" style="width: 130px;" onclick="buyOrder()">Submit Order</button>
                 </form>
                 </div>
             </div>
@@ -354,6 +354,8 @@ function toggleModal(id) {
   const qModal = document.getElementById("qModal");
   const mModal = document.getElementById("mModal");
   const mLabel = document.getElementById("mLabel");
+
+  document.getElementById("tickerInput").value = mModal.value;
 
   if (mModal.value === "") {
     mLabel.innerHTML = "You need to insert a ticket symbol to continue!"
@@ -408,15 +410,19 @@ function getQuoteData(id, ticknoPad) {
     price = data["price"];
     companyName = data["companyName"];
 
+    both = price + "/" + companyName;
+
     if (id === "checkPriceBtn") {
       document.getElementById("mLabel").innerText = companyName + " current share price is $" + price + ".";
+      mLabel.style.visibility = "visible";
     }
     else {
       ytdChange = data["ytdChange"];
 
-      document.getElementById("superLabel").innerText = "The current price of " + companyName + " is: " + price + ".";  
-
+      document.getElementById("superLabel").innerText = "The current price of " + companyName + " is: " + price + "."; 
       document.getElementById("labelYTD").innerText = "52 Week Change: " + ytdChange + "%.";
+      document.getElementById("nameInput").value = both;
+      alert(document.getElementById("nameInput").value);
     }   
 
   })
@@ -428,18 +434,20 @@ $(document).click(function(e) {
   parentElem = e.target.parentNode;
 
   btnID = parentElem.className;
-  // Handle
+  // Handle only if BUY or SELL buttons are pressed
   if (btnID === "btnBuy" || btnID === "btnSell") {
     ticker = parentElem.parentNode.parentNode.id;
 
+    // Shows the pop up window
     const modal = document.getElementById("bgmodal");
     modal.style.visibility = "visible";
 
     var nopad = parentElem.parentNode.className;
     getQuoteData(nopad, ticker)
 
+    // Activates SELL or BUY button in popup window
     document.getElementById(btnID).className += " active";
-    document.getElementById("tickerForm").value = ticker;    
+    document.getElementById("tickerInput").value = ticker;    
   }
 })
 
@@ -469,10 +477,13 @@ function btnActivated(id) {
   }
 }
 
-// Fucntion to get ticker symbol from 
-function getTicker() {
-  console.log(document.getElementById("tickerForm").value);
+// Fucntion to get ticker symbol form
+function buyOrder() {
+  const buyForm = document.getElementById("buyForm");  
+  buyForm.submit()
 }
+
+
 
 </script>
 

@@ -22,19 +22,16 @@ Session(app)
 @app.route('/')
 def hello_world():
     usernames = []
-
-    # _______________________________
-    # Acess to database
+    # ______Acess to database________
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
 
     cursor.execute("SELECT username FROM users")
     user = cursor.fetchall() # gets the output from query
 
-    # Closes connections to database
     cursor.close()
     dbConnection.close()
-    # _______________________________
+    # ____Close access to database___
 
     for row in user:
         usernames.append(row[0])
@@ -81,46 +78,33 @@ def market():
     return render_template("market.html", price=price, ytdChange=ytdChange)
 
 
-@app.route('/wallet')
+@app.route('/wallet', methods=["GET"])
 @login_req
 def wallet():
 
-    
-    ticker = "TSLA"
+    # ______Acess to database________
+    dbConnection = sqlite3.connect('finance.db') # connection
+    cursor = dbConnection.cursor()
+
+    cursor.execute("SELECT ID from users WHERE username=?", (session["user_id"],))
+    temp = cursor.fetchall()
+    userid = temp[0][0]
+
+    cursor.execute("SELECT name, number, price FROM stocks WHERE ID=?", (userid,) )
+    temp = cursor.fetchall() # gets the output from query
+
+    history = []
+    for row in temp:
+        history.append(row)
 
 
-    tickData = yf.Ticker(ticker)
 
-    tempData = tickData.history(period="5y", interval="1mo")
+    cursor.close()
+    dbConnection.close()
+    # ____Close access to database___
+       
 
-    tempyAxis = tempData.Close.values
-    yAxis = []
-    xAxis = []
-
-    size = len(tempData.Close.values)
-
-    for each in tempyAxis:
-        yAxis.append(round(each, 2))
-
-    for share in yAxis:
-        test = share
-
-    MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", "September", "October", "November", "December"]
-
-    date = datetime.datetime.now()
-    xAxis.append(MONTHS[date.month-1])
-    monN = int(date.strftime("%m"))
-    year = 2020
-    for i in range(size - 1):
-        monN = monN - 1   
-        if monN < 1: 
-            monN = 12
-            year -= 1
-        xAxis.append(MONTHS[monN-1] + "/" + str(year - 2000))
-
-    xAxis.reverse()    
-
-    return render_template("wallet.html", yAxis=yAxis, xAxis=xAxis)
+    return render_template("wallet.html", history=history)
 
 @app.route("/login", methods=["GET", "POST"]) # LOGIN REGISTER
 def login(): 
@@ -147,18 +131,16 @@ def login():
         # Forget any user id
         session.clear()
 
-        # _______________________________
-        # Acess to database
+        # ______Acess to database________
         dbConnection = sqlite3.connect('finance.db') # connection
         cursor = dbConnection.cursor()
 
         cursor.execute("SELECT username, password FROM users WHERE username=?",(username,))
         user = cursor.fetchall() # gets the output from query
 
-        # Closes connections to database
         cursor.close()
         dbConnection.close()
-        # _______________________________
+        # ____Close access to database___
 
         # Checks if already exist username in database
         if len(user) > 0:
@@ -195,29 +177,27 @@ def register():
         # _______________________________
 
         checkPass = request.form.get("checkPass")
-        if checkPass == password:                  
-            # _______________________________
-            # Acess to database
+        if checkPass == password:     
+
+            # ______Acess to database________
             dbConnection = sqlite3.connect('finance.db') # connection
             cursor = dbConnection.cursor()
 
             cursor.execute("SELECT username FROM users WHERE username=?",(username,))
             user = cursor.fetchall() # gets the output from query
             if user:
-                return render_template("register.html", logError=username + " already exists!")
                 # Closes connections to database
                 cursor.close()
                 dbConnection.close()
+                return render_template("register.html", logError=username + " already exists!")
 
             # Inserts data into database
             cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
             dbConnection.commit() # apply changes
 
-            # Closes connections to database
             cursor.close()
             dbConnection.close()
-            # _______________________________
-
+            # ____Close access to database___
             return render_template("index.html", username=username, password=password, isreg=1)
         else:
             return render_template("register.html", username=username, logError="Passwords do NOT match!")
@@ -228,7 +208,7 @@ def logout():
     session.clear()
     return redirect("/") 
 
-@app.route("/getHistoricalData", methods=["GET", "POST"])
+@app.route("/getHistoricalData", methods=["POST"])
 def getHistoricalData():
 
     ticker = request.get_json()
@@ -260,8 +240,17 @@ def getPrice():
         tickerData = yf.Ticker(ticker)
 
         price = tickerData.info["open"]
-        companyName = tickerData.info["longName"]
-        ytdChange = round(tickerData.info["52WeekChange"], 2)*100
+
+        try:
+            companyName = tickerData.info["longName"]
+        except:
+            companyName = tickerData.info["shortName"]
+
+        try:
+            ytdChange = round(tickerData.info["52WeekChange"], 2)*100
+        except:
+            ytdChange = "Error"
+        
         result = make_response(jsonify({"price": price, "companyName": companyName, "ytdChange": ytdChange}))
     else:
         result = make_response(jsonify({"price": "Error", "companyName": "Error", "52WeekChange": "Error"}))  
@@ -269,8 +258,42 @@ def getPrice():
     return result
 
 
-@app.route("/buy", methods=["GET", "POST"])
+@app.route("/buy", methods=["POST"])
 def buyStock():
+    # ______Acess to database________
+    dbConnection = sqlite3.connect('finance.db') # connection
+    cursor = dbConnection.cursor()
 
-    ticker = request.form.items
-    return None
+    # Get buying info from submitted form
+    temp = request.form.get("tickerName")
+    temp = temp.split("/")
+    price = temp[0]
+    companyName = temp[1]
+    ticker = request.form.get("tickerSymbol")
+    shares = request.form.get("numberShares")
+
+    # Get cash position
+    cursor.execute("SELECT cash FROM users WHERE username=?", (session["user_id"],))
+    temp = cursor.fetchall() # gets the output from query
+    cashCurrent = temp[0][0]
+
+    # Get id 
+    cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
+    temp = cursor.fetchall()
+    userid = temp[0][0]
+
+    # Register the BUY order
+    cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price) VALUES (date(), ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price))
+    
+    cashSpent = float(price) * int(shares)
+    cashUpdate = cashCurrent - cashSpent
+
+    # Updates cash position
+    cursor.execute("UPDATE users SET cash=?", (cashUpdate,))
+
+    # ____Applies changes________
+    dbConnection.commit()
+    # ____Close access to database___
+    cursor.close()
+    dbConnection.close()     
+    return render_template("wallet.html", ticker=ticker, shares=shares, isBuy=1)
