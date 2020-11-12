@@ -14,68 +14,68 @@
 
           <table>
             <tr>
-              <th>#</th>
-              <th>Stock</th>
-              <th>Price</th>
-              <th>YTD %</th>
+              <th class="th-market">#</th>
+              <th class="th-market">Stock</th>
+              <th class="th-market">Price</th>
+              <th class="th-market">YTD %</th>
             </tr>
             <tr id="TSLA" onClick="doEver(this.id)">
-              <td>1</td>
-              <td>Tesla</td>
-              <td>{{ price[0] }}</td>
-              <td style="color:green">{{ ytdChange[0] }}%</td>
-              <td class="noPad">
+              <td class="td-market">1</td>
+              <td class="td-market">Tesla</td>
+              <td class="td-market">{{ price[0] }}</td>
+              <td class="td-market" style="color:green">{{ ytdChange[0] }}%</td>
+              <td class="noPad td-market">
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
             <tr id="AAPL" onClick="doEver(this.id)">
-              <td>2</td>
-              <td>Apple</td>
-              <td>{{ price[1] }}</td>
-              <td style="color:green">{{ ytdChange[1] }}%</td>
-              <td class="noPad">
+              <td class="td-market">2</td>
+              <td class="td-market">Apple</td>
+              <td class="td-market">{{ price[1] }}</td>
+              <td class="td-market" style="color:green">{{ ytdChange[1] }}%</td>
+              <td class="noPad td-market">
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
             <tr id="AMZN" onClick="doEver(this.id)">
-              <td>3</td>
-              <td>Amazon</td>
-              <td>{{ price[2] }}</td>
-              <td style="color:green">{{ ytdChange[2] }}%</td>
-              <td class="noPad">
+              <td class="td-market">3</td>
+              <td class="td-market">Amazon</td>
+              <td class="td-market">{{ price[2] }}</td>
+              <td class="td-market" style="color:green">{{ ytdChange[2] }}%</td>
+              <td class="noPad td-market">
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
             <tr id="MSFT" onClick="doEver(this.id)">
-              <td>4</td>
-              <td>Microsoft</td>
-              <td>{{ price[3] }}</td>
-              <td style="color:green">{{ ytdChange[3] }}%</td>
-              <td class="noPad">
+              <td class="td-market">4</td>
+              <td class="td-market">Microsoft</td>
+              <td class="td-market">{{ price[3] }}</td>
+              <td class="td-market" style="color:green">{{ ytdChange[3] }}%</td>
+              <td class="noPad td-market">
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
             <tr id="FB" onClick="doEver(this.id)">
-              <td>5</td>
-              <td>Facebook</td>
-              <td>{{ price[4] }}</td>
-              <td style="color:green">{{ ytdChange[4] }}%</td>
-              <td class="noPad">
+              <td class="td-market">5</td>
+              <td class="td-market">Facebook</td>
+              <td class="td-market">{{ price[4] }}</td>
+              <td class="td-market"style="color:green">{{ ytdChange[4] }}%</td>
+              <td class="noPad td-market">
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
@@ -88,62 +88,62 @@
         <h3>Top 5 Non Stock Assets</h1>
           <table>
             <tr>
-              <th>#</th>
-              <th>Stock</th>
-              <th>Price</th>
+              <th class="th-market">#</th>
+              <th class="th-market">Stock</th>
+              <th class="th-market">Price</th>
             </tr>
             <tr id="BTCUSD=X" onClick="doEver(this.id)">
-              <td>1</td>
-              <td>Bitcoin</td>
-              <td>{{ price[5] }}</td>
-              <td class="noPad">
+              <td class="td-market">1</td>
+              <td class="td-market">Bitcoin</td>
+              <td class="td-market">{{ price[5] }}</td>
+              <td class="noPad td-market">
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
             <tr id="EURUSD=X" onClick="doEver(this.id)">
-              <td>2</td>
-              <td>Euro</td>
-              <td>{{ price[6] }}</td>
-              <td class="noPad">
+              <td class="td-market">2</td>
+              <td class="td-market">Euro</td>
+              <td class="td-market">{{ price[6] }}</td>
+              <td class="noPad td-market">
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
             <tr id="^TNX" onClick="doEver(this.id)">
-              <td>3</td>
-              <td>10y Bond</td>
-              <td>{{ price[7] }}</td>
-              <td class="noPad">
+              <td class="td-market">3</td>
+              <td class="td-market">10y Bond</td>
+              <td class="td-market">{{ price[7] }}</td>
+              <td class="noPad td-market">
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
             <tr id="CL=F" onClick="doEver(this.id)">
-              <td>4</td>
-              <td>Oil</td>
-              <td>{{ price[8] }}</td>
-              <td class="noPad">
+              <td class="td-market">4</td>
+              <td class="td-market">Oil</td>
+              <td class="td-market">{{ price[8] }}</td>
+              <td class="noPad td-market">
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
             <tr id="GC=F" onClick="doEver(this.id)">
-              <td>5</td>
-              <td>Gold</td>
-              <td>{{ price[9] }}</td>
-              <td class="noPad">
+              <td class="td-market">5</td>
+              <td class="td-market">Gold</td>
+              <td class="td-market">{{ price[9] }}</td>
+              <td class="noPad td-market" >
                 <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
               </td>
-              <td class="noPad">
+              <td class="noPad td-market">
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
@@ -482,9 +482,6 @@ function buyOrder() {
   const buyForm = document.getElementById("buyForm");  
   buyForm.submit()
 }
-
-
-
 </script>
 
 {% endblock %}

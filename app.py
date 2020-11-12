@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, jsonify, make_response
 from tempfile import mkdtemp
 from flask_session import Session
-from helper import login_req, buildGraphArray
+from helper import login_req, buildGraphArray, getStockHistory
 
 import sqlite3, datetime
 import math
@@ -81,28 +81,7 @@ def market():
 @app.route('/wallet', methods=["GET"])
 @login_req
 def wallet():
-
-    # ______Acess to database________
-    dbConnection = sqlite3.connect('finance.db') # connection
-    cursor = dbConnection.cursor()
-
-    cursor.execute("SELECT ID from users WHERE username=?", (session["user_id"],))
-    temp = cursor.fetchall()
-    userid = temp[0][0]
-
-    cursor.execute("SELECT name, number, price FROM stocks WHERE ID=?", (userid,) )
-    temp = cursor.fetchall() # gets the output from query
-
-    history = []
-    for row in temp:
-        history.append(row)
-
-
-
-    cursor.close()
-    dbConnection.close()
-    # ____Close access to database___
-       
+    history = getStockHistory()
 
     return render_template("wallet.html", history=history)
 
@@ -260,6 +239,7 @@ def getPrice():
 
 @app.route("/buy", methods=["POST"])
 def buyStock():
+    history = getStockHistory()
     # ______Acess to database________
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
@@ -289,11 +269,11 @@ def buyStock():
     cashUpdate = cashCurrent - cashSpent
 
     # Updates cash position
-    cursor.execute("UPDATE users SET cash=?", (cashUpdate,))
+    cursor.execute("UPDATE users SET cash=? WHERE id=?", (cashUpdate, userid))
 
     # ____Applies changes________
     dbConnection.commit()
     # ____Close access to database___
     cursor.close()
     dbConnection.close()     
-    return render_template("wallet.html", ticker=ticker, shares=shares, isBuy=1)
+    return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=1)

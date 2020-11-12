@@ -4,20 +4,24 @@
 
 {% block main %}
 
-<div class="container">
+{% if isBuy %}
+<div id="alarmContainer" class="container alarmContainer">
+	<p>Congratulations! You´ve just bought {{ shares }} shares of {{ ticker }}.</p>
+</div>
+{% endif %}
+
+<div class="container" style="display:flex">
 	<div class="col">
 		<div class="row">
-			{% if isBuy %}
-			<p>Congratulations! You´ve just bought {{ shares }} shares of {{ ticker }}.</p>
-			{% endif %}
-		</div>
-		<div class="row">
-			<table class="table">
-				<thead class="thead-light">
+			<table class="table table-dark table-striped table-borderless table-hover">
+				<thead>
 						<tr>
 								<th scope="col">Name</th>
 								<th scope="col"># Shares</th>
-								<th scope="col">Price</th>
+								<th scope="col">Weighted Cost</th>
+								<th scope="col">Value</th>
+								<th scope="col">$Gain/Loss</th>
+								<th scope="col">%Gain/Loss</th>
 						</tr>
 				</thead>
 				<tbody>
@@ -35,14 +39,34 @@
 			
 				</tbody>
 			</table>
+		</div>		
+	</div>
+	<div class="col secnd-col">		
+		<div class="row">
+			<h2>Wallet Information</h2>
+		</div>		
+		<div class="row">
+			<p>Cash Position:</p>
+			<p>100.000 €</p>
+		</div>
+		<div class="row">
+			<p>Cash invested</p>
+			<p>300.000 €</p>
+		</div>
+		<div class="row">
+			<p>Cash Total:</p>
+			<p>400.000 €</p>
 		</div>
 	</div>
 </div>
 
+<script>
+	function hideAlarmContainer() {
+		const alarmContainer = document.getElementById("alarmContainer");
+		alarmContainer.style.display = "none";
+	}
 
-
-
-
-
+	setTimeout(hideAlarmContainer, 3000);
+</script>
 
 {% endblock %}
