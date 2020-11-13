@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, jsonify, make_response
 from tempfile import mkdtemp
 from flask_session import Session
-from helper import login_req, buildGraphArray, getStockHistory
+from helper import login_req, buildGraphArray, getStockHistory, getStockPrice, getCashPosition
 
 import sqlite3, datetime
 import math
@@ -83,7 +83,18 @@ def market():
 def wallet():
     history = getStockHistory()
 
-    return render_template("wallet.html", history=history)
+    temp = getCashPosition()
+    cashPosition = temp[0]
+    cashInvested = temp[1]
+    cashTotal = round(cashPosition + cashInvested, 2)
+
+    return render_template("wallet.html", history=history, cashTotal=cashTotal, cashInvested=cashInvested, cashPosition=cashPosition)
+
+@app.route('/account', methods=["GET", "POST"])
+@login_req
+def account():
+
+    return render_template("account.html")
 
 @app.route("/login", methods=["GET", "POST"]) # LOGIN REGISTER
 def login(): 
@@ -232,7 +243,7 @@ def getPrice():
         
         result = make_response(jsonify({"price": price, "companyName": companyName, "ytdChange": ytdChange}))
     else:
-        result = make_response(jsonify({"price": "Error", "companyName": "Error", "52WeekChange": "Error"}))  
+        result = make_response(jsonify({"price": "Error", "companyName": "Error", "ytdChange": "Error"})) 
 
     return result
 
@@ -273,7 +284,14 @@ def buyStock():
 
     # ____Applies changes________
     dbConnection.commit()
+
     # ____Close access to database___
     cursor.close()
-    dbConnection.close()     
-    return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=1)
+    dbConnection.close()   
+
+    temp = getCashPosition()
+    cashPosition = temp[0]
+    cashInvested = temp[1]
+    cashTotal = cashPosition + cashInvested
+
+    return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=1, cashPosition=cashPosition, cashInvested=cashInvested, cashTotal=cashTotal)

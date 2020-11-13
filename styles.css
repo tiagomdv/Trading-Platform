@@ -1,11 +1,11 @@
 main {
     /* scroll horizontally as needed */
-    overflow-x: auto;
+    overflow-x: auto;    
 }
 
 html {
   width: 100%;
-  height: 100%;
+  height: 100%;  
 }
 
 body {
@@ -15,6 +15,7 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   font-family: "SuisseIntl-SemiBold",Helvetica,Arial,sans-serif;
+  font-variant: all-petite-caps;
 }
 
 .logContainer {
@@ -49,7 +50,7 @@ h3 h2 {
   text-align: center;
 }
 
-/* Input Form and Button configuration*/
+/* ______________Input Form and Button configuration________*/
 .formIn {
   height: 3em;
 }
@@ -61,8 +62,7 @@ h3 h2 {
 }
 
 
-
-/* Button configuration*/
+/* ______________________Button configuration_____________*/
 
 .btnToPres {
   font-family: "SuisseIntl-SemiBold",Helvetica,Arial,sans-serif;
@@ -133,10 +133,10 @@ h3 h2 {
 }
 
 
-/* FOOTER */  
+/* __________________________FOOTER_____________________ */  
 footer {
   font-size: small;
-  color: gray;
+  color: lightgoldenrodyellow;
   padding: 10px 20px;
   position: fixed;
   left: 0;
@@ -146,8 +146,8 @@ footer {
 }
 
 
-/* WALLET PAGE */
-/* TABLE */
+/* ________________________MARKET PAGE_______________ */
+/* ___________________TABLE_______ */
 
 .tableContainer {
   margin: 5px 0;
@@ -168,18 +168,18 @@ h3 {
   margin-top: 15px;
 }
 
-th {
+.th-market {
   padding: 0 25px;
-  font-size: 20px;
+  font-size: 15px;
   color: darkgrey;
 }
-td {
+.td-market {
   padding: 5px 25px;
   font-size: 15px;
   color: rgb(173, 216, 230);
 }
 
-tr:hover {
+.td-market:hover {
   background-color:lightgrey;
   color: rgb(80, 126, 120); 
 }
@@ -203,7 +203,7 @@ tr:hover {
 }
 
 
-/* CHECK CONTAINER */
+/* _______________CHECK CONTAINER__________ */
 
 .checkContainer {
   display: flex;
@@ -217,8 +217,9 @@ tr:hover {
 }
 
 .labelCheck {
-  margin: 5px 0;
   color: lightcyan;
+  font-weight: 300;
+  font-size: 20px;
 }
 
 .inputCheck {
@@ -252,6 +253,18 @@ tr:hover {
   box-shadow: lightgray 2px;
   background-color: rgb(22, 54, 112);
   color: lightcyan;
+  margin-top: 5px;
+  width: 100px;
+}
+
+.active {
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: lightgray 2px;
+  background-color: lightcyan;
+  color:rgb(22, 54, 112);
+  margin-top: 5px;
+  width: 100px;
 }
 
 .btnCheck:hover, .btnSubmit:hover {
@@ -264,7 +277,7 @@ tr:hover {
   margin: 5px 0;
 }
 
-/* MODAL ELEMENTS */
+/* _____________________POPUP WINDOW ELEMENTS_______________ */
 .bg-modal {
   width: 100%;
   height: 100%;
@@ -285,6 +298,7 @@ tr:hover {
   box-shadow: lightgray 10px;  
   justify-content: center;
   align-items: center;
+  padding: 10px;
 }
 
 .crossX {
@@ -320,13 +334,129 @@ tr:hover {
 .marginContainer {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin: 10px 0;
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  box-shadow: lightgray 10px;
+  padding: 5px;
 }
 
 .marginBtn {
   width: 60px;
-  height: 125%;
   margin: 0 10px;
 }
 
+.labelMargin {
+  font-variant: all-petite-caps;
+  font-weight: bold;
+}
 
+.labelModal {
+  margin-top: 15px;
+  color: lightcyan;
+}
+
+.mLabel {
+  font-size: 15px;
+}
+
+/* ___________________WALLET PAGE_______________*/  
+
+.alarmContainer {
+  display: flex;
+  border: 2px solid lightgreen;
+  margin-bottom: 20px; 
+  padding-top: 10px;
+  transition: all 0.3s ease;
+  justify-content: center;
+  color: lightgreen;
+  font-size: xx-large;
+}
+
+.rowTable { /* table in wallet page */ 
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  box-shadow: lightgray 10px;
+  padding: 15px;
+}
+
+.colTable {
+  margin-left: -250px;
+  margin-right: 30px;
+}
+
+.table-custom {
+  width: 900px;
+}
+
+.secnd-col { /* Second column, right side of table */ 
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  box-shadow: lightgray 10px;
+  padding: 20px;
+  color: lightgray;
+}
+
+.firstCol { /* first column inside right side containers */ 
+  width: 200px;
+}
+
+.h2Wallet { 
+  font-size: 25px;
+  color: lightgreen;
+}
+
+.companyNameLabel {
+  justify-content: center;
+  font-size: 1.3em;
+}
+
+.walletHeadRow:hover {
+  color: lightgreen;
+  background-color: rgba(80, 80, 80, 80);
+}
+
+/* ___________________ACCOUNT PAGE_______________*/  
+
+[data-tab-content] {
+  display: none;
+}
+
+.active[data-tab-content] {
+  display:block;
+}
+
+.tabs {
+  display:flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 10px;
+  margin: 0 2px;
+  width: 150px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 14px;
+  letter-spacing: .4px;
+  border: 1px solid lightblue;
+  border-radius: 5px;
+  background-color: rgb(4, 10, 46); 
+  color: lemonchiffon;
+}
+
+.tab.active {
+  background-color: lightskyblue;
+}
+
+.tab:hover {
+  background-color: lightskyblue;
+  color: lemonchiffon;
+}
+
+.tab-content {
+  margin: 30px 0 0 50px;
+}

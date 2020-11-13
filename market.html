@@ -8,7 +8,7 @@
   <div class="row">
     <div class="col">
 
-      <!-- Table with the top 5 tech stocks -->
+      <!--________Table with the top 5 tech stocks__________ -->
       <div class="tableContainer">
         <h3>Top 5 Tech Stocks</h1>
 
@@ -19,7 +19,7 @@
               <th class="th-market">Price</th>
               <th class="th-market">YTD %</th>
             </tr>
-            <tr id="TSLA" onClick="doEver(this.id)">
+            <tr id="TSLA" onclick="doEver(this.id)">
               <td class="td-market">1</td>
               <td class="td-market">Tesla</td>
               <td class="td-market">{{ price[0] }}</td>
@@ -31,7 +31,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr id="AAPL" onClick="doEver(this.id)">
+            <tr id="AAPL">
               <td class="td-market">2</td>
               <td class="td-market">Apple</td>
               <td class="td-market">{{ price[1] }}</td>
@@ -43,7 +43,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr id="AMZN" onClick="doEver(this.id)">
+            <tr id="AMZN">
               <td class="td-market">3</td>
               <td class="td-market">Amazon</td>
               <td class="td-market">{{ price[2] }}</td>
@@ -55,7 +55,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr id="MSFT" onClick="doEver(this.id)">
+            <tr id="MSFT">
               <td class="td-market">4</td>
               <td class="td-market">Microsoft</td>
               <td class="td-market">{{ price[3] }}</td>
@@ -67,7 +67,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr id="FB" onClick="doEver(this.id)">
+            <tr id="FB">
               <td class="td-market">5</td>
               <td class="td-market">Facebook</td>
               <td class="td-market">{{ price[4] }}</td>
@@ -83,7 +83,7 @@
       </div>
 
 
-      <!-- Table with the top 5 non stock assets -->
+      <!--_______ Table with the top 5 non stock assets______ -->
       <div class="tableContainer">
         <h3>Top 5 Non Stock Assets</h1>
           <table>
@@ -92,7 +92,7 @@
               <th class="th-market">Stock</th>
               <th class="th-market">Price</th>
             </tr>
-            <tr id="BTCUSD=X" onClick="doEver(this.id)">
+            <tr id="BTCUSD=X">
               <td class="td-market">1</td>
               <td class="td-market">Bitcoin</td>
               <td class="td-market">{{ price[5] }}</td>
@@ -103,7 +103,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr id="EURUSD=X" onClick="doEver(this.id)">
+            <tr id="EURUSD=X">
               <td class="td-market">2</td>
               <td class="td-market">Euro</td>
               <td class="td-market">{{ price[6] }}</td>
@@ -114,7 +114,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr id="^TNX" onClick="doEver(this.id)">
+            <tr id="^TNX">
               <td class="td-market">3</td>
               <td class="td-market">10y Bond</td>
               <td class="td-market">{{ price[7] }}</td>
@@ -125,7 +125,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr id="CL=F" onClick="doEver(this.id)">
+            <tr id="CL=F">
               <td class="td-market">4</td>
               <td class="td-market">Oil</td>
               <td class="td-market">{{ price[8] }}</td>
@@ -136,7 +136,7 @@
                 <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
               </td>
             </tr>
-            <tr id="GC=F" onClick="doEver(this.id)">
+            <tr id="GC=F">
               <td class="td-market">5</td>
               <td class="td-market">Gold</td>
               <td class="td-market">{{ price[9] }}</td>
@@ -151,44 +151,44 @@
       </div>
     </div>
 
-    <!-- Second column containing the graph -->
+    <!--__________ Second column containing the graph_________ -->
     <div class="col">
       <div id ="GRAPH" class="GRAPH" style="align-items: center;"><canvas id="canvas" width="500px" height="500px">       </canvas>
       </div>
     </div>
-
   </div>
 </div>
 
+  <div class="row">
+    <div class="col"></div>
 
-<div class="row">
-  <div class="col"></div>
+    <!--_______Container with check quote and submit orders_____ -->
+    <div class="col checkContainer">
+      <div style="margin-right: 100px;">
+      <form action="#" method="post">      
+        <label class="labelCheck">Check other quotes</label>
 
-  <!-- Container with check quote and submit orders -->
-  <div class="col checkContainer">
-    <div style="margin-right: 100px;">
-    <form action="#" method="post">      
-      <label class="labelCheck">Check other quotes</label>
+        <div><input id="mModal" class="inputCheck" name="quote" placeholder="Ticker Symbol">
+          <button id="checkPriceBtn" class="btnCheck" type="submit" onclick="getQuoteData(this.id)">Check</button>
+        </div>
 
-      <div><input id="mModal" class="inputCheck" name="quote" placeholder="Ticker Symbol">
-        <button id="checkPriceBtn" class="btnCheck" type="submit" onclick="getQuoteData(this.id)">Check</button>
-      </div>
+        <label id="mLabel" class="labelCheck mLabel" style="visibility: hidden;">companyName share is valued at price</label>
+      </form>
+    </div>
 
-      <label id="mLabel" class="labelCheck mLabel" style="visibility: hidden;">companyName share is valued at price</label>
-    </form>
-  </div>
+      <div class="divSub"><button id="orderBtn" class="mktBtn" type="submit" onclick="toggleModal(this.id)">Process Order</button></div>
 
-    <div class="divSub"><button id="orderBtn" class="mktBtn" type="submit" onclick="toggleModal(this.id)">Process Order</button></div>
+    </div>
 
-  </div>
-
-  <div class="col"></div>
-</div>
+      <div class="col"></div>
 
 </div>
+</div>
 
+
+
+<!--_________________________ SCRIPT______________________-->
 <script>   
-
   function doEver(id) {
     let yAxis = {};
     let xAxis = {};
@@ -266,33 +266,36 @@
   }
 
   function resetGraph() {
-    document.getElementById("canvas").remove()
+  document.getElementById("canvas").remove();
 
-    var divG = document.getElementById("GRAPH")
-    var canvas = document.createElement("canvas")
+  var divG = document.getElementById("GRAPH");
+  var canvas = document.createElement("canvas");
 
-    divG.appendChild(canvas)
+  divG.appendChild(canvas);
 
-    canvas.setAttribute("id", "canvas")
-    canvas.setAttribute("width", "500px")
-    canvas.setAttribute("height", "500px")
+  canvas.setAttribute("id", "canvas");
+  canvas.setAttribute("width", "500px");
+  canvas.setAttribute("height", "500px");
   }
-
 </script>
+<!--_________________________ SCRIPT______________________-->
 
+
+
+<!--______________________ POPUP WINDOW ___________________-->
   <!-- Container with pop up window -->
 <div id="bgmodal" class="bg-modal">
   <div class="modal-content">
     <p id="closeModal" class="crossX" onclick="miniToggleModal()">+</p>
   <div>
-    <label class="labelModal" id="superLabel">The current share price of companyName is stockPrice.</label>
+    <label class="labelModal" id="superLabel"></label>
 
         <!-- Windows form with info and input to submit orders -->
 
         <div class="container">
           <div class="col">
             <div class="row">
-              <label id="labelYTD" class="labelModal"> Ytd%: </label>
+              <label id="labelYTD" class="labelModal"></label>
             </div>
           </div>
          
@@ -337,19 +340,17 @@
   </div>
 </div>
 
+
+<!--_________________________ SCRIPT______________________-->
 <script>
 
-// Hides pop up windows from load
-const modal = document.getElementById("bgmodal");
-modal.style.visibility = "hidden";
-
-function miniToggleModal() {
-  modal.style.visibility = "hidden";
-  document.getElementById("btnSell").className = "mktBtn";
-  document.getElementById("btnBuy").className = "mktBtn";
+//____________Submits form that handles buy operation_____________
+function buyOrder() {
+  const buyForm = document.getElementById("buyForm");  
+  buyForm.submit()
 }
 
-// Function to make pop up windows appear. Windows to process orders.
+//_________Makes pop up windows appear. Windows to process orders.
 function toggleModal(id) {
   const qModal = document.getElementById("qModal");
   const mModal = document.getElementById("mModal");
@@ -364,7 +365,6 @@ function toggleModal(id) {
     event.preventDefault()
     if (modal.style.visibility === "hidden") {
       modal.style.visibility = "visible";
-      qModal.value = mModal.value;
     }
     else {
       modal.style.visibility = "hidden";
@@ -376,11 +376,11 @@ function toggleModal(id) {
   }
 }
 
-// Function to get price and company name from the server
+//__________Gets price and company name from the server
 function getQuoteData(id, ticknoPad) {
   event.preventDefault()
 
-  if (id !== "noPad") {     
+  if (id !== "noPad td-market") {     
     if (mModal.value === "") {
       mLabel.innerHTML = "You need to insert a ticket symbol to continue!"
       mLabel.style.visibility = "visible";
@@ -388,7 +388,7 @@ function getQuoteData(id, ticknoPad) {
     }
   }
 
-  if (id === "noPad") {
+  if (id === "noPad td-market") {
     ticker = ticknoPad;
   }
   else {
@@ -428,30 +428,26 @@ function getQuoteData(id, ticknoPad) {
   })
 }
 
-// Function to handle Buy and Sell orders from Market main page
-$(document).click(function(e) {
-  event.preventDefault()
-  parentElem = e.target.parentNode;
+</script>
+<!--_________________________ SCRIPT______________________-->
 
-  btnID = parentElem.className;
-  // Handle only if BUY or SELL buttons are pressed
-  if (btnID === "btnBuy" || btnID === "btnSell") {
-    ticker = parentElem.parentNode.parentNode.id;
 
-    // Shows the pop up window
-    const modal = document.getElementById("bgmodal");
-    modal.style.visibility = "visible";
 
-    var nopad = parentElem.parentNode.className;
-    getQuoteData(nopad, ticker)
+<!--_________________________ SCRIPT______________________-->
+<script>
 
-    // Activates SELL or BUY button in popup window
-    document.getElementById(btnID).className += " active";
-    document.getElementById("tickerInput").value = ticker;    
-  }
-})
+//_________________Hides pop up windows from load__________________
+let modal = document.getElementById("bgmodal");
+modal.style.visibility = "hidden";
 
-// Function to activate BUY and SELL button in modal windows
+//_____Closes the POPUP window and resets buy/sell btn toggle_____
+function miniToggleModal() {
+  modal.style.visibility = "hidden";
+  document.getElementById("btnSell").className = "mktBtn";
+  document.getElementById("btnBuy").className = "mktBtn";
+}
+
+//_________Activates BUY and SELL button in modal window________
 function btnActivated(id) {
   var other = "";
 
@@ -477,11 +473,10 @@ function btnActivated(id) {
   }
 }
 
-// Fucntion to get ticker symbol form
-function buyOrder() {
-  const buyForm = document.getElementById("buyForm");  
-  buyForm.submit()
-}
 </script>
+<!--_________________________ SCRIPT______________________-->
+
+
+<script src="/static/market.js"></script>
 
 {% endblock %}

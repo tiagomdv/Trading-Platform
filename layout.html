@@ -33,7 +33,7 @@
         <div id="navbar" class="navbar-nav">
             <a class="btnToPres middleBtn" href="/market" name="goBtn">Market <span class="sr-only">(current)</span></a>
             <a class="btnToPres middleBtn" href="/wallet" name="goBtn">Wallet</a>
-            <a class="btnToPres middleBtn" href="/wallet" name="goBtn">Account Activity</a>
+            <a class="btnToPres middleBtn" href="/account" name="goBtn">Account Activity</a>
             <a class="rightBtn logBtn"  href="/login" id="logBtn">Login</a>
             <a class="rightBtn regBtn" href="/register" id="regBtn">Register</a>
             <a class="rightBtn logOBtn" style="visibility: hidden; display: none" href="/logout" id="logOBtn" name="goBtn">Logout</a>
@@ -58,26 +58,6 @@
     <form id="goWallet" action="/wallet" method="get" style="display: none"></form>
 
     <script>
-
-      $("a[name='goBtn']").click(function() {
-        var text = $(this).text();
-
-        if (text === "Market (current)") {
-          $("#goWallet").attr("action", "/market");
-        }
-        else if (text == "Wallet") {
-          $("#goWallet").attr("action", "/wallet");
-        }
-        else if (text == "Account Activity") {
-          $("#goWallet").attr("action", "/wallet");
-        }
-        else if (text == "Logout") {
-          $("#goWallet").attr("action", "/logout");
-        }
-
-        $("#goWallet").submit()
-      })
-
       const logged = document.getElementById("loggedIn");
 
       if (logged !== null) {
@@ -93,7 +73,9 @@
       logOBtn.style.visibility = "visible";
       logOBtn.style.display = "inline";
       }
-     
+
     </script>
+
+    <script src="/static/layout.js"></script>
 
 </html>

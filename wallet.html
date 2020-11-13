@@ -10,12 +10,13 @@
 </div>
 {% endif %}
 
-<div class="container" style="display:flex">
-	<div class="col">
-		<div class="row">
-			<table class="table table-dark table-striped table-borderless table-hover">
+<div class="container" style="display:flex;">
+	<div class="col colTable">
+		<div class="row rowTable">
+			<table class="table table-dark table-striped table-borderless table-hover table-custom">
 				<thead>
 						<tr>
+								<th scope="col">Symbol</th>
 								<th scope="col">Name</th>
 								<th scope="col"># Shares</th>
 								<th scope="col">Weighted Cost</th>
@@ -29,10 +30,13 @@
 						{% for row in history %}
 			
 								<tr>
-										<th scope="col">{{ row[0] }}</th>
+										<th class="walletHeadRow" scope="col">{{ row[6] }}</th>
+										<td>{{ row[0] }}</td>
 										<td>{{ row[1] }}</td>
-										<td>{{ row[2] }}</td>
-										<td>{{ row[3] }}</td>
+										<td>$ {{ row[2] }}</td>
+										<td>$ {{ row[3] }}</td>
+										<td>$ {{ row[4] }}</td>
+										<td>{{ row[5] }} %</td>
 								</tr>
 			
 						{% endfor %}
@@ -41,32 +45,110 @@
 			</table>
 		</div>		
 	</div>
-	<div class="col secnd-col">		
+	<div class="col">	
+	
 		<div class="row">
-			<h2>Wallet Information</h2>
-		</div>		
-		<div class="row">
-			<p>Cash Position:</p>
-			<p>100.000 €</p>
+			<h2 class="h2Wallet">Wallet Information</h2>
+		</div>	
+	<div class="secnd-col">			
+		<div class="row" style="display:flex">
+			<div class="firstCol">
+				<p>Cash Position:</p>
+			</div>
+			<div>
+				<p>$ {{ cashPosition }}</p>
+			</div>				
 		</div>
-		<div class="row">
-			<p>Cash invested</p>
-			<p>300.000 €</p>
+		<div class="row" style="display:flex">
+			<div class="firstCol">
+				<p>Cash Invested:</p>
+			</div>
+			<div>
+				<p>$ {{ cashInvested }}</p>
+			</div>				
 		</div>
-		<div class="row">
-			<p>Cash Total:</p>
-			<p>400.000 €</p>
+		<div class="row" style="display:flex">
+			<div>
+				<p class="firstCol">Cash Total:</p>
+			</div>
+			<div>
+				<p>$ {{ cashTotal }}</p>
+			</div>				
 		</div>
 	</div>
+
+	<div class="row">
+		<h2 class="h2Wallet">Asset Information</h2>
+	</div>	
+<div class="secnd-col">	
+	<div class="row companyNameLabel">
+		<div>
+			<p id="labelCompanyName">companyName</p>
+		</div>				
+	</div>		
+	<div class="row" style="display:flex">
+		<div class="firstCol">
+			<p>Ticker Symbol:</p>
+		</div>
+		<div>
+			<p id="labelTickerSymbol"></p>
+		</div>				
+	</div>
+	<div class="row" style="display:flex">
+		<div class="firstCol">
+			<p>Current Price:</p>
+		</div>
+		<div>
+			<p id="labelCurrentPrice"></p>
+		</div>				
+	</div>
+	<div class="row" style="display:flex">
+		<div class="firstCol">
+			<p>Year to date %:</p>
+		</div>
+		<div>
+			<p id="labelYearDate"></p>
+		</div>				
+	</div>
+</div>
+</div>
 </div>
 
 <script>
-	function hideAlarmContainer() {
-		const alarmContainer = document.getElementById("alarmContainer");
-		alarmContainer.style.display = "none";
-	}
 
-	setTimeout(hideAlarmContainer, 3000);
+	$(".walletHeadRow").click(function(e) {
+		console.log(e.target.innerHTML)
+		ticker = e.target.innerHTML;
+
+		fetch("http://127.0.0.1:5000/getPrice", {
+    method: "POST",
+    credentials: "include",
+    body: JSON.stringify(ticker),
+    cache:"no-cache",
+    headers: new Headers({
+      "content-type": "application/json"
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+
+		price = data["price"];
+		ytdChange = data["ytdChange"]
+		companyName = data["companyName"]
+
+		console.log(price)
+
+		document.getElementById("labelTickerSymbol").innerText = ticker;
+		document.getElementById("labelCompanyName").innerText = companyName;
+		document.getElementById("labelCurrentPrice").innerText = "$ " + price;
+		document.getElementById("labelYearDate").innerText = ytdChange + " %";
+
+	})
+})
+
 </script>
+
+
+<script src="/static/wallet.js"></script>
 
 {% endblock %}

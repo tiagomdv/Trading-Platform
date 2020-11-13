@@ -59,45 +59,51 @@ def getStockHistory():
     temp = cursor.fetchall()
     userid = temp[0][0]
 
-    cursor.execute("SELECT name, number, price FROM stocks WHERE ID=?", (userid,) )
+    cursor.execute("SELECT name, number, price, symbol FROM stocks WHERE ID=?", (userid,) )
     temp = cursor.fetchall() # gets the output from query
 
     numberDict = {}
     priceDict = {}
+    symbolDict = {}
     tempL = []
     history = []
 
+    # Takes the query results and creates dicts with price and share number of all stock
     for row in temp:
         if row[0] not in numberDict:
             numberDict[row[0]] = []
             priceDict[row[0]] = []
+            if row[0] not in symbolDict:
+                append_value(symbolDict, row[0], row[3])
         append_value(numberDict, row[0], row[1])
-        append_value(priceDict, row[0], row[2])
+        append_value(priceDict, row[0], row[2]*row[1])
 
+
+    # Sums every element from each stock
     for row in numberDict:
-        tempL = numberDict[row]
-        numberDict[row] = sum(tempL)
+        numberDict[row] = sum(numberDict[row])
 
+    # Sums every element from each stock
     for row in priceDict:
-        tempL = priceDict[row]
-        priceDict[row] = sum(tempL)
-        append_value(numberDict, row, priceDict[row])
+        priceDict[row] = sum(priceDict[row])
 
-    # Trying to get all the info needed in history list
-    # Trying to build a list which each row has all the info related to one company
+        #Builds the history list with Name, Shares, W Cost, Value, $P/L and %P/L
+        totalCost = round(priceDict[row], 2)
+        numShares = numberDict[row]
+        WeightedCost = round(totalCost / numShares, 2)
+        #currentStockPrice = getStockPrice(symbolDict[row])
+        currentStockPrice = 5000 # GET current stock price
+        Value = numShares * round(currentStockPrice, 2) 
+        unitPL = round(Value - totalCost, 2)
+        percPL = round((unitPL / totalCost) * 100, 2)
 
-    
-    for row in temp:
-        history.append(row)
-
-
+        history.append((row, numShares, WeightedCost, Value, unitPL, percPL, symbolDict[row]))
 
     cursor.close()
     dbConnection.close()
     # ____Close access to database___
     return history
 
-    #Name	# Shares	Weighted Cost	Value	$Gain/Loss	%Gain/Loss  
 
 # _______________ from thispointer.com _______________________
 def append_value(dict_obj, key, value):
@@ -114,3 +120,33 @@ def append_value(dict_obj, key, value):
         # As key is not in dict,
         # so, add key-value pair
         dict_obj[key] = value
+
+def getStockPrice(ticker):    
+    tickerInfo = yf.Ticker(ticker[0])
+    try:
+        tickerPrice = round(tickerInfo.info["open"], 2)
+    except:
+        tickerPrice = round(tickerInfo.info["ask"], 2)
+
+    return tickerPrice
+
+def getCashPosition():
+    # ______Acess to database________
+    dbConnection = sqlite3.connect('finance.db') # connection
+    cursor = dbConnection.cursor()
+
+    # Get cash position
+    cursor.execute("SELECT cash FROM users WHERE username=?", (session["user_id"],))
+    temp = cursor.fetchall() # gets the output from query
+    cashPosition = round(temp[0][0], 2)
+
+    # Get cash invested
+    cursor.execute("SELECT sum(price*number) FROM stocks WHERE id=6")
+    temp = cursor.fetchall() # gets the output from query
+    cashInvested = round(temp[0][0], 2)
+
+    cursor.close()
+    dbConnection.close()
+    # ____Close access to database___
+
+    return cashPosition, cashInvested

@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block main %}
+
+<ul class="tabs">
+  <li data-tab-target="#history" class="tab active">History</li>
+  <li data-tab-target="#expenses" class="tab">Expenses</li>
+  <li data-tab-target="#account" class="tab">Account</li>
+</ul>
+
+<div class="tab-content">
+  <div id="history" data-tab-content class="active">
+    <h1>History</h1>
+  </div>
+  <div id="expenses" data-tab-content>
+    <h1>Expenses</h1>
+  </div>
+  <div id="account" data-tab-content>
+    <h1>Account</h1>
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll("[data-tab-target]")
+  const tabContents = document.querySelectorAll("[data-tab-content]")
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const target = document.querySelector(tab.dataset.tabTarget)
+      tabContents.forEach(tabContents => {
+        tabContents.classList.remove("active")
+      })
+      tabs.forEach(tab => {
+        tab.classList.remove("active")
+      })
+      tab.classList.add("active")
+      target.classList.add("active")
+    })
+  })
+
+</script>
+
+
+{% endblock %}
