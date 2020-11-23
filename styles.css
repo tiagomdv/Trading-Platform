@@ -135,14 +135,17 @@ h3 h2 {
 
 /* __________________________FOOTER_____________________ */  
 footer {
+  list-style-type: none;
   font-size: small;
   color: lightgoldenrodyellow;
-  padding: 10px 20px;
+  background-color: black;
   position: fixed;
-  left: 0;
+  right: 0;
   bottom: 0;
-  width: 80%;
-  text-align: right;
+  text-align: center;
+  width: 12%;
+  border-radius: 2px;
+  border: 1px solid lightblue;
 }
 
 
@@ -412,9 +415,11 @@ h3 {
 }
 
 .walletHeadRow:hover {
-  color: lightgreen;
-  background-color: rgba(80, 80, 80, 80);
+  color: black;
+  background-color: lightblue;
+  cursor: pointer;
 }
+
 
 /* ___________________ACCOUNT PAGE_______________*/  
 
@@ -422,7 +427,7 @@ h3 {
   display: none;
 }
 
-.active[data-tab-content] {
+.show[data-tab-content] {
   display:block;
 }
 
@@ -448,7 +453,7 @@ h3 {
   color: lemonchiffon;
 }
 
-.tab.active {
+.tab.show {
   background-color: lightskyblue;
 }
 
@@ -458,5 +463,16 @@ h3 {
 }
 
 .tab-content {
-  margin: 30px 0 0 50px;
+  margin: 30px 50px 150px 50px;
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  box-shadow: lightgray 15px;
+  padding: 20px;
+}
+
+/* ___________________PROFILE PAGE _______________*/  
+.labelTC {
+  display: none;
+  margin-top: 5px;
+  color: red;
 }

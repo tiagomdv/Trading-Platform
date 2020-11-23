@@ -94,7 +94,57 @@ def wallet():
 @login_req
 def account():
 
-    return render_template("account.html")
+    if request.method == "GET":
+        # ______Acess to database________
+        dbConnection = sqlite3.connect('finance.db') # connection
+        cursor = dbConnection.cursor()
+
+        # Get id 
+        cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
+        temp = cursor.fetchall()
+        userid = temp[0][0]
+
+        # Get user data
+        cursor.execute("SELECT firstname, lastname, age, city FROM users WHERE ID=?", (userid,))
+        userdata = cursor.fetchall()
+
+        # Get history data
+        cursor.execute("SELECT date, name, number, price, symbol FROM stocks WHERE ID=?", (userid,))
+        history = cursor.fetchall()
+
+        cursor.close()
+        dbConnection.close()
+        # ____Close access to database___
+    
+    if request.method == "POST":
+        firstname = request.form.get("firstname")
+        lastname = request.form.get("lastname")
+        password = request.form.get("password")
+        city = request.form.get("city")
+        age = request.form.get("age")
+        initialcash = request.form.get("initialcash")
+
+        # ______Acess to database________
+        dbConnection = sqlite3.connect('finance.db') # connection
+        cursor = dbConnection.cursor()
+
+        # Get id 
+        cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
+        temp = cursor.fetchall()
+        userid = temp[0][0]
+
+        # Update user info
+        cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=? WHERE ID=?", (firstname, lastname, city, age, userid))
+
+
+
+
+        cursor.close()
+        dbConnection.close()
+        # ____Close access to database___  
+
+
+    return render_template("account.html", history=history, userdata=userdata)
 
 @app.route("/login", methods=["GET", "POST"]) # LOGIN REGISTER
 def login(): 

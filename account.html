@@ -5,24 +5,115 @@
 {% block main %}
 
 <ul class="tabs">
-  <li data-tab-target="#history" class="tab active">History</li>
+  <li id="firstShow" data-tab-target="#history" class="tab ">History</li>
   <li data-tab-target="#expenses" class="tab">Expenses</li>
-  <li data-tab-target="#account" class="tab">Account</li>
+  <li data-tab-target="#profile" class="tab">Profile</li>
 </ul>
 
 <div class="tab-content">
-  <div id="history" data-tab-content class="active">
-    <h1>History</h1>
+
+  <!-- ___________________ History Section _____________________ -->
+  <div class="container" id="history" data-tab-content class="show" style="margin: 0">
+ 
+          <table class="table table-borderless table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Company Name</th>
+                <th scope="col"># Shares</th>
+                <th scope="col">Share Price</th>
+                <th scope="col">Ticker Symbol</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {% for row in history %}
+              <tr>
+                <th scope="col">{{ row[0] }}</th>
+                <th>{{ row[1] }}</th>
+                <th>{{ row[2] }}</th>
+                <th>{{ row[3] }}</th>
+                <th>{{ row[4] }}</th>
+              </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>  
   </div>
+
+  <!-- __________________ Expenses Section ____________________ -->
   <div id="expenses" data-tab-content>
     <h1>Expenses</h1>
   </div>
-  <div id="account" data-tab-content>
-    <h1>Account</h1>
+
+  <!-- ___________________ Account Section _____________________ -->
+  <div id="profile" data-tab-content style="margin: 0 600px;">
+
+    <form action="/account" method="post">
+      <div class="form-row">
+        <div class="col-md-6 mb-3">
+          <label>First name</label>
+          <input type="text" class="form-control" value="{{ userdata[0][0] }}" name="firstname">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>Last name</label>
+          <input type="text" class="form-control" value="{{ userdata[0][1] }}" name="lastname">
+        </div>
+      </div>    
+      <div class="form-row" style="margin-bottom: 15px;">        
+        <div class="col-md-3 mb-3">
+          <label>City</label>
+          <input type="text" class="form-control" name="city" value="{{ userdata[0][3] }}">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Age</label>
+          <input type="text" class="form-control" name="age" value="{{ userdata[0][2] }}">
+        </div>
+      </div>
+      <fieldset disabled>
+      <div class="form-row">
+        <div class="col-md-6 mb-3">
+          <label>Password</label>
+          <input type="text" class="form-control" name="passowrd">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label>Initial Cash</label>
+          <input type="text" class="form-control" name="initialcash">
+        </div>
+      </div>
+    </fieldset>
+      <div class="form-group">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+          <label class="form-check-label" for="invalidCheck">
+            Agree to terms and conditions
+          </label>
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit" onclick="testest()">Save Changes</button>
+      <label id="labelTC" class="labelTC">You need to agree with the terms and conditions to continue!</label>
+    </form>
+
   </div>
+
 </div>
 
 <script>
+
+  function testest() {
+
+    event.preventDefault()
+    const invalidcheck = document.getElementById("invalidCheck")
+    const labelTC = document.getElementById("labelTC")
+    if (invalidcheck.checkValidity() === false) {
+      labelTC.style.display = "block";
+    }
+    else {
+      labelTC.style.display = "none";
+    }
+
+  }
+
   const tabs = document.querySelectorAll("[data-tab-target]")
   const tabContents = document.querySelectorAll("[data-tab-content]")
 
@@ -30,13 +121,13 @@
     tab.addEventListener("click", () => {
       const target = document.querySelector(tab.dataset.tabTarget)
       tabContents.forEach(tabContents => {
-        tabContents.classList.remove("active")
+        tabContents.classList.remove("show")
       })
       tabs.forEach(tab => {
-        tab.classList.remove("active")
+        tab.classList.remove("show")
       })
-      tab.classList.add("active")
-      target.classList.add("active")
+      tab.classList.add("show")
+      target.classList.add("show")
     })
   })
 
