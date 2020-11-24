@@ -47,7 +47,7 @@
   </div>
 
   <!-- ___________________ Account Section _____________________ -->
-  <div id="profile" data-tab-content style="margin: 0 600px;">
+  <div id="profile" data-tab-content style="margin: 0 500px;">
 
     <form id="saveChanges" action="/account" method="post">
       <div class="form-row">
@@ -69,21 +69,31 @@
           <label>Age</label>
           <input type="text" class="form-control" name="age" value="{{ userdata[0][2] }}">
         </div>
-      </div>
-
-      <!-- _________ PASSWORD AND INITIAL CASH FIELDS _________ -->
-      <div class="form-row">
-        <div class="col-md-6 mb-3">
-          <label>Password</label>
-          <input type="text" class="form-control" name="passowrd">
-        </div>
 
         {% if cashSet == 0 %}
         <div class="col-md-6 mb-3">
           <label>Initial Cash</label>
-          <input id="initCash" type="text" class="form-control" name="initialcash" placeholder="Set Cash Value" required>
+          <input id="initCash" type="text" class="form-control inputSetCash" name="initialcash" placeholder="Set Cash Value" required>
         </div>
         {% endif %}
+        
+      </div>
+
+      <!-- _________ PASSWORD FIELDS _________ -->
+      <div class="form-row">
+        <div class="col-md-3 mb-3">
+          <label>Password</label>
+          <input type="password" class="form-control inputPass" name="passowrd" disabled>
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Re enter Password</label>
+          <input type="password" class="form-control inputPass" name="repassowrd" disabled>
+        </div> 
+        <div class="col-md-3 mb-3">
+          <label style="visibility: hidden;">Re enter Password</label>
+          <button style="font-size: small;" class="btn btn-primary" type="submit" onclick="changePass()">Change Password</button>
+        </div>        
+           
 
       </div>
 
@@ -104,10 +114,25 @@
 </div>
 
 <script>
+
+  function changePass() {
+    event.preventDefault()
+    const inputPass = document.querySelectorAll(".inputPass")
+
+    inputPass.forEach(x => {   
+      if (x.disabled == true) {
+        x.disabled = false;
+      }
+      else {
+        x.disabled = true;
+      }
+    })
+  } 
+
   
   function submitIF() {
+    event.preventDefault()  
 
-    event.preventDefault()   
     const initCash = document.getElementById("initCash") 
     const saveChanges = document.getElementById("saveChanges")
     const invalidcheck = document.getElementById("invalidCheck")
@@ -125,6 +150,26 @@
         isfalse = 1;
       }
     } 
+
+    const inputPass = document.querySelectorAll(".inputPass")
+    let checkPass = 0
+    let counter = 0
+    inputPass.forEach(x => {
+      if (counter == 0) {
+        checkPass = x.value
+        counter = 1
+      }
+      else {
+        if (x.value == checkPass) {
+          checkPass = 1
+        }
+        else {
+          checkPass = 0
+          isfalse = 1
+          labelTC.innerHTML = "The password fields does NOT match!"
+        }
+      }
+    })
 
     if (isfalse == 1) {
       labelTC.style.display = "block";
