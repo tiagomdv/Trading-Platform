@@ -116,6 +116,7 @@ def account():
         dbConnection.close()
         # ____Close access to database___
     
+    
     if request.method == "POST":
         firstname = request.form.get("firstname")
         lastname = request.form.get("lastname")
@@ -133,18 +134,30 @@ def account():
         temp = cursor.fetchall()
         userid = temp[0][0]
 
-        # Update user info
-        cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=? WHERE ID=?", (firstname, lastname, city, age, userid))
+        # Updates cash position
+        if initialcash is not None:
+            if float(initialcash) > 0:     
+                # Update user info
+                cursor.execute("UPDATE users SET cash=?, cashset=1 WHERE ID=?", (initialcash, userid))
+                session["cash_set"] = 1
+        else:
+            # Update user info
+            cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=? WHERE ID=?", (firstname, lastname, city, age, userid))
 
+        # Get history data
+        cursor.execute("SELECT date, name, number, price, symbol FROM stocks WHERE ID=?", (userid,))
+        history = cursor.fetchall()
+      
+        # Get user data
+        cursor.execute("SELECT firstname, lastname, age, city FROM users WHERE ID=?", (userid,))
+        userdata = cursor.fetchall()
 
-
-
+        dbConnection.commit() # apply changes
         cursor.close()
         dbConnection.close()
         # ____Close access to database___  
 
-
-    return render_template("account.html", history=history, userdata=userdata)
+    return render_template("account.html", history=history,userdata=userdata, cashSet=session["cash_set"])
 
 @app.route("/login", methods=["GET", "POST"]) # LOGIN REGISTER
 def login(): 
@@ -175,25 +188,26 @@ def login():
         dbConnection = sqlite3.connect('finance.db') # connection
         cursor = dbConnection.cursor()
 
-        cursor.execute("SELECT username, password FROM users WHERE username=?",(username,))
+        cursor.execute("SELECT username, password, cashset FROM users WHERE username=?",(username,))
         user = cursor.fetchall() # gets the output from query
-
-        cursor.close()
-        dbConnection.close()
-        # ____Close access to database___
+        cashset = user[0][2]
 
         # Checks if already exist username in database
         if len(user) > 0:
             session["user_id"] = user[0][0]
             session["recentLog"] = 1
+            session["cash_set"] = cashset
             checkPass = user[0][1]
         else:
             return render_template("login.html", logError="User does NOT exist!") 
 
         if not checkPass == password:
             session.clear()
-            return render_template("login.html", logError="Password is INCORRECT!")              
-         
+            return render_template("login.html", logError="Password is INCORRECT!")  
+        
+        cursor.close()
+        dbConnection.close()
+        # ____Close access to database___          
         return render_template("index.html", username=username, password=password)   
 
 
@@ -232,9 +246,9 @@ def register():
                 return render_template("register.html", logError=username + " already exists!")
 
             # Inserts data into database
-            cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+            cursor.execute("INSERT INTO users (username, password, cash, cashset) VALUES (?, ?, ?, ?)", (username, password, 0, 0))
+            
             dbConnection.commit() # apply changes
-
             cursor.close()
             dbConnection.close()
             # ____Close access to database___
