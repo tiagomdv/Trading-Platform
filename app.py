@@ -112,6 +112,10 @@ def account():
         cursor.execute("SELECT date, name, number, price, symbol FROM stocks WHERE ID=?", (userid,))
         history = cursor.fetchall()
 
+        # Get expenses data
+        cursor.execute("SELECT type, sum(cost), date FROM expenses WHERE user_id=? GROUP BY type", (userid,))
+        expenses = cursor.fetchall()
+
         cursor.close()
         dbConnection.close()
         # ____Close access to database___
@@ -147,6 +151,10 @@ def account():
         # Get history data
         cursor.execute("SELECT date, name, number, price, symbol FROM stocks WHERE ID=?", (userid,))
         history = cursor.fetchall()
+
+        # Get expenses data
+        cursor.execute("SELECT type, sum(cost), date FROM expenses WHERE user_id=? GROUP BY type", (userid,))
+        expenses = cursor.fetchall()
       
         # Get user data
         cursor.execute("SELECT firstname, lastname, age, city FROM users WHERE ID=?", (userid,))
@@ -157,7 +165,7 @@ def account():
         dbConnection.close()
         # ____Close access to database___  
 
-    return render_template("account.html", history=history,userdata=userdata, cashSet=session["cash_set"])
+    return render_template("account.html", expenses=expenses, history=history,userdata=userdata, cashSet=session["cash_set"])
 
 @app.route("/login", methods=["GET", "POST"]) # LOGIN REGISTER
 def login(): 
@@ -359,3 +367,51 @@ def buyStock():
     cashTotal = cashPosition + cashInvested
 
     return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=1, cashPosition=cashPosition, cashInvested=cashInvested, cashTotal=cashTotal)
+
+@app.route("/updateDB", methods=["POST"])
+def updateDB():   
+
+    data = request.get_json()
+
+    # ______Acess to database________
+    dbConnection = sqlite3.connect('finance.db') # connection
+    cursor = dbConnection.cursor()
+
+    # Get id 
+    cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
+    temp = cursor.fetchall()
+    userid = temp[0][0]    
+
+    # Updates expenses database
+    cursor.execute("INSERT INTO expenses (type, expense, cost, date, user_id) VALUES (?, ?, ?, date(), ?)", (data[1], data[2], data[3], userid ))    
+
+    # ____Applies changes________
+    dbConnection.commit()
+    # ____Close access to database___
+    cursor.close()
+    dbConnection.close()   
+    return
+
+@app.route("/getDataDB", methods=["GET"])
+def getDataDB():
+
+    # ______Acess to database________
+    dbConnection = sqlite3.connect('finance.db') # connection
+    cursor = dbConnection.cursor()
+
+    # Get id 
+    cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
+    temp = cursor.fetchall()
+    userid = temp[0][0]    
+
+    # Get expenses data
+    cursor.execute("SELECT type, sum(cost) FROM expenses WHERE user_id=? GROUP BY type", (userid,))
+    expenses = cursor.fetchall() 
+
+    # ____Close access to database___
+    cursor.close()
+    dbConnection.close() 
+
+    result = make_response(jsonify(expenses)) 
+
+    return result

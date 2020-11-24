@@ -5,15 +5,17 @@
 {% block main %}
 
 <ul class="tabs">
-  <li id="firstShow" data-tab-target="#history" class="tab ">History</li>
-  <li data-tab-target="#expenses" class="tab">Expenses</li>
-  <li data-tab-target="#profile" class="tab">Profile</li>
+  <li id="historyButton" data-tab-target="#history" class="tab show">History</li>
+  <li id="expensesButton" data-tab-target="#expenses" class="tab">Expenses</li>
+  <li id="profileButton" data-tab-target="#profile" class="tab">Profile</li>
 </ul>
 
 <div class="tab-content">
 
   <!-- ___________________ History Section _____________________ -->
-  <div class="container" id="history" data-tab-content class="show" style="margin: 0">
+  <div id="history" class="container show" data-tab-content>
+    <div class="col">
+      <div class="row">
  
           <table class="table table-borderless table-striped table-hover">
             <thead>
@@ -29,22 +31,124 @@
 
               {% for row in history %}
               <tr>
-                <th scope="col">{{ row[0] }}</th>
-                <th>{{ row[1] }}</th>
-                <th>{{ row[2] }}</th>
-                <th>{{ row[3] }}</th>
-                <th>{{ row[4] }}</th>
+                <td scope="col">{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
               </tr>
               {% endfor %}
 
             </tbody>
-          </table>  
+          </table> 
+
+      </div>
+    </div>
   </div>
 
+
+
   <!-- __________________ Expenses Section ____________________ -->
-  <div id="expenses" data-tab-content>
-    <h1>Expenses</h1>
+  <div id="expenses" class="container" data-tab-content>
+  <!-- _______ First row with summary table and expense add form ______ -->  
+    <div class="row">
+    <div class="col container-wborder">
+      <div class="row" style="justify-content: center;">
+        <div class="row"><h6>SUMMARY</h6></div>
+        <table class="table table-sm table-borderless table-striped table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Type</th>
+              <th scope="col">Cost</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            {% for row in expenses %}
+              <tr>
+                <td scope="col">{{ row[2] }}</td>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }} €</td>
+              </tr>
+              {% endfor %}
+
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+    <div class="col container-wborder secCol-ExpTab">
+      <div class="row">
+        <div class="container">
+          
+          <form action="#" method="post">
+            <div class="form-row">
+              <div class="col-md-3 mb-3">
+                <label>Type</label>
+                <input type="text" class="form-control buildData" placeholder="Type">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Expense</label>
+                <input type="text" class="form-control buildData" placeholder="Expense">
+              </div>
+              <div class="col-md-3 mb-3">
+                <label>Cost</label>
+                <input type="text" class="form-control buildData" placeholder="Cost">
+              </div>            
+                <div class="col">
+                  <label style="visibility: hidden;">Cost</label>
+                  <button class="btn btn-primary" onclick="createRow()">Add</button>
+                </div>
+            </div>      
+          </form>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col">
+          <label class="labelAddExp"></label>
+        </div>
+      </div>
+    </div>
+
+
   </div>
+<!-- _________________ Second row with pie chart ____________________ -->  
+    <div class="row">
+
+      <div class="col container-wborder">
+        <div id ="GRAPH" class="GRAPH" style="align-items: center;"><canvas id="canvas" width="500px" height="500px"></canvas>
+        </div>
+      </div>
+
+      <div class="col secCol-ExpTab2 container-wborder">
+        <div class="row" style="justify-content: center;"><h6>New Additions</h6></div>
+        <table class="table table-sm table-borderless table-striped table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Type</th>
+              <th scope="col">Expense</th>
+              <th scope="col">Cost</th>
+            </tr>
+          </thead>
+
+          <tbody class="table-body">
+
+          </tbody>
+
+        </table>
+
+    </div> 
+      
+    </div>
+  </div>
+
+
+
 
   <!-- ___________________ Account Section _____________________ -->
   <div id="profile" data-tab-content style="margin: 0 500px;">
@@ -92,9 +196,7 @@
         <div class="col-md-3 mb-3">
           <label style="visibility: hidden;">Re enter Password</label>
           <button style="font-size: small;" class="btn btn-primary" type="submit" onclick="changePass()">Change Password</button>
-        </div>        
-           
-
+        </div>
       </div>
 
       <div class="form-group">
@@ -115,6 +217,104 @@
 
 <script>
 
+/* _____ CREATES ROWS BY PRESSING BUTTON ____*/
+  function createRow() {
+    event.preventDefault()
+    getDataDB()
+    const tablebody = document.querySelector(".table-body");
+    const newTr = document.createElement("tr");  
+    const labelAddExp = document.querySelector(".labelAddExp"); 
+
+    data = updateDB()
+
+    if (data[0] === "ERROR"){
+      labelAddExp.innerHTML = "You can´t leave any blank fields!";
+      labelAddExp.style.visibility = "visible";
+    }
+    else {
+      for (i = 0; i < 4; i++) {
+        const newTd = document.createElement("td");
+        newTd.innerHTML = data[i];
+        newTr.appendChild(newTd);
+      }
+      tablebody.appendChild(newTr);
+      labelAddExp.innerHTML = "You must reload page to update summary table and pie chart!";
+      labelAddExp.style.visibility = "visible";
+    }      
+  }
+
+/* _____ GETS DB DATA AND FILLS SUMMARY TABLE ____*/
+  function getDataDB() {
+    /*_ACCESSES SERVER AND UPDATE EXPENSES TABLE DB_*/
+    fetch("http://127.0.0.1:5000/getDataDB", {
+        method: "GET",
+        credentials: "include",
+        cache:"no-cache",
+        headers: new Headers({
+          "content-type": "application/json"
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      var ctx = document.getElementById('canvas').getContext('2d');
+      var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: data
+      })
+  })
+}
+
+
+/* _____ACESS SERVER TO UPDATE DATABASE AND GET DATABASE INFO TO LOAD TABLE____*/
+  function updateDB() {
+
+    let today = new Date().toISOString().slice(0, 10);
+    let data = [today, 0, 0, 0];
+    let i = 0;
+    const buildData = document.querySelectorAll(".buildData");
+
+    buildData.forEach(x => {
+      if (x.value === "") {
+        data[0] = "ERROR";
+      } 
+      data[i+1] = x.value;
+      i += 1;
+    })
+  
+    if (data[0] !== "ERROR") {
+      /*_ACCESSES SERVER AND UPDATE EXPENSES TABLE DB_*/
+      fetch("http://127.0.0.1:5000/updateDB", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(data),
+        cache:"no-cache",
+        headers: new Headers({
+          "content-type": "application/json"
+        })
+      })  
+    }
+    
+  return data;
+  }
+
+
+
+/* _____ SETS DISPLAY FLEX IN EXPENSE TAB ____*/
+  function displayFlex(element) {
+  
+    const expenseTab = document.getElementById("expenses");
+
+    if (element.id == "expensesButton") {
+      expenseTab.style.display = "flex";
+    }
+    else {
+      expenseTab.style.display = "none";
+    }    
+  }
+
+
+/* _____ ENABLES AND DISABLES PASSWORD FIELDS ____*/
   function changePass() {
     event.preventDefault()
     const inputPass = document.querySelectorAll(".inputPass")
@@ -129,7 +329,7 @@
     })
   } 
 
-  
+/* _____ SUBMITS FORM IF INPUTS ARE CORRECTLY FILLED ____*/  
   function submitIF() {
     event.preventDefault()  
 
