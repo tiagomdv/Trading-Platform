@@ -31,9 +31,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div id="navbar" class="navbar-nav">
-            <a class="btnToPres middleBtn" href="/market" name="goBtn">Market <span class="sr-only">(current)</span></a>
+            <a class="btnToPres middleBtn" href="/market" name="goBtn">Market<span class="sr-only"></span></a>
             <a class="btnToPres middleBtn" href="/wallet" name="goBtn">Wallet</a>
-            <a class="btnToPres middleBtn" href="/account" name="goBtn">Account Activity</a>
+            <a class="btnToPres middleBtn" href="/account" name="goBtn">Account</a>
             <a class="rightBtn logBtn"  href="/login" id="logBtn">Login</a>
             <a class="rightBtn regBtn" href="/register" id="regBtn">Register</a>
             <a class="rightBtn logOBtn" style="visibility: hidden; display: none" href="/logout" id="logOBtn" name="goBtn">Logout</a>
@@ -74,8 +74,26 @@
       logOBtn.style.display = "inline";
       }
 
-    </script>
+      //_________Submit button events after preventDefault__________
+      $("a[name='goBtn']").click(function() {
+        var text = $(this).text();
 
-    <script src="/static/layout.js"></script>
+        if (text === "Market") {
+          $("#goWallet").attr("action", "/market");
+        }
+        else if (text === "Wallet") {
+          $("#goWallet").attr("action", "/wallet");
+        }
+        else if (text === "Account") {
+          $("#goWallet").attr("action", "/account");
+        }
+        else if (text === "Logout") {
+          $("#goWallet").attr("action", "/logout");
+        }
+
+        $("#goWallet").submit()
+      })
+
+    </script>
 
 </html>

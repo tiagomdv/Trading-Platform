@@ -84,11 +84,11 @@ def wallet():
     history = getStockHistory()
 
     temp = getCashPosition()
-    cashPosition = temp[0]
-    cashInvested = temp[1]
-    cashTotal = round(cashPosition + cashInvested, 2)
+    cashPosition = int(temp[0]/1000)
+    cashInvested = int(temp[1]/1000)
+    cashTotal = round(cashPosition + cashInvested, 0)
 
-    return render_template("wallet.html", history=history, cashTotal=cashTotal, cashInvested=cashInvested, cashPosition=cashPosition)
+    return render_template("wallet.html", history=history, cashTotal=cashTotal, cashInvested=cashInvested, cashPosition=cashPosition, username=session["user_id"])
 
 @app.route('/account', methods=["GET", "POST"])
 @login_req
@@ -145,8 +145,12 @@ def account():
                 cursor.execute("UPDATE users SET cash=?, cashset=1 WHERE ID=?", (initialcash, userid))
                 session["cash_set"] = 1
         else:
-            # Update user info
-            cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=? WHERE ID=?", (firstname, lastname, city, age, userid))
+            if password:
+                # Update user info with password
+                cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=?, password=? WHERE ID=?", (firstname, lastname, city, age, password, userid))
+            else:
+                # Update user info without password
+                cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=? WHERE ID=?", (firstname, lastname, city, age, userid))
 
         # Get history data
         cursor.execute("SELECT date, name, number, price, symbol FROM stocks WHERE ID=?", (userid,))
@@ -296,33 +300,58 @@ def getHistoricalData():
 @app.route("/getPrice", methods=["GET", "POST"])
 def getPrice():
 
+
     ticker = request.get_json()
 
+
     if not ticker == None:
+  
         tickerData = yf.Ticker(ticker)
 
-        price = tickerData.info["open"]
+        # Get quote price
+        try:
+            price = tickerData.info["ask"]
+            if price == 0:
+                price = tickerData.info["open"]
+        except:
+            try:
+                price = tickerData.info["open"]
+            except:
+                ticker = "quote-error"
+                return make_response(jsonify(ticker))
 
+        # Get quote name
         try:
             companyName = tickerData.info["longName"]
         except:
-            companyName = tickerData.info["shortName"]
+            companyName = tickerData.info["shortName"]      
 
+        fifty2WL = tickerData.info["fiftyTwoWeekLow"]
+        fifty2WH = tickerData.info["fiftyTwoWeekHigh"]
+
+        # Get quote 52 week change
         try:
-            ytdChange = round(tickerData.info["52WeekChange"], 2)*100
+            fifty2WC = round(tickerData.info["52WeekChange"], 2)*100
         except:
-            ytdChange = "Error"
+            fifty2WC = round((fifty2WH / fifty2WL) - 1, 2) * 100
+
+        # Get quote name
+        try:
+            trailingPE = round(tickerData.info["trailingPE"], 2)
+        except:
+            trailingPE = "Error"
+
+        quoteType = tickerData.info["quoteType"]
         
-        result = make_response(jsonify({"price": price, "companyName": companyName, "ytdChange": ytdChange}))
+        result = make_response(jsonify({"price": price, "companyName": companyName, "fifty2WC": fifty2WC, "fifty2WL": fifty2WL, "fifty2WH": fifty2WH, "trailingPE": trailingPE, "quoteType": quoteType}))
     else:
-        result = make_response(jsonify({"price": "Error", "companyName": "Error", "ytdChange": "Error"})) 
+        result = make_response(jsonify({"price": "error", "companyName": "error", "fifty2WC": "error", "fifty2WL": "error", "fifty2WH": "error", "trailingPE": "error", "quoteTYPE": "error"}))
 
     return result
 
 
 @app.route("/buy", methods=["POST"])
 def buyStock():
-    history = getStockHistory()
     # ______Acess to database________
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
@@ -334,6 +363,7 @@ def buyStock():
     companyName = temp[1]
     ticker = request.form.get("tickerSymbol")
     shares = request.form.get("numberShares")
+    assetType = request.form.get("assetType")
 
     # Get cash position
     cursor.execute("SELECT cash FROM users WHERE username=?", (session["user_id"],))
@@ -346,7 +376,7 @@ def buyStock():
     userid = temp[0][0]
 
     # Register the BUY order
-    cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price) VALUES (date(), ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price))
+    cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price, typeasset) VALUES (date(), ?, ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price, assetType))
     
     cashSpent = float(price) * int(shares)
     cashUpdate = cashCurrent - cashSpent
@@ -365,6 +395,8 @@ def buyStock():
     cashPosition = temp[0]
     cashInvested = temp[1]
     cashTotal = cashPosition + cashInvested
+
+    history = getStockHistory()
 
     return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=1, cashPosition=cashPosition, cashInvested=cashInvested, cashTotal=cashTotal)
 
@@ -390,7 +422,7 @@ def updateDB():
     # ____Close access to database___
     cursor.close()
     dbConnection.close()   
-    return
+    return None
 
 @app.route("/getDataDB", methods=["GET"])
 def getDataDB():

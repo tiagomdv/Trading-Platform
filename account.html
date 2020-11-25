@@ -16,31 +16,31 @@
   <div id="history" class="container show" data-tab-content>
     <div class="col">
       <div class="row">
- 
-          <table class="table table-borderless table-striped table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Company Name</th>
-                <th scope="col"># Shares</th>
-                <th scope="col">Share Price</th>
-                <th scope="col">Ticker Symbol</th>
-              </tr>
-            </thead>
-            <tbody>
 
-              {% for row in history %}
-              <tr>
-                <td scope="col">{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-                <td>{{ row[2] }}</td>
-                <td>{{ row[3] }}</td>
-                <td>{{ row[4] }}</td>
-              </tr>
-              {% endfor %}
+        <table class="table table-borderless table-striped table-hover">
+          <thead>
+            <tr class="th-market">
+              <th scope="col">Date</th>
+              <th scope="col">Company Name</th>
+              <th scope="col"># Shares</th>
+              <th scope="col">Share Price</th>
+              <th scope="col">Ticker Symbol</th>
+            </tr>
+          </thead>
+          <tbody>
 
-            </tbody>
-          </table> 
+            {% for row in history %}
+            <tr class="td-market">
+              <td scope="col">{{ row[0] }}</td>
+              <td>{{ row[1] }}</td>
+              <td>{{ row[2] }}</td>
+              <td>{{ row[3] }}</td>
+              <td>{{ row[4] }}</td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
 
       </div>
     </div>
@@ -50,85 +50,92 @@
 
   <!-- __________________ Expenses Section ____________________ -->
   <div id="expenses" class="container" data-tab-content>
-  <!-- _______ First row with summary table and expense add form ______ -->  
+    <!-- _______ First row with summary table and expense add form ______ -->
     <div class="row">
-    <div class="col container-wborder">
-      <div class="row" style="justify-content: center;">
-        <div class="row"><h6>SUMMARY</h6></div>
-        <table class="table table-sm table-borderless table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Date</th>
-              <th scope="col">Type</th>
-              <th scope="col">Cost</th>
-            </tr>
-          </thead>
+      <div class="col container-wborder">
+        <div class="row table-title">
+          <div class="row">
+            <h6>SUMMARY</h6>
+          </div>
+          <table class="table table-sm table-borderless table-striped table-hover">
+            <thead>
+              <tr class="th-market">
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Cost</th>
+              </tr>
+            </thead>
 
-          <tbody>
+            <tbody>
 
-            {% for row in expenses %}
-              <tr>
+              {% for row in expenses %}
+              <tr class="td-market">
                 <td scope="col">{{ row[2] }}</td>
                 <td>{{ row[0] }}</td>
                 <td>{{ row[1] }} €</td>
               </tr>
               {% endfor %}
 
-          </tbody>
+            </tbody>
 
-        </table>
+          </table>
+        </div>
       </div>
 
-    </div>
-    <div class="col container-wborder secCol-ExpTab">
-      <div class="row">
-        <div class="container">
-          
-          <form action="#" method="post">
-            <div class="form-row">
-              <div class="col-md-3 mb-3">
-                <label>Type</label>
-                <input type="text" class="form-control buildData" placeholder="Type">
-              </div>
-              <div class="col-md-4 mb-3">
-                <label>Expense</label>
-                <input type="text" class="form-control buildData" placeholder="Expense">
-              </div>
-              <div class="col-md-3 mb-3">
-                <label>Cost</label>
-                <input type="text" class="form-control buildData" placeholder="Cost">
-              </div>            
+
+      <!-- _____________________  EXPENSE ADD FORM ______________________ -->
+      <div class="col container-wborder secCol-ExpTab">
+        <div class="row">
+          <div class="container">
+
+            <form action="#" method="post">
+              <div class="form-row">
+                <div class="col-md-3 mb-3">
+                  <label class="label-profile">Type</label>
+                  <input type="text" class="form-control buildData" placeholder="Type">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="label-profile">Expense</label>
+                  <input type="text" class="form-control buildData" placeholder="Expense">
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label class="label-profile">Cost</label>
+                  <input type="text" class="form-control buildData" placeholder="Cost">
+                </div>
                 <div class="col">
                   <label style="visibility: hidden;">Cost</label>
-                  <button class="btn btn-primary" onclick="createRow()">Add</button>
+                  <button class="default-button button-changes-expenses" onclick="createRow()">Add</button>
                 </div>
-            </div>      
-          </form>
-        </div>
+              </div>
+            </form>
+          </div>
 
-      </div>
-      <div class="row">
-        <div class="col">
-          <label class="labelAddExp"></label>
+        </div>
+        <div class="row" style="justify-content: center; display: grid;">
+          <div class="col">
+            <label class="labelAddExp"></label>
+            <a class="default-button button-changes-expenses-1" href="/account">Refresh</a>
+          </div>
         </div>
       </div>
+
+
     </div>
-
-
-  </div>
-<!-- _________________ Second row with pie chart ____________________ -->  
+    <!-- _________________ Second row with pie chart ____________________ -->
     <div class="row">
 
       <div class="col container-wborder">
-        <div id ="GRAPH" class="GRAPH" style="align-items: center;"><canvas id="canvas" width="500px" height="500px"></canvas>
+        <div id="pie-chart"><canvas id="canvas" width="500px" height="500px"></canvas>
         </div>
       </div>
 
       <div class="col secCol-ExpTab2 container-wborder">
-        <div class="row" style="justify-content: center;"><h6>New Additions</h6></div>
+        <div class="row table-title">
+          <h6>New Additions</h6>
+        </div>
         <table class="table table-sm table-borderless table-striped table-hover">
           <thead>
-            <tr>
+            <tr class="th-market">
               <th scope="col">Date</th>
               <th scope="col">Type</th>
               <th scope="col">Expense</th>
@@ -142,8 +149,8 @@
 
         </table>
 
-    </div> 
-      
+      </div>
+
     </div>
   </div>
 
@@ -163,8 +170,8 @@
           <label>Last name</label>
           <input type="text" class="form-control" value="{{ userdata[0][1] }}" name="lastname">
         </div>
-      </div>    
-      <div class="form-row" style="margin-bottom: 15px;">        
+      </div>
+      <div class="form-row" style="margin-bottom: 15px;">
         <div class="col-md-3 mb-3">
           <label>City</label>
           <input type="text" class="form-control" name="city" value="{{ userdata[0][3] }}">
@@ -177,25 +184,27 @@
         {% if cashSet == 0 %}
         <div class="col-md-6 mb-3">
           <label>Initial Cash</label>
-          <input id="initCash" type="text" class="form-control inputSetCash" name="initialcash" placeholder="Set Cash Value" required>
+          <input id="initCash" type="text" class="form-control inputSetCash" name="initialcash"
+            placeholder="Set Cash Value" required>
         </div>
         {% endif %}
-        
+
       </div>
 
       <!-- _________ PASSWORD FIELDS _________ -->
       <div class="form-row">
         <div class="col-md-3 mb-3">
           <label>Password</label>
-          <input type="password" class="form-control inputPass" name="passowrd" disabled>
+          <input type="password" class="form-control inputPass" name="password" disabled>
         </div>
         <div class="col-md-3 mb-3">
           <label>Re enter Password</label>
-          <input type="password" class="form-control inputPass" name="repassowrd" disabled>
-        </div> 
+          <input type="password" class="form-control inputPass" disabled>
+        </div>
         <div class="col-md-3 mb-3">
           <label style="visibility: hidden;">Re enter Password</label>
-          <button style="font-size: small;" class="btn btn-primary" type="submit" onclick="changePass()">Change Password</button>
+          <button class="default-button button-changes-profile" type="submit" onclick="toggleInputPass()">Change
+            Password</button>
         </div>
       </div>
 
@@ -207,7 +216,7 @@
           </label>
         </div>
       </div>
-      <button class="btn btn-primary" type="submit" onclick="submitIF()">Save Changes</button>
+      <button class="default-button button-changes-profile" type="submit" onclick="submitIF()">Save Changes</button>
       <label id="labelTC" class="labelTC"></label>
     </form>
 
@@ -217,17 +226,23 @@
 
 <script>
 
-/* _____ CREATES ROWS BY PRESSING BUTTON ____*/
+  window.onload = function() {
+    buildPieChart()
+  }
+
+
+  /* _____ CREATES ROWS, GRAPH AND UPDATES DATABASE ____*/
   function createRow() {
     event.preventDefault()
-    getDataDB()
-    const tablebody = document.querySelector(".table-body");
-    const newTr = document.createElement("tr");  
-    const labelAddExp = document.querySelector(".labelAddExp"); 
 
     data = updateDB()
+    buildPieChart()
 
-    if (data[0] === "ERROR"){
+    const tablebody = document.querySelector(".table-body");
+    const newTr = document.createElement("tr");
+    const labelAddExp = document.querySelector(".labelAddExp");
+
+    if (data[0] === "ERROR") {
       labelAddExp.innerHTML = "You can´t leave any blank fields!";
       labelAddExp.style.visibility = "visible";
     }
@@ -236,37 +251,65 @@
         const newTd = document.createElement("td");
         newTd.innerHTML = data[i];
         newTr.appendChild(newTd);
+        newTr.className = "td-market";
       }
       tablebody.appendChild(newTr);
-      labelAddExp.innerHTML = "You must reload page to update summary table and pie chart!";
+      labelAddExp.innerHTML = "You must reload page to update summary table!";
       labelAddExp.style.visibility = "visible";
-    }      
+      document.querySelector(".button-changes-expenses-1").style.visibility = "visible";
+    }
   }
 
-/* _____ GETS DB DATA AND FILLS SUMMARY TABLE ____*/
-  function getDataDB() {
+
+  /* _____ GETS DB DATA AND BUILDS PIE CHART ____*/
+  function buildPieChart() {
     /*_ACCESSES SERVER AND UPDATE EXPENSES TABLE DB_*/
     fetch("http://127.0.0.1:5000/getDataDB", {
-        method: "GET",
-        credentials: "include",
-        cache:"no-cache",
-        headers: new Headers({
-          "content-type": "application/json"
-        })
+      method: "GET"
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      var ctx = document.getElementById('canvas').getContext('2d');
-      var myPieChart = new Chart(ctx, {
-        type: 'pie',
-        data: data
+      .then(response => response.json())
+      .then(data => {
+        let label = []
+        let dataset = []
+
+        const colors = ["#81b29a", "#2a9d8f", "#457b9d", "#1d3557", "#14213d", "#dee2ff", "#cbc0d3", "#64653", "#6b705c", "#d4a373"];
+
+        data.forEach(x => {
+          label.push(x[0]);
+          dataset.push(x[1]);
+        })
+
+        var ctx = document.getElementById('canvas').getContext('2d');
+        var myPieChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: label,
+            datasets: [{
+              data: dataset,
+              backgroundColor: colors,
+              borderColor: "lightgray"
+            }]
+          },
+          options: {
+            title: {
+              text: "Expenses Summary",
+              fontSize: 18,
+              fontColor: "#00b4d8",
+              display: true
+            },
+            responsive: true,
+            legend: {
+              labels: {
+                fontColor: "#17c3b2"
+              }
+            }
+          }
+        })
       })
-  })
-}
+  }
 
 
-/* _____ACESS SERVER TO UPDATE DATABASE AND GET DATABASE INFO TO LOAD TABLE____*/
+  /* _____ACESS SERVER TO UPDATE DATABASE____*/
   function updateDB() {
 
     let today = new Date().toISOString().slice(0, 10);
@@ -277,63 +320,69 @@
     buildData.forEach(x => {
       if (x.value === "") {
         data[0] = "ERROR";
-      } 
-      data[i+1] = x.value;
+      }
+      data[i + 1] = x.value;
       i += 1;
     })
-  
+
+    resetGraph()
+
     if (data[0] !== "ERROR") {
       /*_ACCESSES SERVER AND UPDATE EXPENSES TABLE DB_*/
       fetch("http://127.0.0.1:5000/updateDB", {
         method: "POST",
-        credentials: "include",
         body: JSON.stringify(data),
-        cache:"no-cache",
         headers: new Headers({
           "content-type": "application/json"
         })
-      })  
+      })
     }
-    
-  return data;
+
+    return data;
+  }
+
+  /* _________________ RESETS PIE CHART ________________*/
+  function resetGraph() {
+    document.getElementById("canvas").remove();
+
+    var divG = document.getElementById("pie-chart");
+    var canvas = document.createElement("canvas");
+
+    divG.appendChild(canvas);
+
+    canvas.setAttribute("id", "canvas");
+    canvas.setAttribute("width", "500px");
+    canvas.setAttribute("height", "500px");
   }
 
 
-
-/* _____ SETS DISPLAY FLEX IN EXPENSE TAB ____*/
-  function displayFlex(element) {
-  
-    const expenseTab = document.getElementById("expenses");
-
-    if (element.id == "expensesButton") {
-      expenseTab.style.display = "flex";
-    }
-    else {
-      expenseTab.style.display = "none";
-    }    
-  }
-
-
-/* _____ ENABLES AND DISABLES PASSWORD FIELDS ____*/
-  function changePass() {
+  /* _____ ENABLES AND DISABLES PASSWORD FIELDS ____*/
+  function toggleInputPass() {
     event.preventDefault()
     const inputPass = document.querySelectorAll(".inputPass")
+    const label = document.getElementById("labelTC");
 
-    inputPass.forEach(x => {   
+    inputPass.forEach(x => {
       if (x.disabled == true) {
         x.disabled = false;
+        x.classList.add("input-enabled");
+        label.innerHTML = "Press Save Changes to save password!";
+        label.style.display = "block";
       }
       else {
         x.disabled = true;
+        x.classList.remove("input-enabled");
+        label.style.display = "none";
       }
     })
-  } 
+  }
 
-/* _____ SUBMITS FORM IF INPUTS ARE CORRECTLY FILLED ____*/  
+
+  /* _____ SUBMITS FORM IF INPUTS ARE CORRECTLY FILLED ____*/
   function submitIF() {
-    event.preventDefault()  
+    event.preventDefault()
 
-    const initCash = document.getElementById("initCash") 
+    const initCash = document.getElementById("initCash")
     const saveChanges = document.getElementById("saveChanges")
     const invalidcheck = document.getElementById("invalidCheck")
     const labelTC = document.getElementById("labelTC")
@@ -341,15 +390,15 @@
 
     if (invalidcheck.checkValidity() === false) {
       labelTC.innerHTML = "You need to agree with the terms and conditions to continue!"
-      isfalse = 1;      
+      isfalse = 1;
     }
 
-    if (initCash !== null) {   
+    if (initCash !== null) {
       if (initCash.checkValidity() === false) {
         labelTC.innerHTML = "In your first login you must set an initial cash ammount!"
         isfalse = 1;
       }
-    } 
+    }
 
     const inputPass = document.querySelectorAll(".inputPass")
     let checkPass = 0
@@ -364,7 +413,6 @@
           checkPass = 1
         }
         else {
-          checkPass = 0
           isfalse = 1
           labelTC.innerHTML = "The password fields does NOT match!"
         }
@@ -378,9 +426,10 @@
       labelTC.style.display = "none";
       saveChanges.submit()
     }
-
   }
 
+
+  /* _______Handles the content switch inside account page________ */
   const tabs = document.querySelectorAll("[data-tab-target]")
   const tabContents = document.querySelectorAll("[data-tab-content]")
 

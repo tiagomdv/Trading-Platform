@@ -10,473 +10,624 @@
 
       <!--________Table with the top 5 tech stocks__________ -->
       <div class="tableContainer">
-        <h3>Top 5 Tech Stocks</h1>
+        <div class="row table-title">
+          <h3>Top Stock Assets</h3>
+        </div>
 
-          <table>
-            <tr>
-              <th class="th-market">#</th>
-              <th class="th-market">Stock</th>
-              <th class="th-market">Price</th>
-              <th class="th-market">YTD %</th>
-            </tr>
-            <tr id="TSLA" onclick="doEver(this.id)">
-              <td class="td-market">1</td>
-              <td class="td-market">Tesla</td>
-              <td class="td-market">{{ price[0] }}</td>
-              <td class="td-market" style="color:green">{{ ytdChange[0] }}%</td>
-              <td class="noPad td-market">
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-            <tr id="AAPL">
-              <td class="td-market">2</td>
-              <td class="td-market">Apple</td>
-              <td class="td-market">{{ price[1] }}</td>
-              <td class="td-market" style="color:green">{{ ytdChange[1] }}%</td>
-              <td class="noPad td-market">
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-            <tr id="AMZN">
-              <td class="td-market">3</td>
-              <td class="td-market">Amazon</td>
-              <td class="td-market">{{ price[2] }}</td>
-              <td class="td-market" style="color:green">{{ ytdChange[2] }}%</td>
-              <td class="noPad td-market">
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-            <tr id="MSFT">
-              <td class="td-market">4</td>
-              <td class="td-market">Microsoft</td>
-              <td class="td-market">{{ price[3] }}</td>
-              <td class="td-market" style="color:green">{{ ytdChange[3] }}%</td>
-              <td class="noPad td-market">
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-            <tr id="FB">
-              <td class="td-market">5</td>
-              <td class="td-market">Facebook</td>
-              <td class="td-market">{{ price[4] }}</td>
-              <td class="td-market"style="color:green">{{ ytdChange[4] }}%</td>
-              <td class="noPad td-market">
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-          </table>
+        <table>
+          <tr>
+            <th class="th-market">#</th>
+            <th class="th-market">Stock</th>
+            <th class="th-market">Price</th>
+            <th class="th-market">YTD %</th>
+          </tr>
+          <tr id="TSLA" onclick="doEver(this.id)">
+            <td class="td-market">1</td>
+            <td class="td-market td-hover">Tesla</td>
+            <td class="td-market">{{ price[0] }}</td>
+            <td class="td-market" style="color:green">{{ ytdChange[0] }}%</td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+          <tr id="AAPL" onclick="doEver(this.id)">
+            <td class="td-market">2</td>
+            <td class="td-market td-hover">Apple</td>
+            <td class="td-market">{{ price[1] }}</td>
+            <td class="td-market" style="color:green">{{ ytdChange[1] }}%</td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+          <tr id="AMZN" onclick="doEver(this.id)">
+            <td class="td-market">3</td>
+            <td class="td-market td-hover">Amazon</td>
+            <td class="td-market">{{ price[2] }}</td>
+            <td class="td-market" style="color:green">{{ ytdChange[2] }}%</td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+          <tr id="MSFT" onclick="doEver(this.id)">
+            <td class="td-market">4</td>
+            <td class="td-market td-hover">Microsoft</td>
+            <td class="td-market">{{ price[3] }}</td>
+            <td class="td-market" style="color:green">{{ ytdChange[3] }}%</td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+          <tr id="FB" onclick="doEver(this.id)">
+            <td class="td-market">5</td>
+            <td class="td-market td-hover">Facebook</td>
+            <td class="td-market">{{ price[4] }}</td>
+            <td class="td-market" style="color:green">{{ ytdChange[4] }}%</td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+        </table>
       </div>
 
 
       <!--_______ Table with the top 5 non stock assets______ -->
       <div class="tableContainer">
-        <h3>Top 5 Non Stock Assets</h1>
-          <table>
-            <tr>
-              <th class="th-market">#</th>
-              <th class="th-market">Stock</th>
-              <th class="th-market">Price</th>
-            </tr>
-            <tr id="BTCUSD=X">
-              <td class="td-market">1</td>
-              <td class="td-market">Bitcoin</td>
-              <td class="td-market">{{ price[5] }}</td>
-              <td class="noPad td-market">
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-            <tr id="EURUSD=X">
-              <td class="td-market">2</td>
-              <td class="td-market">Euro</td>
-              <td class="td-market">{{ price[6] }}</td>
-              <td class="noPad td-market">
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-            <tr id="^TNX">
-              <td class="td-market">3</td>
-              <td class="td-market">10y Bond</td>
-              <td class="td-market">{{ price[7] }}</td>
-              <td class="noPad td-market">
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-            <tr id="CL=F">
-              <td class="td-market">4</td>
-              <td class="td-market">Oil</td>
-              <td class="td-market">{{ price[8] }}</td>
-              <td class="noPad td-market">
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-            <tr id="GC=F">
-              <td class="td-market">5</td>
-              <td class="td-market">Gold</td>
-              <td class="td-market">{{ price[9] }}</td>
-              <td class="noPad td-market" >
-                <a class="btnBuy" href="/"><i class="fas fa-angle-double-up fa-sm"></i></a>
-              </td>
-              <td class="noPad td-market">
-                <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
-              </td>
-            </tr>
-          </table>
+        <div class="row table-title">
+          <h3>Top Non Stock Assets</h3>
+        </div>
+        <table>
+          <tr>
+            <th class="th-market">#</th>
+            <th class="th-market">Stock</th>
+            <th class="th-market">Price</th>
+          </tr>
+          <tr id="BTCUSD=X" onclick="doEver(this.id)">
+            <td class="td-market">1</td>
+            <td class="td-market td-hover">Bitcoin</td>
+            <td class="td-market">{{ price[5] }}</td>
+            <td class="td-fill"></td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+          <tr id="EURUSD=X" onclick="doEver(this.id)">
+            <td class="td-market">2</td>
+            <td class="td-market td-hover">Euro</td>
+            <td class="td-market">{{ price[6] }}</td>
+            <td class="td-fill"></td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell" href="/"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+          <tr id="^TNX" onclick="doEver(this.id)">
+            <td class="td-market">3</td>
+            <td class="td-market td-hover">10y Bond</td>
+            <td class="td-market">{{ price[7] }}</td>
+            <td class="td-fill"></td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+          <tr id="CL=F" onclick="doEver(this.id)">
+            <td class="td-market">4</td>
+            <td class="td-market td-hover">Oil</td>
+            <td class="td-market">{{ price[8] }}</td>
+            <td class="td-fill"></td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+          <tr id="GC=F" onclick="doEver(this.id)">
+            <td class="td-market">5</td>
+            <td class="td-market td-hover">Gold</td>
+            <td class="td-market">{{ price[9] }}</td>
+            <td class="td-fill"></td>
+            <td class="noPad td-market">
+              <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
+            </td>
+            <td class="noPad td-market">
+              <a class="btnSell"><i class="fas fa-angle-double-down fa-sm"></i></a>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
 
     <!--__________ Second column containing the graph_________ -->
     <div class="col">
-      <div id ="GRAPH" class="GRAPH" style="align-items: center;"><canvas id="canvas" width="500px" height="500px"></canvas>
+      <div id="graph-container" class="graph-container" style="align-items: center;"><canvas id="canvas" width="500px"
+          height="500px"></canvas>
       </div>
     </div>
   </div>
 </div>
 
-  <div class="row">
-    <div class="col"></div>
+<!--_______Container with check quote and submit orders_____ -->
+<div class="container">
 
-    <!--_______Container with check quote and submit orders_____ -->
-    <div class="col checkContainer">
-      <div style="margin-right: 100px;">
-      <form action="#" method="post">      
-        <label class="labelCheck">Check other quotes</label>
+  <div class="row justify-content-md-center">
 
-        <div><input id="mModal" class="inputCheck" name="quote" placeholder="Ticker Symbol">
-          <button id="checkPriceBtn" class="btnCheck" type="submit" onclick="getQuoteData(this.id)">Check</button>
+
+    <div class="col col-lg-5 check-container">
+      <div class="row label-check"><label>Check other quotes</label></div>
+
+      <div class="row input-button-check">
+        <div class="col"><input id="mModal" class="inputCheck" name="quote" placeholder="Ticker Symbol"></div>
+        <div class="col"><button id="checkPriceBtn" class="default-button"
+            onclick="getQuoteData(this.id)">Check</button></div>
+      </div>
+
+      <div class="row label-warning"><label id="mLabel" style="visibility: hidden;"></label></div>
+    </div>
+
+    <div class="col col-1 second-check-box-container">
+      <div class="row"><button id="orderBtn" class="default-button" type="submit" onclick="toggleModal(this.id)">Process
+          Order</button></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!--_______Container with quote info_____ -->
+<div id="quoteInfoContainer">
+
+  <div class="row justify-content-md-center">
+
+    <div class="col col-lg-5 check-container">
+
+      <div class="row row-quote-info-title"><label id="companyName" class="label-quote-info-title"></label>
+      </div>
+
+      <div class="row row-quote-info">
+
+        <div class="col">
+          <div class="row"><label class="label-quote-info">Price:</label><label id="companyPrice"
+              class="label-quote-info-next"></label></div>
         </div>
 
-        <label id="mLabel" class="labelCheck mLabel" style="visibility: hidden;">companyName share is valued at price</label>
-      </form>
+        <div class="col">
+          <div class="row"><label class="label-quote-info">52 Week Change:</label><label id="fifty2WC"
+              class="label-quote-info-next"></label></div>
+        </div>
+
+      </div>
+
+      <div class="row row-quote-info">
+
+        <div class="col">
+          <div class="row"><label class="label-quote-info">52 Week Low:</label><label id="fifty2WL"
+              class="label-quote-info-next"></label></div>
+        </div>
+
+        <div class="col">
+          <div class="row"><label class="label-quote-info">52 Week High:</label><label id="fifty2WH"
+              class="label-quote-info-next"></label></div>
+        </div>
+
+      </div>
+
+      <div class="row row-quote-info">
+
+        <div class="col">
+          <div class="row"><label class="label-quote-info">trailing PE:</label><label id="trailingPE"
+              class="label-quote-info-next"></label></div>
+        </div>
+
+        <div class="col">
+          <div class="row"><label class="label-quote-info">Asset Type:</label><label id="quoteType"
+              class="label-quote-info-next"></label></div>
+        </div>
+
+      </div>
+
     </div>
 
-      <div class="divSub"><button id="orderBtn" class="mktBtn" type="submit" onclick="toggleModal(this.id)">Process Order</button></div>
+  </div>
+
+</div>
+
+
+<!--______________________ POPUP WINDOW ___________________-->
+<!-- Container with pop up window -->
+<div id="bgmodal" class="bg-modal">
+  <div class="modal-content">
+    <p id="closeModal" class="crossX" onclick="miniToggleModal()">+</p>
+    <div>
+
+      <!-- Windows form with info and input to submit orders -->
+      <label class="labelModal" id="superLabel"></label>
+
+      <div class="row row-quote-info">
+        <label id="labelYTD" class="labelModal"></label>
+      </div>
+
+      <!-- Section with Buttons to BUY, SELL and SUMBIT ORDER -->
+      <div class="container contBuySell" style="display: flex; ">
+        <div class="row">
+
+          <div class="col">
+            <div class="row"><button id="btnBuy" class="default-button button-changes-popup" type="submit"
+                onclick="btnActivated(this.id)">Buy</button></div>
+            <div class="row"><button id="btnSell" class="default-button button-changes-popup" type="submit"
+                onclick="btnActivated(this.id)">Sell</button></div>
+          </div>
+
+          <div class="col">
+            <!-- Form that submits all info related to buying order-->
+            <form id="buyForm" action="/buy" method="post">
+              <input id="tickerInput" name="tickerSymbol" style="display: none;">
+              <input id="nameInput" name="tickerName" style="display: none;">
+              <input id="quoteTypeInput" name="assetType" style="display: none;">
+              <input id="qModal" class="inputCheck" name="numberShares" placeholder="How many?"
+                style="top: 50px; width: 130px; ">
+              <button class="default-button" type="submit" style="width: 130px;" onclick="buyOrder()">Submit
+                Order</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
 
     </div>
 
-      <div class="col"></div>
 
+    <!-- Section with Buttons to margin buy -->
+    <div class="container marginContainer" style="display: flex">
+      <div class="col"><label class="labelMargin">Trade with Leverage</label></div>
+      <div class="row" style="align-items: center;">
+        <div class="col"><button class="default-button marginBtn" type="submit" name="margin2x">x2</button></div>
+        <div class="col"><button class="default-button marginBtn" type="submit" name="margin5x">x5</button></div>
+        <div class="col"><button class="default-button marginBtn" type="submit" name="margin10x">x10</button></div>
+      </div>
+
+    </div>
+
+    </form>
+
+  </div>
 </div>
-</div>
 
 
 
-<!--_________________________ SCRIPT______________________-->
-<script>   
+
+
+
+
+
+<!--__________________ SCRIPT that handles graph bulding _____________-->
+<script>
   function doEver(id) {
     let yAxis = {};
     let xAxis = {};
 
     getData(id);
   }
-       
+
+  /* _____________________ Gets data to build graph ___________________*/
   function getData(entry) {
-      fetch("http://127.0.0.1:5000/getHistoricalData", {
+    fetch("http://127.0.0.1:5000/getHistoricalData", {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(entry),
-      cache:"no-cache",
+      cache: "no-cache",
       headers: new Headers({
-      "content-type": "application/json"
+        "content-type": "application/json"
       })
     })
-    .then(response => response.json())
-    .then(data => {   
-      xAxis = data["xAxis"]
-      yAxis = data["yAxis"]
-      
-      resetGraph();
-      doGraph(xAxis, yAxis, entry)      
-    })
-  }    
+      .then(response => response.json())
+      .then(data => {
+        xAxis = data["xAxis"]
+        yAxis = data["yAxis"]
 
+        resetGraph();
+        doGraph(xAxis, yAxis, entry)
+      })
+  }
+
+  /* _____________________ Builds Graph ___________________*/
   function doGraph(xData, yData, ticker) {
     var config = {
-			type: 'line',
-			data: {
-				labels: xData,
-				datasets: [{
-					label: 'Dataset: ' + ticker,
-					backgroundColor: "lightgray",
-					borderColor: "black",
-					data: yData,
-					fill: false,
-				}]
-			},
-			options: {
-				responsive: true,
-				title: {
-					display: true,
-					text: '5 year period historic performance'
-				},
-				tooltips: {
-					mode: 'index',
-					intersect: false,
-				},
-				hover: {
-					mode: 'nearest',
-					intersect: true
-				},
-				scales: {
-					xAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Month'
-						}
-					}],
-					yAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Value'
-						}
-					}]
-				}
-			}
-		};
-  var ctx = document.getElementById('canvas').getContext('2d');
-  window.myLine = new Chart(ctx, config);
+      type: 'line',
+      data: {
+        labels: xData,
+        datasets: [{
+          label: ticker,
+          backgroundColor: "black",
+          borderColor: "#17c3b2",
+          data: yData,
+          fill: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+          text: '5 YEAR PERFORMANCE: ' + ticker,
+          fontFamily: "SuisseIntl-SemiBold,Helvetica,Arial,sans-serif",
+          fontColor: "#00b4d8",
+          fontSize: 18,
+          lineHeight: 1.5
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          xAxes: [{
+            display: true,
+            ticks: {
+              fontColor: "#a9def9"
+            }
+          }],
+          yAxes: [{
+            display: true,
+            fontColor: "#17c3b2",
+            ticks: {
+              fontColor: "#a9def9"
+            }
+          }]
+        },
+        legend: {
+          display: false
+        }
+      }
+
+    };
+    var ctx = document.getElementById('canvas').getContext('2d');
+    window.myLine = new Chart(ctx, config);
   }
 
   function resetGraph() {
-  document.getElementById("canvas").remove();
+    document.getElementById("canvas").remove();
 
-  var divG = document.getElementById("GRAPH");
-  var canvas = document.createElement("canvas");
+    var divG = document.getElementById("graph-container");
+    var canvas = document.createElement("canvas");
 
-  divG.appendChild(canvas);
+    divG.appendChild(canvas);
 
-  canvas.setAttribute("id", "canvas");
-  canvas.setAttribute("width", "500px");
-  canvas.setAttribute("height", "500px");
+    canvas.setAttribute("id", "canvas");
+    canvas.setAttribute("width", "500px");
+    canvas.setAttribute("height", "500px");
   }
 </script>
-<!--_________________________ SCRIPT______________________-->
 
 
 
-<!--______________________ POPUP WINDOW ___________________-->
-  <!-- Container with pop up window -->
-<div id="bgmodal" class="bg-modal">
-  <div class="modal-content">
-    <p id="closeModal" class="crossX" onclick="miniToggleModal()">+</p>
-  <div>
-    <label class="labelModal" id="superLabel"></label>
-
-        <!-- Windows form with info and input to submit orders -->
-
-        <div class="container">
-          <div class="col">
-            <div class="row">
-              <label id="labelYTD" class="labelModal"></label>
-            </div>
-          </div>
-         
-        </div>
-
-          <!-- Section with Buttons to BUY, SELL and SUMBIT ORDER -->
-          <div class="container contBuySell" style="display: flex; ">
-            <div class="row">
-              <div class="col">
-                <div class="row"><button id="btnBuy" class="mktBtn" type="submit" onclick="btnActivated(this.id)">Buy</button></div>
-                <div class="row"><button id="btnSell" class="mktBtn" type="submit" onclick="btnActivated(this.id)">Sell</button></div>
-              </div>
-                <div class="col">
-                  <!-- Form that submits all info related to buying order-->
-                  <form id="buyForm" action="/buy" method="post">
-                    <input id="tickerInput" name="tickerSymbol" style="display: none;">
-                    <input id="nameInput" name="tickerName" style="display: none;">
-                    <input id="qModal" class="inputCheck" name="numberShares" placeholder="Numer of shares" style="top: 50px; width: 130px; ">
-                    <button class="mktBtn" type="submit" style="width: 130px;" onclick="buyOrder()">Submit Order</button>
-                </form>
-                </div>
-            </div>
-          </div>
-
-  </div>
 
 
-          <!-- Section with Buttons to margin buy -->
-        <div class="container marginContainer" style="display: flex">
-          <div class="col"><label class="labelMargin">Trade with Leverage</label></div>
-          <div class="row" style="align-items: center;">
-            <div class="col"><button class="mktBtn marginBtn" type="submit" name="margin2x">x2</button></div>
-            <div class="col"><button class="mktBtn marginBtn" type="submit" name="margin5x">x5</button></div>
-            <div class="col"><button class="mktBtn marginBtn" type="submit" name="margin10x">x10</button></div>
-          </div>   
-          
-        </div>
-        
-      </form>
-      
-    </div>
-  </div>
-</div>
 
 
-<!--_________________________ SCRIPT______________________-->
+<!--_ SCRIPT that gets stock related data from server and handles buy order _-->
 <script>
 
-//____________Submits form that handles buy operation_____________
-function buyOrder() {
-  const buyForm = document.getElementById("buyForm");  
-  buyForm.submit()
-}
-
-//_________Makes pop up windows appear. Windows to process orders.
-function toggleModal(id) {
-  const qModal = document.getElementById("qModal");
-  const mModal = document.getElementById("mModal");
-  const mLabel = document.getElementById("mLabel");
-
-  document.getElementById("tickerInput").value = mModal.value;
-
-  if (mModal.value === "") {
-    mLabel.innerHTML = "You need to insert a ticket symbol to continue!"
+  //____________Submits form that handles buy operation_____________
+  function buyOrder() {
+    const buyForm = document.getElementById("buyForm");
+    buyForm.submit()
   }
-  else {
-    event.preventDefault()
-    if (modal.style.visibility === "hidden") {
-      modal.style.visibility = "visible";
+
+  //_________Makes pop up windows appear. Windows to process orders.
+  function toggleModal(id) {
+    const qModal = document.getElementById("qModal");
+    const mModal = document.getElementById("mModal");
+    const mLabel = document.getElementById("mLabel");
+
+    if (mLabel.innerHTML === "Invalid ticker symbol!") {
+      mLabel.innerHTML = "Cannot continue without a valid ticker symbol!"
+      return null
     }
-    else {
-      modal.style.visibility = "hidden";
-    }
-  }
-  
-  if (id === "orderBtn") {
-    getQuoteData();
-  }
-}
 
-//__________Gets price and company name from the server
-function getQuoteData(id, ticknoPad) {
-  event.preventDefault()
+    document.getElementById("tickerInput").value = mModal.value;
 
-  if (id !== "noPad td-market") {     
     if (mModal.value === "") {
       mLabel.innerHTML = "You need to insert a ticket symbol to continue!"
-      mLabel.style.visibility = "visible";
-      return;
-    }
-  }
-
-  if (id === "noPad td-market") {
-    ticker = ticknoPad;
-  }
-  else {
-    ticker = document.getElementById("mModal").value;
-  }  
-
-  fetch("http://127.0.0.1:5000/getPrice", {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(ticker),
-    cache:"no-cache",
-    headers: new Headers({
-      "content-type": "application/json"
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-
-    price = data["price"];
-    companyName = data["companyName"];
-
-    both = price + "/" + companyName;
-
-    if (id === "checkPriceBtn") {
-      document.getElementById("mLabel").innerText = companyName + " current share price is $" + price + ".";
-      mLabel.style.visibility = "visible";
     }
     else {
-      ytdChange = data["ytdChange"];
+      event.preventDefault()
+      if (modal.style.visibility === "hidden") {
+        modal.style.visibility = "visible";
+      }
+      else {
+        modal.style.visibility = "hidden";
+      }
+    }
 
-      document.getElementById("superLabel").innerText = "The current price of " + companyName + " is: " + price + "."; 
-      document.getElementById("labelYTD").innerText = "52 Week Change: " + ytdChange + "%.";
+    if (id === "orderBtn") {
+      getQuoteData();
+    }
+  }
+
+
+  //__________Gets price and company name from the server
+  function getQuoteData(id, ticknoPad) {
+    event.preventDefault()
+
+    if (id !== "noPad td-market") {
+      if (mModal.value === "") {
+        mLabel.innerHTML = "You need to insert a ticket symbol to continue!"
+        mLabel.style.visibility = "visible";
+        return;
+      }
+    }
+
+    if (id === "noPad td-market") {
+      ticker = ticknoPad;
+    }
+    else {
+      ticker = document.getElementById("mModal").value;
+    }
+
+    // _____ If Process Order Button is pressed and exists quote data 
+    if (mLabel.innerHTML === "notFirst") {
+      companyName = document.getElementById("companyName").innerText;
+      companyPrice = document.getElementById("companyPrice").innerText;
+
+      both = companyPrice + "/" + companyName;
+
       document.getElementById("nameInput").value = both;
-      alert(document.getElementById("nameInput").value);
-    }   
+      document.getElementById("quoteTypeInput").value = document.getElementById("quoteType").innerText;
 
-  })
-}
+      document.getElementById("superLabel").innerText = "Current price of " + companyName + " is: " + companyPrice + ".";
+      document.getElementById("labelYTD").innerText = "52 Week Change: " + document.getElementById("fifty2WC").innerText + "%.";
+      return;
+    }
+
+    // ____ Gets quote data from the server
+    fetch("http://127.0.0.1:5000/getPrice", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(ticker),
+      cache: "no-cache",
+      headers: new Headers({
+        "content-type": "application/json"
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+
+        if (data == "quote-error") {
+          document.getElementById("mLabel").innerText = "Invalid ticker symbol!";
+          mLabel.style.visibility = "visible";
+        }
+        else {
+
+          if (id === "checkPriceBtn") { /* If check button is pressed */
+            mLabel.style.visibility = "hidden";
+            mLabel.innerHTML = "notFirst";
+
+            document.getElementById("companyName").innerText = data["companyName"]
+            document.getElementById("companyPrice").innerText = "$" + data["price"]
+            document.getElementById("fifty2WC").innerText = data["fifty2WC"] + " %"
+            document.getElementById("fifty2WL").innerText = data["fifty2WL"]
+            document.getElementById("fifty2WH").innerText = data["fifty2WH"]
+            document.getElementById("trailingPE").innerText = data["trailingPE"]
+            document.getElementById("quoteType").innerText = data["quoteType"]
+
+            document.getElementById("quoteInfoContainer").style.visibility = "visible"
+
+          }
+          else { /* If submit order button is pressed */
+
+            both = data["price"] + "/" + data["companyName"];
+
+            document.getElementById("nameInput").value = both;
+            document.getElementById("quoteTypeInput").value = data["quoteType"];
+
+            document.getElementById("superLabel").innerText = "Current price of " + data["companyName"] + " is: " + data["price"] + ".";
+            document.getElementById("labelYTD").innerText = "52 Week Change: " + data["fifty2WC"] + "%.";
+
+            alert(document.getElementById("nameInput").value);
+
+          }
+        }
+
+      })
+  }
 
 </script>
-<!--_________________________ SCRIPT______________________-->
 
 
 
-<!--_________________________ SCRIPT______________________-->
+
+
+
+<!--_____________________ SCRIPT that handles POPUP window ___________-->
 <script>
 
-//_________________Hides pop up windows from load__________________
-let modal = document.getElementById("bgmodal");
-modal.style.visibility = "hidden";
+  window.onload = function () {
+    doEver("TSLA");
+  }
 
-//_____Closes the POPUP window and resets buy/sell btn toggle_____
-function miniToggleModal() {
+  //_________________Hides pop up windows from load__________________
+  let modal = document.getElementById("bgmodal");
   modal.style.visibility = "hidden";
-  document.getElementById("btnSell").className = "mktBtn";
-  document.getElementById("btnBuy").className = "mktBtn";
-}
 
-//_________Activates BUY and SELL button in modal window________
-function btnActivated(id) {
-  var other = "";
-
-  if (id === "btnBuy") {
-    other = "btnSell";
-  }
-  else {
-    other = "btnBuy";
+  //_____Closes the POPUP window and resets buy/sell btn toggle_____
+  function miniToggleModal() {
+    modal.style.visibility = "hidden";
+    document.getElementById("btnSell").className = "default-button button-changes-popup";
+    document.getElementById("btnBuy").className = "default-button button-changes-popup";
   }
 
-  var toActive = document.getElementById(id);
-  var toDesactive = document.getElementById(other);
+  //_________Activates BUY and SELL button in modal window________
+  function btnActivated(id) {
+    var other = "";
 
-  var classNameActive = toActive.className;
-  var classNameDesactive = toDesactive.className;
+    if (id === "btnBuy") {
+      other = "btnSell";
+    }
+    else {
+      other = "btnBuy";
+    }
 
-  if (classNameActive.match(/active/) === null) {
-    toActive.className += " active";
+    var toActive = document.getElementById(id);
+    var toDesactive = document.getElementById(other);
+
+    var classNameActive = toActive.className;
+    var classNameDesactive = toDesactive.className;
+
+    if (classNameActive.match(/active/) === null) {
+      toActive.className += " active";
+    }
+
+    if (classNameDesactive.match(/active/) !== null) {
+      toDesactive.className = "default-button button-changes-popup";
+    }
   }
 
-  if (classNameDesactive.match(/active/) !== null) {
-    toDesactive.className = "mktBtn";
-  }
-}
+  //____________Handles buy/sell buttons on click _____
+  $(document).click(function (e) {
+    parentElem = e.target.parentNode;
+
+    btnID = parentElem.className;
+    // Handle only if BUY or SELL buttons are pressed
+    if (btnID === "btnBuy" || btnID === "btnSell") {
+      ticker = parentElem.parentNode.parentNode.id;
+
+      // Shows the pop up window
+      modal.style.visibility = "visible";
+
+      var nopad = parentElem.parentNode.className;
+      getQuoteData(nopad, ticker)
+
+      // Activates SELL or BUY button in POPUP window
+      document.getElementById(btnID).className += " active";
+      document.getElementById("tickerInput").value = ticker;
+    }
+  })
 
 </script>
-<!--_________________________ SCRIPT______________________-->
-
-
-<script src="/static/market.js"></script>
 
 {% endblock %}

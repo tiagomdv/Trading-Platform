@@ -4,19 +4,22 @@
 
 {% block main %}
 
-<div class="container logContainer text-cool">
+<div class="container logContainer">
 
   <div class="container">
-    <h1>Welcome</h1>
-    <h5>
-      <!-- Details the origin of errors from login -->
-      {% if logError %}
-          {{ logError }}
-
-        {% else %}
-          Please provide your information.
-      {% endif %}
-    </h5>
+    <div class="row rows-login"><h1>Welcome</h1></div>    
+    <div class="row rows-login">
+      <h5>
+        <!-- Details the origin of errors from login -->
+        {% if logError %}
+            {{ logError }}
+  
+          {% else %}
+            Please provide your information.
+        {% endif %}
+      </h5>
+    </div>
+    
   </div>
 
   <form action="/login" method="post">

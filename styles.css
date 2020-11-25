@@ -25,17 +25,12 @@ body {
   border-radius: 5px;
   box-shadow: lightgray 2px;
   width: 400px;
-  align-items: center;
-}
-
-.text-cool {
   color: rgb(185, 190, 207);
 }
 
-h1 {
-  text-align: center;
-  color: lightgoldenrodyellow;
-  font-size: 35px;
+.rows-login {
+  display: flex;
+  justify-content: center;
 }
 
 h5 {
@@ -45,10 +40,10 @@ h5 {
   color: lightgoldenrodyellow;
 }
 
-h3 h2 {
-  color: grey;
-  text-align: center;
+h1 {
+  color: #00b4d8;
 }
+
 
 /* ______________Input Form and Button configuration________*/
 .formIn {
@@ -79,7 +74,7 @@ h3 h2 {
 .btnToPres:hover {
   text-decoration: none;
   list-style-type: none;
-  color: rgb(28, 61, 134);
+  color: lightskyblue;
   transition: all 0.3s ease;
   cursor: pointer;
   border-radius: 10px;
@@ -137,14 +132,14 @@ h3 h2 {
 footer {
   list-style-type: none;
   font-size: small;
-  color: lightgoldenrodyellow;
-  background-color: black;
+  color: white;
+  background-color: lightskyblue;
   position: fixed;
-  right: 0;
-  bottom: 0;
+  right: 5px;
+  bottom: 5px;
   text-align: center;
   width: 12%;
-  border-radius: 2px;
+  border-radius: 4px;
   border: 1px solid lightblue;
 }
 
@@ -162,32 +157,43 @@ footer {
 }
 
 h3 {
-  color: lightgreen;
+  color: #00b4d8;
   font-weight: bold;
-  font-size: 18px;
-  line-height: 14px;
-  letter-spacing: .4px;
-  text-transform: uppercase;
-  margin-top: 15px;
+  font-size: 20px;
+  margin-top: 8px;
+}
+
+.table-title {
+  justify-content: center;
 }
 
 .th-market {
   padding: 0 25px;
   font-size: 15px;
-  color: darkgrey;
+  color: #17c3b2;
 }
 .td-market {
-  padding: 5px 25px;
+  padding: 6px 25px;
   font-size: 15px;
-  color: rgb(173, 216, 230);
+  color:#a9def9;
 }
 
-.td-market:hover {
+.td-fill {
+  width: 100px;
+}
+
+.td-hover {
+  min-width: 150px;
+}
+.td-hover:hover {
   background-color:lightgrey;
   color: rgb(80, 126, 120); 
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bolder;
 }
 
-.GRAPH {
+.graph-container {
   border: 2px solid lightgray;
   border-radius: 8px;
   box-shadow: lightgray 10px;
@@ -195,89 +201,125 @@ h3 {
 
 .btnBuy {
   color: rgb(34, 146, 34); 
+  cursor: pointer;
 }
 
 .btnSell {
   color: rgb(209, 10, 10);
+  cursor: pointer;
 }
 
 .noPad {
   padding: 0 5px;
 }
 
-
 /* _______________CHECK CONTAINER__________ */
 
-.checkContainer {
-  display: flex;
-  margin-top: 15px;
+.check-container {
+  margin: 15px 15px 0 0 ;
   padding: 15px;
   border: 2px solid lightgray;
   border-radius: 8px;
-  box-shadow: lightgray 10px;
-  justify-content: center;
-  align-content: center;
+  box-shadow: lightgray 10px;  
 }
 
-.labelCheck {
-  color: lightcyan;
+.label-check {
+  justify-content: center;
+  color: #00b4d8;
   font-weight: 300;
   font-size: 20px;
+}
+
+.input-button-check {
+  justify-content: center;
+  align-items: center;
+  line-height: normal;
+  font-size: 18px;
+}
+
+.label-warning {
+  color: #a9def9;
+  font-size: 16px;
+  justify-content: center;
 }
 
 .inputCheck {
   margin: 5px 0;
   background-color: rgb(22, 54, 112);
-  color: lightcyan;
-}
-
-.btnCheck {
+  border: 2px solid #a9def9;
   border-radius: 5px;
-  border: 1px solid lightcyan;
-  box-shadow: lightgray 2px;
-  background-color: rgb(22, 54, 112);
-  color: lightcyan;
+  color: #a9def9;
 }
 
-.btnCheck:hover  {
-  background-color: lightcyan;
+.inputCheck:hover {
+  border: 2px solid lightgoldenrodyellow;
+}
+
+.default-button {
+  color: lightcyan;
+  background-color: rgb(22, 54, 112);
+  border-radius: 5px;
+  border: 2px solid #a9def9;
+  box-shadow: lightgray 5px;
+}
+
+.default-button:hover {
+  background-color: #a9def9;
   color: rgb(22, 54, 112);
+  font-weight: bolder;
   transition: all 0.3s ease;
 }
-.mktBtn:hover {
-  background-color: lightcyan;
-  color: rgb(22, 54, 112);
-  transition: all 0.3s ease;
-}
 
-.mktBtn {
-  border-radius: 5px;
-  border: 1px solid lightcyan;
-  box-shadow: lightgray 2px;
-  background-color: rgb(22, 54, 112);
-  color: lightcyan;
-  margin-top: 5px;
+.button-changes-popup {
   width: 100px;
+  margin-top: 5px;
 }
 
 .active {
-  border-radius: 5px;
-  border: 1px solid black;
-  box-shadow: lightgray 2px;
-  background-color: lightcyan;
-  color:rgb(22, 54, 112);
-  margin-top: 5px;
+  background-color: #a9def9;
+  color: rgb(22, 54, 112);
+  font-weight: bolder;
+  transition: all 0.3s ease;
   width: 100px;
+  margin-top: 5px;
 }
 
 .btnCheck:hover, .btnSubmit:hover {
   background-color: white;
 }
 
-.divSub {
+.second-check-box-container {
   display: flex;
   justify-content: center;
-  margin: 5px 0;
+  align-items: center;
+}
+
+#quoteInfoContainer {
+  visibility: hidden;
+}
+
+.label-quote-info-title {
+  color: #17c3b2;
+  font-size: 20px;
+}
+
+.label-quote-info {
+  color: #00b4d8;
+  margin-left: 10px;
+}
+
+.label-quote-info-next {
+  color: #a9def9;
+  margin-left: 3px;
+}
+
+.row-quote-info-title {
+  margin: 6px 0;
+  justify-content: center;
+}
+
+.row-quote-info {
+  justify-content: center;
 }
 
 /* _____________________POPUP WINDOW ELEMENTS_______________ */
@@ -359,10 +401,6 @@ h3 {
   color: lightcyan;
 }
 
-.mLabel {
-  font-size: 15px;
-}
-
 /* ___________________WALLET PAGE_______________*/  
 
 .alarmContainer {
@@ -381,6 +419,7 @@ h3 {
   border-radius: 8px;
   box-shadow: lightgray 10px;
   padding: 15px;
+  justify-content: center;
 }
 
 .colTable {
@@ -404,9 +443,17 @@ h3 {
   width: 200px;
 }
 
-.h2Wallet { 
+.h2-wallet { 
   font-size: 25px;
-  color: lightgreen;
+  color: #00b4d8;
+}
+
+.box-title-wallet {
+  color: #17c3b2;
+}
+
+.box-rows-wallet {
+  color: #a9def9;
 }
 
 .companyNameLabel {
@@ -418,6 +465,10 @@ h3 {
   color: black;
   background-color: lightblue;
   cursor: pointer;
+}
+
+.boxes-wallet {
+  margin-top: 30px;
 }
 
 
@@ -470,9 +521,67 @@ h3 {
   padding: 20px;
 }
 
-/* ___________________PROFILE PAGE _______________*/  
+.button-changes-expenses {
+  padding: 6px 20px;
+}
+
+.button-changes-expenses-1 {
+  padding: 5px 5px;
+  visibility: hidden;
+}
+
+/* ___________________PROFILE TAB _______________*/  
 .labelTC {
   display: none;
   margin-top: 5px;
   color: red;
+}
+
+.inputSetCash {
+  border: 2px solid lime;
+  background-color: lightgreen;
+}
+
+.button-changes-profile {
+  padding: 8px 5px;
+  font-size: small;
+}
+
+.input-enabled {
+  border: 2px solid #00b4d8;
+  background-color: lightblue;
+}
+
+/* ___________________EXPENSES TAB _______________*/  
+.container-wborder {
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  box-shadow: lightgray 15px;
+  padding: 20px;
+  margin-top: 25px;
+}
+
+.secCol-ExpTab {
+  margin-left: 50px;
+}
+
+.secCol-ExpTab2 {
+  margin-left: 50px;
+  align-items: center;
+}
+
+.hiddenContainer {
+  padding: 50px;
+}
+
+h6 {
+  font-size: 18px;
+  text-align: center;
+  color: #00b4d8;
+}
+
+.labelAddExp {
+  color: red;
+  margin-top: 20px;
+  visibility: hidden;
 }

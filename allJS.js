@@ -253,3 +253,16 @@ regBtn.style.display = "none";
 logOBtn.style.visibility = "visible";
 logOBtn.style.display = "inline";
 }
+
+/* _____ SETS DISPLAY FLEX IN EXPENSE TAB ____*/
+  function displayFlex(element) {
+  
+    const expenseTab = document.getElementById("expenses");
+
+    if (element.id == "expensesButton") {
+      expenseTab.style.display = "flex";
+    }
+    else {
+      expenseTab.style.display = "none";
+    }    
+  }
