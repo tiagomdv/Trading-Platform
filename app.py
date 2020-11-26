@@ -447,3 +447,27 @@ def getDataDB():
     result = make_response(jsonify(expenses)) 
 
     return result
+
+@app.route("/getAssetAloc", methods=["GET"])
+def getAssetAloc():
+
+    # ______Acess to database________
+    dbConnection = sqlite3.connect('finance.db') # connection
+    cursor = dbConnection.cursor()
+
+    # Get id 
+    cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
+    temp = cursor.fetchall()
+    userid = temp[0][0] 
+
+    # Get data
+    cursor.execute("SELECT typeasset, round(sum(price*number), 2) FROM stocks WHERE ID=? GROUP BY typeasset", (userid,))
+    temp = cursor.fetchall()
+
+    # ____Close access to database___
+    cursor.close()
+    dbConnection.close() 
+
+    result = make_response(jsonify(temp)) 
+
+    return result

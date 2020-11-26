@@ -33,7 +33,7 @@
 					{% for row in history %}
 					<tr class="td-market">
 						<th class="walletHeadRow" scope="col" onclick="getAssetData(this)">{{ row[6] }}</th>
-						<td>{{ row[0] }}</td>
+						<td>{{ row[7] }}</td>
 						<td>{{ row[1] }}</td>
 						<td>$ {{ row[2] }}</td>
 						<td>$ {{ row[3] }}</td>
@@ -181,7 +181,7 @@
 	function buildPieChart() {
 
 		/* _____ GETS DATA _____*/
-		fetch("http://127.0.0.1:5000/getDataDB", {
+		fetch("http://127.0.0.1:5000/getAssetAloc", {
 			method: "GET"
 		})
 			.then(response => response.json())
