@@ -63,7 +63,7 @@
 					<p>Cash Position:</p>
 				</div>
 				<div>
-					<p>$ {{ cashPosition }}.000</p>
+					<p>$ {{ cashPosition[0] }},{{ cashPosition[1] }}</p>
 				</div>
 			</div>
 			<div class="row  box-rows-wallet" style="display:flex">
@@ -71,7 +71,7 @@
 					<p>Cash Invested:</p>
 				</div>
 				<div>
-					<p>$ {{ cashInvested }}.000</p>
+					<p>$ {{ cashInvested[0] }},{{ cashInvested[1] }}</p>
 				</div>
 			</div>
 			<div class="row  box-rows-wallet" style="display:flex">
@@ -79,7 +79,7 @@
 					<p class="firstCol">Cash Total:</p>
 				</div>
 				<div>
-					<p>$ {{ cashTotal }}.000</p>
+					<p>$ {{ cashTotal[0] }},{{ cashTotal[1] }}</p>
 				</div>
 			</div>
 		</div>
@@ -132,25 +132,124 @@
 	</div>
 </div>
 
+
+<!--______________________ POPUP WINDOW ___________________-->
+<!-- Container with pop up window -->
+<div id="walletModal" class="bg-modal">
+	<div class="modal-content-wallet">
+
+		<div class="container">
+
+			<div class="col">
+				<p id="closeModal" class="crossX" onclick="closeModal()">+</p>
+				<div class="row rowTable" style="margin-top: 0;">
+					<div class="row">
+						<h6 style="font-size: 18px;">Asset History</h6>
+					</div>
+					<table class="table table-striped table-borderless table-hover table-smdxr">
+						<thead>
+							<tr class="th-market">
+								<th scope="col">Date</th>
+								<th scope="col">Description</th>
+								<th scope="col">Shares</th>
+								<th scope="col">Price</th>
+								<th scope="col">Order Value</th>
+							</tr>
+						</thead>
+
+						<tbody class="table-body">
+
+
+
+						</tbody>
+
+					</table>
+				</div>
+			</div>
+			<div class="col" style="margin-left: 25px">
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+
 <script>
+	const tableBody = document.querySelector(".table-body")
 
-	window.onload = function () {
-		buildPieChart()
+
+	function fillsTable(e) {
+
+		const rows_delete = document.querySelectorAll(".row-delete")
+
+		rows_delete.forEach(row => {
+			tableBody.removeChild(row)
+		})
+
+		ticker = e.innerHTML;
+
+		fetch("http://127.0.0.1:5000/getStockHistory", {
+			method: "POST",
+			credentials: "include",
+			body: JSON.stringify(ticker),
+			cache: "no-cache",
+			headers: new Headers({
+				"content-type": "application/json"
+			})
+		})
+			.then(response => response.json())
+			.then(data => {
+
+				data.forEach(row => {
+					const newTr = document.createElement("tr")
+					newTr.classList.add("td-market")
+					newTr.classList.add("row-delete")
+
+					/* Creates a a table row (Tr) with 4 Td */
+					for (i = 0; i < 5; i++) {
+
+						const newTd = document.createElement("td")
+
+						if (i == 3) {
+							row[i] = Math.round(row[i] * 100) / 100
+						}
+
+						if (i < 4) {
+							newTd.innerHTML = row[i]
+						}
+						else {
+							newTd.innerHTML = "$ " + (row[2] + row[3])
+						}
+						newTr.appendChild(newTd)
+					}
+					tableBody.appendChild(newTr)
+				})
+			})
 	}
 
-	/*________ Handles alert messagem when buying assets ________*/
-	function hideAlarmContainer() {
-		const alarmContainer = document.getElementById("alarmContainer");
-		if (alarmContainer !== null) {
-			alarmContainer.style.display = "none";
-		}
+	function closeModal() {
+		document.getElementById("walletModal").style.visibility = "hidden";
 	}
-	setTimeout(hideAlarmContainer, 3000);
 
 
 	/*_________ Gets asset info and loads asset info box _________*/
 	function getAssetData(e) {
-		ticker = e.innerHTML;
+
+		const modalWindow = document.getElementById("walletModal")
+		modalWindow.style.visibility = "hidden";
+
+		if (e != null) {
+			fillsTable(e)
+			ticker = e.innerHTML;
+			modalWindow.style.visibility = "visible";
+		}
+		else {
+			if (ticker == "") {
+				ticker = "TSLA";
+			}
+		}
 
 		fetch("http://127.0.0.1:5000/getPrice", {
 			method: "POST",
@@ -165,7 +264,7 @@
 			.then(data => {
 
 				price = data["price"];
-				ytdChange = data["ytdChange"]
+				ytdChange = data["fifty2WC"]
 				companyName = data["companyName"]
 
 				document.getElementById("labelTickerSymbol").innerText = ticker;
@@ -175,6 +274,8 @@
 
 			})
 	}
+
+
 
 
 	/* ___________ GETS DATA AND BUILDS PIE CHART _____________*/
@@ -213,7 +314,7 @@
 						legend: {
 							position: "right",
 							labels: {
-								fontSize: 9,
+								fontSize: 12,
 								fontColor: "#17c3b2"
 							}
 						}
@@ -221,6 +322,25 @@
 				})
 			})
 	}
+
+
+
+	ticker = "{{ ticker }}"
+
+	window.onload = function () {
+		buildPieChart()
+		getAssetData()
+	}
+
+	/*________ Handles alert messagem when buying assets ________*/
+	function hideAlarmContainer() {
+		const alarmContainer = document.getElementById("alarmContainer");
+		if (alarmContainer !== null) {
+			alarmContainer.style.display = "none";
+		}
+	}
+	setTimeout(hideAlarmContainer, 3000);
+
 
 </script>
 

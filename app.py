@@ -38,138 +38,6 @@ def hello_world():
 
     return render_template("index.html", quote="TESLA", usernames=usernames)
 
-@app.route('/market', methods=["GET", "POST"])
-@login_req
-def market():    
-
-    if request.method == "GET":
-
-        #session["recentLog"] = 1 # Temporary TTTTTTTTTTTTTTTTTTTT
-
-        symbols = ["TSLA", "AAPL", "AMZN", "MSFT", "FB", "BTCUSD=X", "EURUSD=X", "^TNX", "CL=F", "GC=F"]
-
-        price = []
-        ytdChange = []
-        i = 0
-
-        if session["recentLog"] == 21: # Condition to prevent Market page to reload everytime. It slows alot the flow of the website
-            for each in symbols:
-                i += 1
-                q = yf.Ticker(each)
-                if not q == None:
-                    if i<=5: # From the symbols list, only the first 5 have 52WeekChange attributes                       
-                        ytdChange.append(round(q.info["52WeekChange"]*100, 2))                        
-                        price.append(round(q.info["ask"], 2))
-                        
-                    else: 
-                        if each in ["BTCUSD=X", "GC=F"]:
-                            price.append(round(q.info["open"]))
-                        else:
-                            price.append(round(q.info["open"], 4))
-            session["recentLog"] = 0
-
-        if not "priceMarket" in session: # If list does not exist, create
-            session["priceMarket"] = price
-            session["ytdChange"] = ytdChange
-        else:
-            price = session["priceMarket"]
-            ytdChange = session["ytdChange"]
-
-    return render_template("market.html", price=price, ytdChange=ytdChange)
-
-
-@app.route('/wallet', methods=["GET"])
-@login_req
-def wallet():
-    history = getStockHistory()
-
-    temp = getCashPosition()
-    cashPosition = int(temp[0]/1000)
-    cashInvested = int(temp[1]/1000)
-    cashTotal = round(cashPosition + cashInvested, 0)
-
-    return render_template("wallet.html", history=history, cashTotal=cashTotal, cashInvested=cashInvested, cashPosition=cashPosition, username=session["user_id"])
-
-@app.route('/account', methods=["GET", "POST"])
-@login_req
-def account():
-
-    if request.method == "GET":
-        # ______Acess to database________
-        dbConnection = sqlite3.connect('finance.db') # connection
-        cursor = dbConnection.cursor()
-
-        # Get id 
-        cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
-        temp = cursor.fetchall()
-        userid = temp[0][0]
-
-        # Get user data
-        cursor.execute("SELECT firstname, lastname, age, city FROM users WHERE ID=?", (userid,))
-        userdata = cursor.fetchall()
-
-        # Get history data
-        cursor.execute("SELECT date, name, number, price, symbol FROM stocks WHERE ID=?", (userid,))
-        history = cursor.fetchall()
-
-        # Get expenses data
-        cursor.execute("SELECT type, sum(cost), date FROM expenses WHERE user_id=? GROUP BY type", (userid,))
-        expenses = cursor.fetchall()
-
-        cursor.close()
-        dbConnection.close()
-        # ____Close access to database___
-    
-    
-    if request.method == "POST":
-        firstname = request.form.get("firstname")
-        lastname = request.form.get("lastname")
-        password = request.form.get("password")
-        city = request.form.get("city")
-        age = request.form.get("age")
-        initialcash = request.form.get("initialcash")
-
-        # ______Acess to database________
-        dbConnection = sqlite3.connect('finance.db') # connection
-        cursor = dbConnection.cursor()
-
-        # Get id 
-        cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
-        temp = cursor.fetchall()
-        userid = temp[0][0]
-
-        # Updates cash position
-        if initialcash is not None:
-            if float(initialcash) > 0:     
-                # Update user info
-                cursor.execute("UPDATE users SET cash=?, cashset=1 WHERE ID=?", (initialcash, userid))
-                session["cash_set"] = 1
-        else:
-            if password:
-                # Update user info with password
-                cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=?, password=? WHERE ID=?", (firstname, lastname, city, age, password, userid))
-            else:
-                # Update user info without password
-                cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=? WHERE ID=?", (firstname, lastname, city, age, userid))
-
-        # Get history data
-        cursor.execute("SELECT date, name, number, price, symbol FROM stocks WHERE ID=?", (userid,))
-        history = cursor.fetchall()
-
-        # Get expenses data
-        cursor.execute("SELECT type, sum(cost), date FROM expenses WHERE user_id=? GROUP BY type", (userid,))
-        expenses = cursor.fetchall()
-      
-        # Get user data
-        cursor.execute("SELECT firstname, lastname, age, city FROM users WHERE ID=?", (userid,))
-        userdata = cursor.fetchall()
-
-        dbConnection.commit() # apply changes
-        cursor.close()
-        dbConnection.close()
-        # ____Close access to database___  
-
-    return render_template("account.html", expenses=expenses, history=history,userdata=userdata, cashSet=session["cash_set"])
 
 @app.route("/login", methods=["GET", "POST"]) # LOGIN REGISTER
 def login(): 
@@ -177,7 +45,11 @@ def login():
     if request.method == "GET":
         return render_template("login.html")
 
-    if request.method == "POST": # the method POST can be used to LOGIN or to REGISTER. How the code detects is if password2 variable exists
+    if request.method == "POST": 
+        
+        # ______Acess to database________
+        dbConnection = sqlite3.connect('finance.db') # connection
+        cursor = dbConnection.cursor()
         
         # Forget any user id
         session.clear()
@@ -193,30 +65,37 @@ def login():
             return render_template("login.html", username=username,logError="Invalid password!")         
         # _______________________________                
 
-        # Forget any user id
-        session.clear()
-
-        # ______Acess to database________
-        dbConnection = sqlite3.connect('finance.db') # connection
-        cursor = dbConnection.cursor()
-
-        cursor.execute("SELECT username, password, cashset FROM users WHERE username=?",(username,))
+        # Gets the cash position from  the database
+        cursor.execute("SELECT username, password, cashset, ID FROM users WHERE username=?",(username,))
         user = cursor.fetchall() # gets the output from query
         cashset = user[0][2]
 
         # Checks if already exist username in database
-        if len(user) > 0:
-            session["user_id"] = user[0][0]
+        if len(user) > 0:            
+            session["user_name"] = user[0][0]
+            session["user_id"] = user[0][3]
             session["recentLog"] = 1
             session["cash_set"] = cashset
+
             checkPass = user[0][1]
+            if not checkPass == password:
+                session.clear()
+                return render_template("login.html", logError="Password is INCORRECT!")  
         else:
             return render_template("login.html", logError="User does NOT exist!") 
 
-        if not checkPass == password:
-            session.clear()
-            return render_template("login.html", logError="Password is INCORRECT!")  
+        # Gets every ticker symbol that the user has in the portfolio
+        cursor.execute("SELECT symbol FROM stocks WHERE ID=? GROUP BY symbol",(session["user_id"],))
+        temp = cursor.fetchall() # gets the output from query
         
+        tickers = {}
+
+        for row in temp:
+            price = getStockPrice(row)
+            tickers[row[0]] = price
+        
+        session["all_stock_price"] = tickers
+
         cursor.close()
         dbConnection.close()
         # ____Close access to database___          
@@ -268,33 +147,162 @@ def register():
         else:
             return render_template("register.html", username=username, logError="Passwords do NOT match!")
 
+
 @app.route("/logout", methods=["GET"]) # Handles LOGOUT
 def logout():
 
     session.clear()
     return redirect("/") 
 
-@app.route("/getHistoricalData", methods=["POST"])
-def getHistoricalData():
 
-    ticker = request.get_json()
+@app.route('/market', methods=["GET", "POST"])
+@login_req
+def market():    
 
-    tickerData = buildGraphArray(ticker)
+    if request.method == "GET":
 
-    yAxis = tickerData[1]
-    xAxis = tickerData[0]
+        #session["recentLog"] = 1 # Temporary TTTTTTTTTTTTTTTTTTTT
 
-    i = 0
-    for n in yAxis:
-            if math.isnan(n):
-                yAxis[i] = yAxis[i-1]      
+        symbols = ["TSLA", "AAPL", "AMZN", "MSFT", "FB", "BTCUSD=X", "EURUSD=X", "^TNX", "CL=F", "GC=F"]
+
+        price = []
+        ytdChange = []
+        i = 0
+
+        if session["recentLog"] == 21: # Condition to prevent Market page to reload everytime. It slows alot the flow of the website
+            for each in symbols:
+                i += 1
+                q = yf.Ticker(each)
+                if not q == None:
+                    if i<=5: # From the symbols list, only the first 5 have 52WeekChange attributes                       
+                        ytdChange.append(round(q.info["52WeekChange"]*100, 2))                        
+                        price.append(round(q.info["ask"], 2))
+                        
+                    else: 
+                        if each in ["BTCUSD=X", "GC=F"]:
+                            price.append(round(q.info["open"]))
+                        else:
+                            price.append(round(q.info["open"], 4))
+            session["recentLog"] = 0
+
+        if not "priceMarket" in session: # If list does not exist, create
+            session["priceMarket"] = price
+            session["ytdChange"] = ytdChange
+        else:
+            price = session["priceMarket"]
+            ytdChange = session["ytdChange"]
+
+    return render_template("market.html", price=price, ytdChange=ytdChange)
+
+
+@app.route('/wallet', methods=["GET"])
+@login_req
+def wallet():
+    history = getStockHistory()
+
+    temp = getCashPosition()
+
+    cash_position_first = int(temp[0] / 1000)
+    cash_position_second = temp[0] - (cash_position_first * 1000)
+    if cash_position_second < 10:
+        cash_position_second *= 100
+    if cash_position_second < 100:
+        cash_position_second *= 10
+    cashPosition = [cash_position_first, round(cash_position_second, 2)]
+
+    cash_invested_first = int(temp[1] / 1000)
+    cash_invested_second = temp[1] - (cash_invested_first * 1000)
+    if cash_invested_second < 10:
+        cash_invested_second *= 100
+    if cash_invested_second < 100:
+        cash_invested_second *= 10
+    cashInvested = [cash_invested_first, round(cash_invested_second, 2)]
+
+    cash_total_first = int((temp[0] + temp[1]) / 1000)
+    cash_total_second = (temp[0] + temp[1]) - (cash_total_first * 1000)
+    if cash_total_second < 10:
+        cash_total_second *= 100
+    if cash_total_second < 100:
+        cash_total_second *= 10
+    cashTotal = [cash_total_first, round(cash_total_second, 2)]
+
+    return render_template("wallet.html", history=history, cashTotal=cashTotal, cashInvested=cashInvested, cashPosition=cashPosition, username=session["user_name"])
+
+
+@app.route('/account', methods=["GET", "POST"])
+@login_req
+def account():
+
+    if request.method == "GET":
+        # ______Acess to database________
+        dbConnection = sqlite3.connect('finance.db') # connection
+        cursor = dbConnection.cursor()
+
+        userid = session["user_id"]
+
+        # Get user data
+        cursor.execute("SELECT firstname, lastname, age, city FROM users WHERE ID=?", (userid,))
+        userdata = cursor.fetchall()
+
+        # Get history data
+        cursor.execute("SELECT date, name, number, price, symbol FROM stocks WHERE ID=?", (userid,))
+        history = cursor.fetchall()
+
+        # Get expenses data
+        cursor.execute("SELECT type, sum(cost), date FROM expenses WHERE user_id=? GROUP BY type", (userid,))
+        expenses = cursor.fetchall()
+
+        cursor.close()
+        dbConnection.close()
+        # ____Close access to database___
+    
+    
+    if request.method == "POST":
+        firstname = request.form.get("firstname")
+        lastname = request.form.get("lastname")
+        password = request.form.get("password")
+        city = request.form.get("city")
+        age = request.form.get("age")
+        initialcash = request.form.get("initialcash")
+
+        # ______Acess to database________
+        dbConnection = sqlite3.connect('finance.db') # connection
+        cursor = dbConnection.cursor()
+
+        userid = session["user_id"]
+
+        # Updates cash position
+        if initialcash is not None:
+            if float(initialcash) > 0:     
+                # Update user info
+                cursor.execute("UPDATE users SET cash=?, cashset=1 WHERE ID=?", (initialcash, userid))
+                session["cash_set"] = 1
+        else:
+            if password:
+                # Update user info with password
+                cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=?, password=? WHERE ID=?", (firstname, lastname, city, age, password, userid))
             else:
-                yAxis[i] = float(n)
-            i += 1
+                # Update user info without password
+                cursor.execute("UPDATE users SET firstname=?, lastname=?, city=?, age=? WHERE ID=?", (firstname, lastname, city, age, userid))
 
-    result = make_response(jsonify({"xAxis": xAxis, "yAxis": yAxis}))
+        # Get history data
+        cursor.execute("SELECT date, name, number, price, symbol FROM stocks WHERE ID=?", (userid,))
+        history = cursor.fetchall()
 
-    return result
+        # Get expenses data
+        cursor.execute("SELECT type, sum(cost), date FROM expenses WHERE user_id=? GROUP BY type", (userid,))
+        expenses = cursor.fetchall()
+      
+        # Get user data
+        cursor.execute("SELECT firstname, lastname, age, city FROM users WHERE ID=?", (userid,))
+        userdata = cursor.fetchall()
+
+        dbConnection.commit() # apply changes
+        cursor.close()
+        dbConnection.close()
+        # ____Close access to database___  
+
+    return render_template("account.html", expenses=expenses, history=history,userdata=userdata, cashSet=session["cash_set"])
 
 
 @app.route("/getPrice", methods=["GET", "POST"])
@@ -356,39 +364,39 @@ def buyStock():
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
 
-    # Get buying info from submitted form
+    # If value 1, is a BUY order, else is a SELL order
+    buy_order =  request.form.get("buyOrSell") 
+
+    # Get order info from submitted form
     temp = request.form.get("tickerName")
     temp = temp.split("/")
     price = temp[0]
     companyName = temp[1]
-    ticker = request.form.get("tickerSymbol")
+    ticker = request.form.get("tickerSymbol").upper()
     shares = request.form.get("numberShares")
     assetType = request.form.get("assetType")
 
     # Get cash position
-    cursor.execute("SELECT cash FROM users WHERE username=?", (session["user_id"],))
+    cursor.execute("SELECT cash FROM users WHERE username=?", (session["user_name"],))
     temp = cursor.fetchall() # gets the output from query
     cashCurrent = temp[0][0]
+    userid = session["user_id"]
 
-    # Get id 
-    cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
-    temp = cursor.fetchall()
-    userid = temp[0][0]
+    if buy_order == 1: # BUY order 
+        shares = request.form.get("numberShares")
+    else: # SELL order
+        shares = request.form.get("numberShares") * -1
 
-    # Register the BUY order
-    cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price, typeasset) VALUES (date(), ?, ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price, assetType))
-    
+    cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price, typeasset) VALUES (date(), ?, ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price, assetType))     
+
+    # Updates cash position
     cashSpent = float(price) * int(shares)
     cashUpdate = cashCurrent - cashSpent
 
-    # Updates cash position
     cursor.execute("UPDATE users SET cash=? WHERE id=?", (cashUpdate, userid))
 
-    # ____Applies changes________
-    dbConnection.commit()
-
-    # ____Close access to database___
-    cursor.close()
+    dbConnection.commit() # Applies changes
+    cursor.close() # Closes access to database
     dbConnection.close()   
 
     temp = getCashPosition()
@@ -400,6 +408,30 @@ def buyStock():
 
     return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=1, cashPosition=cashPosition, cashInvested=cashInvested, cashTotal=cashTotal)
 
+
+@app.route("/getHistoricalData", methods=["POST"])
+def getHistoricalData():
+
+    ticker = request.get_json()
+
+    tickerData = buildGraphArray(ticker)
+
+    yAxis = tickerData[1]
+    xAxis = tickerData[0]
+
+    i = 0
+    for n in yAxis:
+            if math.isnan(n):
+                yAxis[i] = yAxis[i-1]      
+            else:
+                yAxis[i] = float(n)
+            i += 1
+
+    result = make_response(jsonify({"xAxis": xAxis, "yAxis": yAxis}))
+
+    return result
+
+
 @app.route("/updateDB", methods=["POST"])
 def updateDB():   
 
@@ -409,10 +441,7 @@ def updateDB():
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
 
-    # Get id 
-    cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
-    temp = cursor.fetchall()
-    userid = temp[0][0]    
+    userid = session["user_id"]   
 
     # Updates expenses database
     cursor.execute("INSERT INTO expenses (type, expense, cost, date, user_id) VALUES (?, ?, ?, date(), ?)", (data[1], data[2], data[3], userid ))    
@@ -431,10 +460,7 @@ def getDataDB():
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
 
-    # Get id 
-    cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
-    temp = cursor.fetchall()
-    userid = temp[0][0]    
+    userid = session["user_id"]   
 
     # Get expenses data
     cursor.execute("SELECT type, sum(cost) FROM expenses WHERE user_id=? GROUP BY type", (userid,))
@@ -455,10 +481,7 @@ def getAssetAloc():
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
 
-    # Get id 
-    cursor.execute("SELECT id FROM users WHERE username=?", (session["user_id"],))
-    temp = cursor.fetchall()
-    userid = temp[0][0] 
+    userid = session["user_id"]
 
     # Get data
     cursor.execute("SELECT typeasset, round(sum(price*number), 2) FROM stocks WHERE ID=? GROUP BY typeasset", (userid,))
@@ -470,4 +493,25 @@ def getAssetAloc():
 
     result = make_response(jsonify(temp)) 
 
+    return result
+
+@app.route("/getStockHistory", methods=["POST"])
+def getIndividualStockHistory():
+
+    ticker = request.get_json()
+    # ______Acess to database________
+    dbConnection = sqlite3.connect('finance.db') # connection
+    cursor = dbConnection.cursor()
+
+    userid = session["user_id"]
+
+    # Get data
+    cursor.execute("SELECT date, name, number, price FROM stocks WHERE ID=? AND symbol=?", (userid, ticker))
+    temp = cursor.fetchall()
+
+    result = make_response(jsonify(temp))
+
+    # ____Close access to database___
+    cursor.close()
+    dbConnection.close() 
     return result

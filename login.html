@@ -7,25 +7,27 @@
 <div class="container logContainer">
 
   <div class="container">
-    <div class="row rows-login"><h1>Welcome</h1></div>    
     <div class="row rows-login">
-      <h5>
+      <h1 id="title">Welcome</h1>
+    </div>
+    <div class="row rows-login">
+      <h5 id="label">
         <!-- Details the origin of errors from login -->
         {% if logError %}
-            {{ logError }}
-  
-          {% else %}
-            Please provide your information.
+        {{ logError }}
+
+        {% else %}
+        Please provide your information.
         {% endif %}
       </h5>
     </div>
-    
   </div>
 
   <form action="/login" method="post">
     <div class="form-group ">
-      <label for="exampleInputEmail1" >Enter you username</label>
-      <input name="username"  class="form-control formIn" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{ username}}">
+      <label for="exampleInputEmail1">Enter you username</label>
+      <input name="username" class="form-control formIn" id="exampleInputEmail1" aria-describedby="emailHelp"
+        value="{{ username}}">
       <small id="emailHelp" class="form-text ">We'll never share your email with anyone else.</small>
     </div>
     <div class="form-group">
@@ -33,22 +35,37 @@
       <input name="password" type="password" class="form-control formIn" id="exampleInputPassword1">
     </div>
 
-    <div><button type="submit" class="btn btn-dark btnSub">Login</button></div>
+    <div><button type="submit" class="btn btn-dark btnSub" onclick="load()">Login</button></div>
     <a style="color: lightskyblue" href="/register">No account yet? Register here.</a>
-    </div>
+</div>
 
-  </form>
+</form>
 
 </div>
 
 <script>
+
+  function load() {
+    const title = document.getElementById("title");
+    const label = document.getElementById("label");
+
+    title.innerHTML = "Loading";
+    label.innerHTML = "";
+
+    setTimeout(load2, 10000);
+  }
+
+  function load2() {
+    const title = document.getElementById("title");
+    title.innerHTML = "Still Loading";
+  }
 
   const navbar = document.getElementById("navbar");
   const regBtn = document.getElementById("regBtn");
 
   navbar.style.visibility = "hidden";
   regBtn.style.visibility = "hidden";
-  
+
 </script>
 
 {% endblock %}

@@ -55,11 +55,9 @@ def getStockHistory():
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
 
-    cursor.execute("SELECT ID from users WHERE username=?", (session["user_id"],))
-    temp = cursor.fetchall()
-    userid = temp[0][0]
+    userid = session["user_id"]
 
-    cursor.execute("SELECT name, number, price, symbol FROM stocks WHERE ID=?", (userid,) )
+    cursor.execute("SELECT name, number, price, symbol, typeasset FROM stocks WHERE ID=?", (userid,) )
     temp = cursor.fetchall() # gets the output from query
 
     numberDict = {}
@@ -75,6 +73,7 @@ def getStockHistory():
             priceDict[row[0]] = []
             if row[0] not in symbolDict:
                 append_value(symbolDict, row[0], row[3])
+                append_value(symbolDict, row[0], row[4])
         append_value(numberDict, row[0], row[1])
         append_value(priceDict, row[0], row[2]*row[1])
 
@@ -86,18 +85,20 @@ def getStockHistory():
     # Sums every element from each stock
     for row in priceDict:
         priceDict[row] = sum(priceDict[row])
+        ticker = symbolDict[row][0]
+        assetType = symbolDict[row][1]
 
         #Builds the history list with Name, Shares, W Cost, Value, $P/L and %P/L
         totalCost = round(priceDict[row], 2)
         numShares = numberDict[row]
         WeightedCost = round(totalCost / numShares, 2)
         #currentStockPrice = getStockPrice(symbolDict[row])
-        currentStockPrice = 5000 # GET current stock price
-        Value = numShares * round(currentStockPrice, 2) 
+        currentStockPrice = session["all_stock_price"][ticker]
+        Value = round((numShares * currentStockPrice), 2) 
         unitPL = round(Value - totalCost, 2)
         percPL = round((unitPL / totalCost) * 100, 2)
 
-        history.append((row, numShares, WeightedCost, Value, unitPL, percPL, symbolDict[row]))
+        history.append((row, numShares, WeightedCost, Value, unitPL, percPL, ticker, assetType))
 
     cursor.close()
     dbConnection.close()
@@ -136,14 +137,18 @@ def getCashPosition():
     cursor = dbConnection.cursor()
 
     # Get cash position
-    cursor.execute("SELECT cash FROM users WHERE username=?", (session["user_id"],))
+    cursor.execute("SELECT cash FROM users WHERE username=?", (session["user_name"],))
     temp = cursor.fetchall() # gets the output from query
     cashPosition = round(temp[0][0], 2)
 
     # Get cash invested
-    cursor.execute("SELECT sum(price*number) FROM stocks WHERE id=6")
+    cursor.execute("SELECT sum(price*number) FROM stocks WHERE id=?", (session["user_id"],))
     temp = cursor.fetchall() # gets the output from query
-    cashInvested = round(temp[0][0], 2)
+
+    try:
+        cashInvested = round(temp[0][0], 2)
+    except:
+        cashInvested = 0
 
     cursor.close()
     dbConnection.close()
