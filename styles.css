@@ -154,6 +154,21 @@ footer {
   border: 2px solid lightgray;
   border-radius: 8px;
   box-shadow: lightgray 10px;
+  height: 260px;
+  width: 520px;
+}
+
+.tableContainer-load {
+  margin: 5px 0;
+  background-color: linear-gradient(120deg, rgb(100, 100, 100), rgb(50, 85, 180));
+  padding: 10px;
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  box-shadow: lightgray 10px;
+  height: 260px;
+  width: 520px;
+  justify-content: center;
+  align-items: center;
 }
 
 h3 {
@@ -167,6 +182,10 @@ h3 {
   justify-content: center;
 }
 
+.update1 {
+  color: greenyellow;
+}
+
 .th-market {
   padding: 0 25px;
   font-size: 15px;
@@ -178,8 +197,14 @@ h3 {
   color:#a9def9;
 }
 
+.td-market-btn {
+  padding: 0 5px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
 .td-fill {
-  width: 100px;
+  width: 130px;
 }
 
 .td-hover {
@@ -197,26 +222,22 @@ h3 {
   border: 2px solid lightgray;
   border-radius: 8px;
   box-shadow: lightgray 10px;
+  padding: 15px;
 }
 
 .btnBuy {
-  color: rgb(34, 146, 34); 
-  cursor: pointer;
+  color: rgb(34, 146, 34);
 }
 
 .btnSell {
   color: rgb(209, 10, 10);
-  cursor: pointer;
 }
 
-.noPad {
-  padding: 0 5px;
-}
 
 /* _______________CHECK CONTAINER__________ */
 
 .check-container {
-  margin: 15px 15px 0 0 ;
+  margin: 15px 15px 15px 0 ;
   padding: 15px;
   border: 2px solid lightgray;
   border-radius: 8px;
@@ -260,6 +281,14 @@ h3 {
   background-color: rgb(22, 54, 112);
   border-radius: 5px;
   border: 2px solid #a9def9;
+  box-shadow: lightgray 5px;
+}
+
+.default-button:disabled {
+  color: rgba(224, 255, 255, 0.4);
+  background-color: rgba(22, 54, 112, 0.4);
+  border-radius: 5px;
+  border: 2px solid rgba(169, 222, 249, 0.4);
   box-shadow: lightgray 5px;
 }
 
@@ -313,6 +342,11 @@ h3 {
   margin-left: 3px;
 }
 
+.label-quote-aux {
+  color: #a9def9;
+  margin-left: 6px;
+}
+
 .row-quote-info-title {
   margin: 6px 0;
   justify-content: center;
@@ -332,11 +366,12 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: center;
+  visibility: hidden;
 }
 
 .modal-content {
   width: 500px;
-  height: 300px;
+  height: 350px;
   background-image: linear-gradient(120deg, rgb(80, 80, 80), rgb(37, 71, 163));
   border: 2px solid lightgray;
   border-radius: 8px;
@@ -344,6 +379,19 @@ h3 {
   justify-content: center;
   align-items: center;
   padding: 10px;
+  display: none;
+}
+
+.modal-content-load {
+  width: 500px;
+  background-image: linear-gradient(120deg, rgb(80, 80, 80), rgb(37, 71, 163));
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  box-shadow: lightgray 10px;  
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  display: flex;
 }
 
 .crossX {
@@ -379,7 +427,7 @@ h3 {
 .marginContainer {
   display: flex;
   justify-content: center;
-  margin: 10px 0;
+  margin: 20px 0 10px 0;
   border: 2px solid lightgray;
   border-radius: 8px;
   box-shadow: lightgray 10px;
@@ -391,9 +439,20 @@ h3 {
   margin: 0 10px;
 }
 
+.marginBtn-disabled {
+  width: 60px;
+  margin: 0 10px;
+  color: rgba(224, 255, 255, 0.4);
+  background-color: rgba(22, 54, 112, 0.4);
+  border-radius: 5px;
+  border: 2px solid rgba(169, 222, 249, 0.4);
+  box-shadow: lightgray 5px;
+}
+
 .labelMargin {
   font-variant: all-petite-caps;
   font-weight: bold;
+  color: #a9def9;
 }
 
 .labelModal {
@@ -401,7 +460,7 @@ h3 {
   color: lightcyan;
 }
 
-/* ___________________WALLET PAGE_______________*/  
+/* ___________________________WALLET PAGE___________________________*/  
 
 .alarmContainer {
   display: flex;
@@ -411,6 +470,17 @@ h3 {
   transition: all 0.3s ease;
   justify-content: center;
   color: lightgreen;
+  font-size: xx-large;
+}
+
+.alarmContainer-error {
+  display: flex;
+  border: 2px solid lightcoral;
+  margin-bottom: 20px; 
+  padding-top: 10px;
+  transition: all 0.3s ease;
+  justify-content: center;
+  color: red;
   font-size: xx-large;
 }
 
@@ -437,10 +507,11 @@ h3 {
   box-shadow: lightgray 10px;
   padding: 20px;
   color: lightgray;
+  margin-bottom: 20px;
 }
 
 .firstCol { /* first column inside right side containers */ 
-  width: 200px;
+  width: 130px;
 }
 
 .h2-wallet { 
@@ -452,8 +523,14 @@ h3 {
   color: #17c3b2;
 }
 
+.box-rows-wallet-title {
+  color: #a9def9;
+  justify-content: center;
+}
+
 .box-rows-wallet {
   color: #a9def9;
+  margin-left: 20px;
 }
 
 .companyNameLabel {
@@ -469,6 +546,17 @@ h3 {
 
 .boxes-wallet {
   margin-top: 30px;
+}
+
+.modal-content-wallet {
+  width: 700px;
+  background-image: linear-gradient(120deg, rgb(80, 80, 80), rgb(37, 71, 163));
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  box-shadow: lightgray 10px;  
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
 
 

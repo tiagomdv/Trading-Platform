@@ -61,7 +61,9 @@ def getStockHistory():
     temp = cursor.fetchall() # gets the output from query
 
     numberDict = {}
+    numberDict2 = {}
     priceDict = {}
+    priceDict2 = {}
     symbolDict = {}
     tempL = []
     history = []
@@ -75,35 +77,61 @@ def getStockHistory():
                 append_value(symbolDict, row[0], row[3])
                 append_value(symbolDict, row[0], row[4])
         append_value(numberDict, row[0], row[1])
-        append_value(priceDict, row[0], row[2]*row[1])
+        append_value(priceDict, row[0], round(row[2]*row[1], 2))
+        append_value(numberDict2, row[0], row[1])
+        append_value(priceDict2, row[0], round(row[2]*row[1], 2))
 
-
-    # Sums every element from each stock
-    for row in numberDict:
+    for row in numberDict:                
+        # Sums price and share number of every stock
         numberDict[row] = sum(numberDict[row])
-
-    # Sums every element from each stock
-    for row in priceDict:
         priceDict[row] = sum(priceDict[row])
+
+    # builds the dict to send to webpage
+    for row in priceDict:        
+        numShares = numberDict[row]
+        if numShares == 0:
+            continue
+
+        temp_price = 0
+        temp_number_pos = 0
+        temp_number_neg = 0
+
+        if type(numberDict2[row]) is int:
+            temp_number_pos += numberDict2[row]
+            temp_price = priceDict2[row]
+        else:
+            for each in numberDict2[row]:
+                if each > 0:
+                    temp_number_pos += each # How many shares bought
+                else:
+                    temp_number_neg += each # How many shares sold
+
+            for each in priceDict2[row]:
+                if each > 0:
+                    temp_price += each   
+
+        #Builds the history list with Name, Shares, W Cost, Value, $P/L and %P/L
         ticker = symbolDict[row][0]
         assetType = symbolDict[row][1]
 
-        #Builds the history list with Name, Shares, W Cost, Value, $P/L and %P/L
-        totalCost = round(priceDict[row], 2)
-        numShares = numberDict[row]
-        WeightedCost = round(totalCost / numShares, 2)
-        #currentStockPrice = getStockPrice(symbolDict[row])
-        currentStockPrice = session["all_stock_price"][ticker]
-        Value = round((numShares * currentStockPrice), 2) 
-        unitPL = round(Value - totalCost, 2)
-        percPL = round((unitPL / totalCost) * 100, 2)
+        try:
+            currentStockPrice = session["all_stock_price"][ticker]
+        except:
+            currentStockPrice = getStockPrice(symbolDict[row])
 
-        history.append((row, numShares, WeightedCost, Value, unitPL, percPL, ticker, assetType))
+        average_price = temp_price / temp_number_pos
+        total_cost = average_price * numShares         
+
+        value = round((numShares * currentStockPrice), 2) 
+        unit_roi = round(value - total_cost, 2)
+        perc_roi = round((unit_roi / total_cost) * 100, 2)
+
+        history.append((row, numShares, average_price, value, unit_roi, perc_roi, ticker, assetType))
 
     cursor.close()
     dbConnection.close()
     # ____Close access to database___
-    return history
+    return history, unit_roi, perc_roi
 
 
 # _______________ from thispointer.com _______________________
@@ -125,9 +153,9 @@ def append_value(dict_obj, key, value):
 def getStockPrice(ticker):    
     tickerInfo = yf.Ticker(ticker[0])
     try:
-        tickerPrice = round(tickerInfo.info["open"], 2)
-    except:
         tickerPrice = round(tickerInfo.info["ask"], 2)
+    except:
+        tickerPrice = round(tickerInfo.info["open"], 2)
 
     return tickerPrice
 
@@ -155,3 +183,45 @@ def getCashPosition():
     # ____Close access to database___
 
     return cashPosition, cashInvested
+
+def calculate_cash():
+
+    temp = getCashPosition()
+
+    cash_position_first = int(temp[0] / 1000)
+    cash_position_second = temp[0] - (cash_position_first * 1000)
+    if cash_position_second < 10:
+        cash_position_second *= 100
+    if cash_position_second < 100:
+        cash_position_second *= 10
+    if cash_position_second == 0:
+        cash_position_second = "000"
+        cashPosition = [cash_position_first, cash_position_second]
+    else:
+        cashPosition = [cash_position_first, round(cash_position_second, 2)]
+
+    cash_invested_first = int(temp[1] / 1000)
+    cash_invested_second = temp[1] - (cash_invested_first * 1000)
+    if cash_invested_second < 10:
+        cash_invested_second *= 100
+    if cash_invested_second < 100:
+        cash_invested_second *= 10
+    if cash_invested_second == 0:
+        cash_invested_second = "000"
+        cashInvested = [cash_invested_first, cash_invested_second]
+    else:
+        cashInvested = [cash_invested_first, round(cash_invested_second, 2)]
+    
+    cash_total_first = int((temp[0] + temp[1]) / 1000)
+    cash_total_second = (temp[0] + temp[1]) - (cash_total_first * 1000)
+    if cash_total_second < 10:
+        cash_total_second *= 100
+    if cash_total_second < 100:
+        cash_total_second *= 10
+    if cash_total_second == 0:
+        cash_total_second = "000"
+        cashTotal = [cash_total_first, cash_total_second]
+    else:
+        cashTotal = [cash_total_first, round(cash_total_second, 2)]  
+    
+    return cashPosition, cashInvested, cashTotal

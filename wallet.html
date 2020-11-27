@@ -4,10 +4,22 @@
 
 {% block main %}
 
-{% if isBuy %}
-<div id="alarmContainer" class="container alarmContainer">
-	<p>Congratulations! You´ve just bought {{ shares }} shares of {{ ticker }}.</p>
+{% if error %}
+<div id="alarmContainer" class="container alarmContainer-error">
+	<p>We can´t process the buy order. Not enough margin available.</p>
 </div>
+{% else %}
+{% if isBuy %}
+{% if isBuy == 1 %}
+<div id="alarmContainer" class="container alarmContainer">
+	<p>Congratulations! You´ve bought {{ shares }} shares of {{ ticker }}.</p>
+</div>
+{% else %}
+<div id="alarmContainer" class="container alarmContainer">
+	<p>Congratulations! You´ve sold {{ shares }} shares of {{ ticker }}.</p>
+</div>
+{% endif %}
+{% endif %}
 {% endif %}
 
 <div class="container" style="display:flex;">
@@ -58,9 +70,16 @@
 					<p class="box-title-wallet">{{ username }}</p>
 				</div>
 			</div>
+
+			<div class="row box-rows-wallet-title" style="display:flex">
+				<div class="firstCol">
+					<p>cash summary</p>
+				</div>
+			</div>
+
 			<div class="row box-rows-wallet" style="display:flex">
 				<div class="firstCol">
-					<p>Cash Position:</p>
+					<p>Actual:</p>
 				</div>
 				<div>
 					<p>$ {{ cashPosition[0] }},{{ cashPosition[1] }}</p>
@@ -68,7 +87,7 @@
 			</div>
 			<div class="row  box-rows-wallet" style="display:flex">
 				<div class="firstCol">
-					<p>Cash Invested:</p>
+					<p>Invested:</p>
 				</div>
 				<div>
 					<p>$ {{ cashInvested[0] }},{{ cashInvested[1] }}</p>
@@ -76,12 +95,35 @@
 			</div>
 			<div class="row  box-rows-wallet" style="display:flex">
 				<div>
-					<p class="firstCol">Cash Total:</p>
+					<p class="firstCol">Portfolio:</p>
 				</div>
 				<div>
-					<p>$ {{ cashTotal[0] }},{{ cashTotal[1] }}</p>
+					<p>$ {{ portfolio }}</p>
 				</div>
 			</div>
+
+			<div class="row box-rows-wallet-title" style="display:flex">
+				<div class="firstCol">
+					<p>Performance</p>
+				</div>
+			</div>
+			<div class="row  box-rows-wallet" style="display:flex">
+				<div class="firstCol">
+					<p>Return($):</p>
+				</div>
+				<div>
+					<p>$ {{ uRet }}{{ uRoi }}</p>
+				</div>
+			</div>
+			<div class="row  box-rows-wallet" style="display:flex">
+				<div>
+					<p class="firstCol">Return(%):</p>
+				</div>
+				<div>
+					<p>{{ pRet }}{{ pRoi }} %</p>
+				</div>
+			</div>
+
 		</div>
 
 		<!-- ____________ ASSET INFORMATION BOX ________________-->
@@ -220,7 +262,7 @@
 							newTd.innerHTML = row[i]
 						}
 						else {
-							newTd.innerHTML = "$ " + (row[2] + row[3])
+							newTd.innerHTML = "$ " + Math.round((row[2] * row[3]) * 100) / 100
 						}
 						newTr.appendChild(newTd)
 					}

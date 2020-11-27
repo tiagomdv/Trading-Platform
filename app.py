@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, jsonify, make_response
 from tempfile import mkdtemp
 from flask_session import Session
-from helper import login_req, buildGraphArray, getStockHistory, getStockPrice, getCashPosition
+from helper import login_req, buildGraphArray, getStockHistory, getStockPrice, getCashPosition, calculate_cash
 
 import sqlite3, datetime
 import math
@@ -161,18 +161,17 @@ def market():
 
     if request.method == "GET":
 
-        #session["recentLog"] = 1 # Temporary TTTTTTTTTTTTTTTTTTTT
-
         symbols = ["TSLA", "AAPL", "AMZN", "MSFT", "FB", "BTCUSD=X", "EURUSD=X", "^TNX", "CL=F", "GC=F"]
 
         price = []
         ytdChange = []
         i = 0
 
-        if session["recentLog"] == 21: # Condition to prevent Market page to reload everytime. It slows alot the flow of the website
+        if session["recentLog"] == 2: # Condition to prevent Market page to reload everytime. It slows alot the flow of the website
             for each in symbols:
-                i += 1
+                i += 1                 
                 q = yf.Ticker(each)
+
                 if not q == None:
                     if i<=5: # From the symbols list, only the first 5 have 52WeekChange attributes                       
                         ytdChange.append(round(q.info["52WeekChange"]*100, 2))                        
@@ -198,35 +197,46 @@ def market():
 @app.route('/wallet', methods=["GET"])
 @login_req
 def wallet():
-    history = getStockHistory()
+    temp = getStockHistory()
+    history = temp[0]
+    cash = calculate_cash()
 
-    temp = getCashPosition()
+     # ______Acess to database________
+    dbConnection = sqlite3.connect('finance.db') # connection
+    cursor = dbConnection.cursor()
 
-    cash_position_first = int(temp[0] / 1000)
-    cash_position_second = temp[0] - (cash_position_first * 1000)
-    if cash_position_second < 10:
-        cash_position_second *= 100
-    if cash_position_second < 100:
-        cash_position_second *= 10
-    cashPosition = [cash_position_first, round(cash_position_second, 2)]
+    # Get initial cash
+    cursor.execute("SELECT initialcash FROM users WHERE ID=?", (session["user_id"],))
+    temp = cursor.fetchall()
+    initial_cash = temp[0][0]
 
-    cash_invested_first = int(temp[1] / 1000)
-    cash_invested_second = temp[1] - (cash_invested_first * 1000)
-    if cash_invested_second < 10:
-        cash_invested_second *= 100
-    if cash_invested_second < 100:
-        cash_invested_second *= 10
-    cashInvested = [cash_invested_first, round(cash_invested_second, 2)]
+    # Get stock shares number
+    cursor.execute("SELECT symbol, sum(number) FROM stocks WHERE ID=? GROUP BY symbol", (session["user_id"],))
+    temp = cursor.fetchall()
 
-    cash_total_first = int((temp[0] + temp[1]) / 1000)
-    cash_total_second = (temp[0] + temp[1]) - (cash_total_first * 1000)
-    if cash_total_second < 10:
-        cash_total_second *= 100
-    if cash_total_second < 100:
-        cash_total_second *= 10
-    cashTotal = [cash_total_first, round(cash_total_second, 2)]
+    cursor.close()
+    dbConnection.close()
+    # ____Close access to database___
+    
+    stock_info = {}
+    for row in temp:
+        stock_info[row[0]] = row[1] 
 
-    return render_template("wallet.html", history=history, cashTotal=cashTotal, cashInvested=cashInvested, cashPosition=cashPosition, username=session["user_name"])
+    temp = session["all_stock_price"]
+    portfolio_value = 0
+
+    for row in temp:
+        portfolio_value += temp[row] * stock_info[row]
+
+    cash = getCashPosition()
+    portfolio = portfolio_value + cash[0]
+
+    unit_return = round(portfolio - initial_cash, 2)
+    perc_return = round((portfolio / initial_cash) - 1, 2)
+
+    temp = calculate_cash()
+
+    return render_template("wallet.html", history=history, portfolio=portfolio, cashInvested=temp[1], cashPosition=temp[0], username=session["user_name"],  uRet=unit_return, pRet=perc_return)
 
 
 @app.route('/account', methods=["GET", "POST"])
@@ -275,7 +285,8 @@ def account():
         if initialcash is not None:
             if float(initialcash) > 0:     
                 # Update user info
-                cursor.execute("UPDATE users SET cash=?, cashset=1 WHERE ID=?", (initialcash, userid))
+                margin_accepted = initialcash * 1.5
+                cursor.execute("UPDATE users SET margin, initialcash, cash=?, cashset=1 WHERE ID=?", (margin_accepted, initialcash ,initialcash, userid))
                 session["cash_set"] = 1
         else:
             if password:
@@ -373,8 +384,11 @@ def buyStock():
     price = temp[0]
     companyName = temp[1]
     ticker = request.form.get("tickerSymbol").upper()
-    shares = request.form.get("numberShares")
     assetType = request.form.get("assetType")
+    shares = request.form.get("numberShares")
+    margin_x = request.form.get("margin_x")
+
+    
 
     # Get cash position
     cursor.execute("SELECT cash FROM users WHERE username=?", (session["user_name"],))
@@ -382,31 +396,41 @@ def buyStock():
     cashCurrent = temp[0][0]
     userid = session["user_id"]
 
-    if buy_order == 1: # BUY order 
-        shares = request.form.get("numberShares")
+    if int(buy_order) == 1: # BUY order 
+        isBuy = 1
+        shares = int(shares)
     else: # SELL order
-        shares = request.form.get("numberShares") * -1
+        isBuy = 2
+        shares = int(shares) * (-1)
 
     cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price, typeasset) VALUES (date(), ?, ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price, assetType))     
 
     # Updates cash position
     cashSpent = float(price) * int(shares)
     cashUpdate = cashCurrent - cashSpent
-
     cursor.execute("UPDATE users SET cash=? WHERE id=?", (cashUpdate, userid))
 
     dbConnection.commit() # Applies changes
     cursor.close() # Closes access to database
     dbConnection.close()   
 
+    cash = calculate_cash()
+    temp = getStockHistory()
+    history = temp[0]
+
+    if isBuy == 2:
+        shares = shares * (-1)
+
+    temp = session["all_stock_price"]
+    portfolio_value = 0
+
+    for row in temp:
+        portfolio_value += temp[row] * stock_info[row]
+
     temp = getCashPosition()
-    cashPosition = temp[0]
-    cashInvested = temp[1]
-    cashTotal = cashPosition + cashInvested
+    portfolio = portfolio_value + temp[0]
 
-    history = getStockHistory()
-
-    return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=1, cashPosition=cashPosition, cashInvested=cashInvested, cashTotal=cashTotal)
+    return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=isBuy, cashPosition=cash[0], cashInvested=cash[1], cashTotal=cash[2], portfolio=portfolio, uRoi=history[1], pRoi=history[2], error=1)
 
 
 @app.route("/getHistoricalData", methods=["POST"])
@@ -515,3 +539,32 @@ def getIndividualStockHistory():
     cursor.close()
     dbConnection.close() 
     return result
+
+
+@app.route('/updateMarket', methods=["GET"])
+def updateMarket(): 
+
+    symbols = ["TSLA", "AAPL", "AMZN", "MSFT", "FB", "BTCUSD=X", "EURUSD=X", "^TNX", "CL=F", "GC=F"]
+
+    price = []
+    ytdChange = []
+    i = 0
+
+    for each in symbols:
+        i += 1                 
+        q = yf.Ticker(each)
+
+        if not q == None:
+            if i<=5: # From the symbols list, only the first 5 have 52WeekChange attributes                       
+                ytdChange.append(round(q.info["52WeekChange"]*100, 2))                        
+                price.append(round(q.info["ask"], 2))
+                
+            else: 
+                if each in ["BTCUSD=X", "GC=F"]:
+                    price.append(round(q.info["open"]))
+                else:
+                    price.append(round(q.info["open"], 4))
+
+    res = make_response(jsonify({"price": price, "ytdChange": ytdChange}))
+
+    return res

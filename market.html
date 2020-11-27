@@ -9,7 +9,13 @@
     <div class="col">
 
       <!--________Table with the top 5 tech stocks__________ -->
-      <div class="tableContainer">
+      <div id="container1-load" class="tableContainer-load">
+        <div class="row rows-login">
+          <h1 class="title">Loading ...</h1>
+        </div>
+      </div>
+
+      <div id="container1" class="tableContainer">
         <div class="row table-title">
           <h3>Top Stock Assets</h3>
         </div>
@@ -24,8 +30,8 @@
           <tr id="TSLA">
             <td class="td-market">1</td>
             <td class="td-market td-hover">Tesla</td>
-            <td class="td-market">{{ price[0] }}</td>
-            <td class="td-market" style="color:green">{{ ytdChange[0] }}%</td>
+            <td class="td-market update">{{ price[0] }}</td>
+            <td class="td-market update1">{{ ytdChange[0] }}</td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm" disabled></i></a>
             </td>
@@ -36,8 +42,8 @@
           <tr id="AAPL">
             <td class="td-market">2</td>
             <td class="td-market td-hover">Apple</td>
-            <td class="td-market">{{ price[1] }}</td>
-            <td class="td-market" style="color:green">{{ ytdChange[1] }}%</td>
+            <td class="td-market update">{{ price[1] }}</td>
+            <td class="td-market update1">{{ ytdChange[1] }}</td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
             </td>
@@ -48,8 +54,8 @@
           <tr id="AMZN">
             <td class="td-market">3</td>
             <td class="td-market td-hover">Amazon</td>
-            <td class="td-market">{{ price[2] }}</td>
-            <td class="td-market" style="color:green">{{ ytdChange[2] }}%</td>
+            <td class="td-market update">{{ price[2] }}</td>
+            <td class="td-market update1">{{ ytdChange[2] }}</td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
             </td>
@@ -60,8 +66,8 @@
           <tr id="MSFT">
             <td class="td-market">4</td>
             <td class="td-market td-hover">Microsoft</td>
-            <td class="td-market">{{ price[3] }}</td>
-            <td class="td-market" style="color:green">{{ ytdChange[3] }}%</td>
+            <td class="td-market update">{{ price[3] }}</td>
+            <td class="td-market update1">{{ ytdChange[3] }}</td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
             </td>
@@ -72,8 +78,8 @@
           <tr id="FB">
             <td class="td-market">5</td>
             <td class="td-market td-hover">Facebook</td>
-            <td class="td-market">{{ price[4] }}</td>
-            <td class="td-market" style="color:green">{{ ytdChange[4] }}%</td>
+            <td class="td-market update">{{ price[4] }}</td>
+            <td class="td-market update1">{{ ytdChange[4] }}</td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
             </td>
@@ -86,7 +92,13 @@
 
 
       <!--_______ Table with the top 5 non stock assets______ -->
-      <div class="tableContainer">
+      <div id="container2-load" class="tableContainer-load">
+        <div class="row rows-login">
+          <h1 class="title">Loading ...</h1>
+        </div>
+      </div>
+
+      <div id="container2" class="tableContainer">
         <div class="row table-title">
           <h3>Top Non Stock Assets</h3>
         </div>
@@ -99,7 +111,7 @@
           <tr id="BTCUSD=X">
             <td class="td-market">1</td>
             <td class="td-market td-hover">Bitcoin</td>
-            <td class="td-market">{{ price[5] }}</td>
+            <td class="td-market update">{{ price[5] }}</td>
             <td class="td-fill"></td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
@@ -111,7 +123,7 @@
           <tr id="EURUSD=X">
             <td class="td-market">2</td>
             <td class="td-market td-hover">Euro</td>
-            <td class="td-market">{{ price[6] }}</td>
+            <td class="td-market update">{{ price[6] }}</td>
             <td class="td-fill"></td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
@@ -123,7 +135,7 @@
           <tr id="^TNX">
             <td class="td-market">3</td>
             <td class="td-market td-hover">10y Bond</td>
-            <td class="td-market">{{ price[7] }}</td>
+            <td class="td-market update">{{ price[7] }}</td>
             <td class="td-fill"></td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
@@ -135,7 +147,7 @@
           <tr id="CL=F">
             <td class="td-market">4</td>
             <td class="td-market td-hover">Oil</td>
-            <td class="td-market">{{ price[8] }}</td>
+            <td class="td-market update">{{ price[8] }}</td>
             <td class="td-fill"></td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
@@ -147,7 +159,7 @@
           <tr id="GC=F">
             <td class="td-market">5</td>
             <td class="td-market td-hover">Gold</td>
-            <td class="td-market">{{ price[9] }}</td>
+            <td class="td-market update">{{ price[9] }}</td>
             <td class="td-fill"></td>
             <td class="td-market-btn">
               <a class="btnBuy"><i class="fas fa-angle-double-up fa-sm"></i></a>
@@ -259,7 +271,7 @@
 <!-- Container with pop up window -->
 <div id="bgmodal" class="bg-modal">
 
-  <div id="load_modal" class="modal-content-load" style="display:flex; justify-content: center;">
+  <div id="load_modal" class="modal-content-load">
     <div class="row rows-login">
       <h1 id="title">Loading</h1>
     </div>
@@ -272,7 +284,7 @@
       <!-- Windows form with info and input to submit orders -->
       <div class="row row-quote-info">
         <label class="labelModal" id="superLabel"></label>
-      </div>      
+      </div>
 
       <div class="row row-quote-info">
         <label id="labelYTD" class="labelModal"></label>
@@ -300,6 +312,7 @@
               <input id="tickerInput" name="tickerSymbol" style="display: none;">
               <input id="nameInput" name="tickerName" style="display: none;">
               <input id="assetTypeInput" name="assetType" style="display: none;">
+              <input id="margin_x" name="marginx" style="display: none;">
               <input id="sharesInput" class="inputCheck" name="numberShares" placeholder="   How many?"
                 style="top: 50px; width: 130px; ">
               <button class="default-button" type="submit" style="width: 130px;" onclick="buyOrder()">Submit
@@ -317,9 +330,12 @@
     <div class="container marginContainer">
       <div class="col"><label class="labelMargin">Trade with Leverage</label></div>
       <div class="row" style="align-items: center;">
-        <div class="col"><button class="default-button marginBtn" type="submit" name="margin2x">x2</button></div>
-        <div class="col"><button class="default-button marginBtn" type="submit" name="margin5x">x5</button></div>
-        <div class="col"><button class="default-button marginBtn" type="submit" name="margin10x">x10</button></div>
+        <div class="col"><button id="margin_1" class="default-button marginBtn"
+            onclick="margin_handler(this)">x1</button></div>
+        <div class="col"><button id="margin_2" class="default-button marginBtn"
+            onclick="margin_handler(this)">x2</button></div>
+        <div class="col"><button id="margin_5" class="default-button marginBtn"
+            onclick="margin_handler(this)">x5</button></div>
       </div>
 
     </div>
@@ -443,7 +459,7 @@
 
   //____________Submits form that handles buy operation_____________
   function buyOrder() {
-    
+
     const sharesInput = document.getElementById("sharesInput")
 
     if (sharesInput.value === "" || sharesInput.value < 1) {
@@ -454,6 +470,10 @@
     else {
       document.getElementById("buy_sell").value = order_buy;
       const buyForm = document.getElementById("buyForm");
+
+      document.getElementById("load_modal").style.display = "block";
+      document.getElementById("content_modal").style.display = "none";
+
       buyForm.submit()
     }
   }
@@ -470,7 +490,7 @@
 
     /* Fills necessary input in the modal/popup window */
     document.getElementById("tickerInput").value = input_check;
-    document.getElementById("nameInput").value = company_name;
+    document.getElementById("nameInput").value = company_price + "/" + company_name;
     document.getElementById("assetTypeInput").value = quote_type;
 
     document.getElementById("superLabel").innerHTML = "Current price of " + company_name + " is: $" + company_price;
@@ -478,6 +498,9 @@
 
     var elmnt = document.getElementById("bgmodal");
     elmnt.scrollIntoView(true); // Scroll to Bottom
+
+    document.getElementById("load_modal").style.display = "none";
+    document.getElementById("content_modal").style.display = "block";
 
     popup.style.visibility = "visible";
   }
@@ -543,7 +566,7 @@
 
           /* Fills necessary input in the modal/popup window */
           document.getElementById("tickerInput").value = ticker;
-          document.getElementById("nameInput").value = data["companyName"];
+          document.getElementById("nameInput").value = data["price"] + "/" + data["companyName"];
           document.getElementById("assetTypeInput").value = data["quoteType"];
 
           document.getElementById("superLabel").innerHTML = "Current price of " + data["companyName"] + " is: $" + data["price"];
@@ -560,10 +583,90 @@
 
   }
 
+  function updateMarket() {
+    rowUpdate = document.querySelectorAll(".update");
+    rowUpdate1 = document.querySelectorAll(".update1");
+
+    document.getElementById("container1-load").style.display = "flex";
+    document.getElementById("container1").style.display = "none";
+    document.getElementById("container2-load").style.display = "flex";
+    document.getElementById("container2").style.display = "none";
+
+    titles = document.querySelectorAll(".title")
+
+    setTimeout(load10, 10000);
+    setTimeout(load20, 20000);
+    setTimeout(load30, 30000);
+    setTimeout(load50, 50000);
+    setTimeout(load100, 100000);
+
+    function load10() {
+      titles.forEach(x => {
+        x.innerHTML = "Still Loading ..."
+      })
+    }
+    function load20() {
+      titles.forEach(x => {
+        x.innerHTML = "Almost ..."
+      })
+    }
+    function load30() {
+      titles.forEach(x => {
+        x.innerHTML = "Few seconds to go ..."
+      })
+    }
+    function load50() {
+      titles.forEach(x => {
+        x.innerHTML = "Just finishing ..."
+      })
+    }
+    function load100() {
+      titles.forEach(x => {
+        x.innerHTML = "Error occurred!"
+      })
+    }
+
+
+
+    fetch("http://127.0.0.1:5000/updateMarket", {
+      method: "GET",
+      credentials: "include",
+      cache: "no-cache",
+      headers: new Headers({
+        "content-type": "application/json"
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+
+        price = data["price"]
+        fifty2WC = data["ytdChange"]
+
+        document.getElementById("container1-load").style.display = "none";
+        document.getElementById("container1").style.display = "block";
+        document.getElementById("container2-load").style.display = "none";
+        document.getElementById("container2").style.display = "block";
+
+        i = 0;
+        rowUpdate.forEach(row => {
+          row.innerHTML = "$ " + price[i];
+          i += 1;
+        })
+        i = 0;
+        rowUpdate1.forEach(row => {
+          row.innerHTML = fifty2WC[i] + " %";
+          i += 1;
+        })
+      })
+  }
+
 </script>
 
 
-<!--_________ SCRIPT that handles button behavior ___________-->
+
+
+
+<!--_________________ HANDLES BUTTON BEHAVIOR ___________-->
 <script>
 
 
@@ -637,6 +740,31 @@
     }
   }
 
+  function margin_handler(e) {
+    const margin2 = document.getElementById("margin_2");
+    const margin5 = document.getElementById("margin_5");
+    const margin10 = document.getElementById("margin_10");
+
+    if (e.id == "margin_1") {
+      margin1.className = "default-button marginBtn";
+      margin2.className = "default-button marginBtn-disabled";
+      margin5.className = "default-button marginBtn-disabled";
+      margin_x = 2;
+    }
+    if (e.id == "margin_2") {
+      margin2.className = "default-button marginBtn";
+      margin1.className = "default-button marginBtn-disabled";
+      margin5.className = "default-button marginBtn-disabled";
+      margin_x = 1;
+    }
+    if (e.id == "margin_5") {
+      margin5.className = "default-button marginBtn";
+      margin2.className = "default-button marginBtn-disabled";
+      margin1.className = "default-button marginBtn-disabled";
+      margin_x = 5;
+    }
+  }
+
 
 
   /*___________________Handles buy/sell buttons on click ______________*/
@@ -652,6 +780,8 @@
       if (block_loads == 1) { return; }
       block_loads = 1;
       ticker = parentElem.parentNode.parentNode.id;
+
+      if (id == "btnSell") { order_buy = 0; }
 
       // Shows the pop up window
       document.getElementById("bgmodal").style.visibility = "visible";
@@ -696,9 +826,11 @@
 <script>
   let block_loads = 0
   let order_buy = 1 // When processing order, 0 is SELL and 1 is BUY
+  let margin_x = 1
 
   window.onload = function () {
     build_graph("TSLA");
+    updateMarket()
   }
 </script>
 

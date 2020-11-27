@@ -53,11 +53,16 @@
     label.innerHTML = "";
 
     setTimeout(load2, 10000);
+    setTimeout(load3, 20000);
   }
 
   function load2() {
     const title = document.getElementById("title");
     title.innerHTML = "Still Loading";
+  }
+  function load3() {
+    const title = document.getElementById("title");
+    title.innerHTML = "Almost ...";
   }
 
   const navbar = document.getElementById("navbar");
