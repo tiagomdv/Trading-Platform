@@ -4,26 +4,126 @@
 
 {% block main %}
 
-<div>
+<div class="index-container">
 
-  {% if session.user_id %}
-    <h1>Welcome back!</h1>
-    <h5>You can now keep working on your stuff!</h5>
-    <h3>You are logged as: {{ username }}</h3>
-    <h3>Your password is: {{ password }}</h3>
-  {% else %}
-    {% if isreg %}
-    <h1>Welcome!</h1>
-    <h5>You can now LOGIN and begin exploring the app!</h5>
-    <h3>You are registered as: {{ username }}</h3>
-    <h3>Your password is: {{ password }}</h3>
-    {% else %}
-    <h2>Usernames in database: {{ usernames }}</h2>
-    <h2>Stock you should buy for sure: {{ quote }}</h2>
-    {% endif %}
-  {% endif %}
+  <div class="row">
+    <div class="col">
 
-  
+      {% if isreg %}
+      <div class="row row-title">
+        <h1>Hey {{ session.user_name }}!</h1>
+      </div>
+      <div class="row row-title row-sub-title">
+        <h5>Welcome. Set your initial cash in PROFILE tab in ACCOUNT to start!</h5>
+      </div>
+      <div class="row row-title row-sub-title">
+        <h5></h5>
+      </div>
+      {% endif %}
+
+      {% if logged %}
+        {% if logged == 10 %}
+        <div class="row row-title">
+          <h1>Welcome {{ session.user_name }}!</h1>
+        </div>
+        <div class="row row-title row-sub-title">
+          <h5>Confused? Take some time to read below and get a sense of how everything works. Also, check PROFILE in
+            ACCOUNT tab to set your initial cash and start building your portfolio!</h5>
+        </div>
+        {% else %}
+        <div class="row row-title">
+          <h1>Welcome back {{ session.user_name }}!</h1>
+        </div>
+        <div class="row row-title row-sub-title">
+          <h5>You can now keep working on your stuff!</h5>
+        </div>
+        {% endif %}
+      {% else %}
+        <div class="row row-title">
+          <h1>Hey!</h1>
+        </div>
+        <div class="row row-title row-sub-title">
+          <h5>Register an account and start using the application we built for you!</h5>
+        </div>
+      {% endif %}
+
+
+    </div>
+  </div>
+
+  <div class="row row-cols-2 index-row">
+
+    <div class="col index-first">
+
+      <div class="row row-title">
+        <p>Check data of your favorite stock!</p>
+      </div>
+
+      <div class="row row-text">
+        <p>Intuitive dashboard to get a sense of how your stock is performing. You can check the MARKET and either check
+          the top 5 stock assets or non stock assets that we chose for you or check for another stock in the bottom box
+          CHECK OTHER QUOTES by inserting the tycker symbol to get basic information about the stock and also visualize
+          its 5 year performance history.</p>
+      </div>
+
+
+    </div>
+
+    <div class="col index-container">
+      <img class="img-info" src="http://127.0.0.1:5500/templates/images/marketpage.jpg" alt="marketpage">
+
+    </div>
+
+  </div>
+
+
+  <div class="row row-cols-2 index-row">
+
+    <div class="col index-first">
+
+      <div class="row row-title">
+        <p>Your portfolio summary!</p>
+      </div>
+
+      <div class="row row-text">
+        <p>You can control your portfolio performance by consulting your WALLET. Check your returns in each stock or
+          overall. Get a sense of how much is your portfolio diversified.</p>
+      </div>
+
+
+    </div>
+
+    <div class="col index-container">
+      <img class="img-info" src="http://127.0.0.1:5500/templates/images/portfolio.png" alt="portfolio">
+
+    </div>
+
+  </div>
+
+
+  <div class="row row-cols-2 index-row">
+
+    <div class="col index-first">
+
+      <div class="row row-title">
+        <p>Control your personal expenses!</p>
+      </div>
+
+      <div class="row row-text">
+        <p>You are now able to control your everyday expenses and analyse where your money is being spent and take
+          action.</p>
+      </div>
+
+
+    </div>
+
+    <div class="col index-container">
+      <img class="img-info" src="http://127.0.0.1:5500/templates/images/expenses.png" alt="portfolio">
+
+    </div>
+
+  </div>
+
 </div>
 
 {% endblock %}

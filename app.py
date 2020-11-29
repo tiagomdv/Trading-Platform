@@ -21,22 +21,26 @@ Session(app)
 
 @app.route('/')
 def hello_world():
-    usernames = []
-    # ______Acess to database________
-    dbConnection = sqlite3.connect('finance.db') # connection
-    cursor = dbConnection.cursor()
+    try:
+        if session["user_id"]:
+            # ______Acess to database________
+            dbConnection = sqlite3.connect('finance.db') # connection
+            cursor = dbConnection.cursor()
 
-    cursor.execute("SELECT username FROM users")
-    user = cursor.fetchall() # gets the output from query
+            cursor.execute("SELECT cashset FROM users WHERE ID=?", (session["user_id"],))
+            temp = cursor.fetchall() # gets the output from query
+            cashset = temp[0][0]
 
-    cursor.close()
-    dbConnection.close()
-    # ____Close access to database___
+            if cashset == 0:
+                cashset = 10
 
-    for row in user:
-        usernames.append(row[0])
+            cursor.close()
+            dbConnection.close()
+            # ____Close access to database___
 
-    return render_template("index.html", quote="TESLA", usernames=usernames)
+            return render_template("index.html", logged=cashset)
+    except:
+        return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"]) # LOGIN REGISTER
@@ -99,7 +103,7 @@ def login():
         cursor.close()
         dbConnection.close()
         # ____Close access to database___          
-        return render_template("index.html", username=username, password=password)   
+        return render_template("index.html", username=username, password=password, logged=1)   
 
 
 @app.route("/register", methods=["GET", "POST"]) # Handles REGISTRY
@@ -198,12 +202,20 @@ def market():
 @login_req
 def wallet():
     temp = getStockHistory()
-    history = temp[0]
-    cash = calculate_cash()
+    if temp is not None:
+        history = temp[0]
 
      # ______Acess to database________
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
+
+    # is cash already set ?
+    cursor.execute("SELECT cashset FROM users WHERE ID=?", (session["user_id"],))
+    temp = cursor.fetchall()
+    initial_cash = temp[0][0]
+
+    if initial_cash == 0:
+        return render_template("wallet.html",portfolio=0, cashInvested=[0, 0], cashPosition=[0, 0], username=session["user_name"],  uRet=0, pRet=0)
 
     # Get initial cash
     cursor.execute("SELECT initialcash FROM users WHERE ID=?", (session["user_id"],))
@@ -371,6 +383,12 @@ def getPrice():
 
 @app.route("/buy", methods=["POST"])
 def buyStock():
+    buy_error = 0
+    history_temp = getStockHistory()
+    history = 0
+    if history_temp is not None:
+        history = history_temp[0]
+
     # ______Acess to database________
     dbConnection = sqlite3.connect('finance.db') # connection
     cursor = dbConnection.cursor()
@@ -386,51 +404,70 @@ def buyStock():
     ticker = request.form.get("tickerSymbol").upper()
     assetType = request.form.get("assetType")
     shares = request.form.get("numberShares")
+    shares = int(shares)
     margin_x = request.form.get("margin_x")
-
-    
-
+ 
     # Get cash position
     cursor.execute("SELECT cash FROM users WHERE username=?", (session["user_name"],))
     temp = cursor.fetchall() # gets the output from query
     cashCurrent = temp[0][0]
     userid = session["user_id"]
+    
+    cashSpent = float(price) * int(shares)
 
     if int(buy_order) == 1: # BUY order 
-        isBuy = 1
-        shares = int(shares)
+        isBuy = 1        
+
+        if cashCurrent > cashSpent:
+            cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price, typeasset) VALUES (date(), ?, ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price, assetType))  
+
+             # Updates cash position
+            cashUpdate = cashCurrent - cashSpent
+            cursor.execute("UPDATE users SET cash=? WHERE id=?", (cashUpdate, userid))
+        else:
+            buy_error = 1
     else: # SELL order
-        isBuy = 2
-        shares = int(shares) * (-1)
+        cursor.execute("SELECT number FROM stocks WHERE symbol=? AND ID=?", (ticker, userid))
+        temp = cursor.fetchall()
+        temp_shares = 0
+        for row in temp:
+            temp_shares += row[0]
+        isBuy = 2        
 
-    cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price, typeasset) VALUES (date(), ?, ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price, assetType))     
+        if temp_shares > shares:
+            shares = int(shares) * (-1)
+            cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price, typeasset) VALUES (date(), ?, ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price, assetType))
+        else:
+            buy_error = 2         
 
-    # Updates cash position
-    cashSpent = float(price) * int(shares)
-    cashUpdate = cashCurrent - cashSpent
-    cursor.execute("UPDATE users SET cash=? WHERE id=?", (cashUpdate, userid))
+    cash = calculate_cash()
+    # Get stock shares number
+    cursor.execute("SELECT symbol, sum(number) FROM stocks WHERE ID=? GROUP BY symbol", (session["user_id"],))
+    temp = cursor.fetchall()
+
+    stock_info = {}
+    for row in temp:
+        stock_info[row[0]] = row[1] 
+
+    temp = session["all_stock_price"]
+    portfolio_value = 0
+
+    if len(temp) >= 1:
+        for row in temp:
+            portfolio_value += temp[row] * stock_info[row]
+
+    temp = getCashPosition()
+    portfolio = portfolio_value + temp[0]
+
 
     dbConnection.commit() # Applies changes
     cursor.close() # Closes access to database
     dbConnection.close()   
 
-    cash = calculate_cash()
-    temp = getStockHistory()
-    history = temp[0]
+    if history == 0:
+        return render_template("wallet.html", ticker=ticker, shares=shares, isBuy=isBuy, cashPosition=cash[0], cashInvested=cash[1], cashTotal=cash[2], portfolio=portfolio, uRoi=0, pRoi=0, error=buy_error)   
 
-    if isBuy == 2:
-        shares = shares * (-1)
-
-    temp = session["all_stock_price"]
-    portfolio_value = 0
-
-    for row in temp:
-        portfolio_value += temp[row] * stock_info[row]
-
-    temp = getCashPosition()
-    portfolio = portfolio_value + temp[0]
-
-    return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=isBuy, cashPosition=cash[0], cashInvested=cash[1], cashTotal=cash[2], portfolio=portfolio, uRoi=history[1], pRoi=history[2], error=1)
+    return render_template("wallet.html", history=history, ticker=ticker, shares=shares, isBuy=isBuy, cashPosition=cash[0], cashInvested=cash[1], cashTotal=cash[2], portfolio=portfolio, uRoi=history_temp[1], pRoi=history_temp[2], error=buy_error)
 
 
 @app.route("/getHistoricalData", methods=["POST"])

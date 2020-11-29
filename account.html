@@ -72,7 +72,7 @@
               <tr class="td-market">
                 <td scope="col">{{ row[2] }}</td>
                 <td>{{ row[0] }}</td>
-                <td>{{ row[1] }} €</td>
+                <td>$ {{ row[1] }}</td>
               </tr>
               {% endfor %}
 
@@ -84,52 +84,61 @@
 
 
       <!-- _____________________  EXPENSE ADD FORM ______________________ -->
-      <div class="col container-wborder secCol-ExpTab">
+      <div class="col secCol-ExpTab">
         <div class="row">
+
           <div class="container">
 
             <form action="#" method="post">
               <div class="form-row">
+
                 <div class="col-md-3 mb-3">
                   <label class="label-profile">Type</label>
                   <input type="text" class="form-control buildData" placeholder="Type">
                 </div>
+
                 <div class="col-md-4 mb-3">
                   <label class="label-profile">Expense</label>
                   <input type="text" class="form-control buildData" placeholder="Expense">
                 </div>
+
                 <div class="col-md-3 mb-3">
                   <label class="label-profile">Cost</label>
                   <input type="text" class="form-control buildData" placeholder="Cost">
                 </div>
+
                 <div class="col">
                   <label style="visibility: hidden;">Cost</label>
                   <button class="default-button button-changes-expenses" onclick="createRow()">Add</button>
                 </div>
+
               </div>
             </form>
+
           </div>
 
         </div>
+
         <div class="row" style="justify-content: center; display: grid;">
           <div class="col">
             <label class="labelAddExp"></label>
             <a class="default-button button-changes-expenses-1" href="/account">Refresh</a>
           </div>
         </div>
+
       </div>
 
 
     </div>
     <!-- _________________ Second row with pie chart ____________________ -->
-    <div class="row">
+    <div class="row" height="300px">
 
       <div class="col container-wborder">
         <div id="pie-chart"><canvas id="canvas" width="500px" height="500px"></canvas>
         </div>
       </div>
 
-      <div class="col secCol-ExpTab2 container-wborder">
+      <div class="col secCol-ExpTab2">
         <div class="row table-title">
           <h6>New Additions</h6>
         </div>

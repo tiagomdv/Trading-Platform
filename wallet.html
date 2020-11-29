@@ -5,9 +5,16 @@
 {% block main %}
 
 {% if error %}
+{% if error == 1 %}
 <div id="alarmContainer" class="container alarmContainer-error">
-	<p>We can´t process the buy order. Not enough margin available.</p>
+	<p>We can´t process the buy order. Not enough cash available.</p>
 </div>
+{% endif %}
+{% if error == 2 %}
+<div id="alarmContainer" class="container alarmContainer-error">
+	<p>We can´t process the sell order. Not enough shares available.</p>
+</div>
+{% endif %}
 {% else %}
 {% if isBuy %}
 {% if isBuy == 1 %}
@@ -42,6 +49,7 @@
 				</thead>
 				<tbody>
 
+					{% if history %}
 					{% for row in history %}
 					<tr class="td-market">
 						<th class="walletHeadRow" scope="col" onclick="getAssetData(this)">{{ row[6] }}</th>
@@ -53,6 +61,11 @@
 						<td>{{ row[5] }} %</td>
 					</tr>
 					{% endfor %}
+					{% else %}
+					<tr class="td-market">
+						<th class="walletHeadRow" scope="col" onclick="getAssetData(this)">Empty!</th>
+					</tr>
+					{% endif %}
 
 				</tbody>
 			</table>
@@ -73,7 +86,7 @@
 
 			<div class="row box-rows-wallet-title" style="display:flex">
 				<div class="firstCol">
-					<p>cash summary</p>
+					<p>Cash Summary</p>
 				</div>
 			</div>
 
@@ -381,7 +394,7 @@
 			alarmContainer.style.display = "none";
 		}
 	}
-	setTimeout(hideAlarmContainer, 3000);
+	setTimeout(hideAlarmContainer, 5000);
 
 
 </script>

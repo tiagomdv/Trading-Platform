@@ -69,6 +69,9 @@ def getStockHistory():
     history = []
 
     # Takes the query results and creates dicts with price and share number of all stock
+    if len(temp) == 0:
+        return
+
     for row in temp:
         if row[0] not in numberDict:
             numberDict[row[0]] = []

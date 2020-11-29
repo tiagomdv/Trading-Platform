@@ -25,7 +25,7 @@
   <body>
 
     <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand iconBtn" href="/"><i class="fas fa-money-check-alt fa-3x"></i> </a>
+        <a class="navbar-brand iconBtn" href="/" name="goBtn"><i class="fas fa-money-check-alt fa-3x"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -55,7 +55,7 @@
 
     {% if session.user_id %}<div id="loggedIn"></div>{% endif %}
     
-    <form id="goWallet" action="/wallet" method="get" style="display: none"></form>
+    <form id="goWallet" action="/" method="get" style="display: none"></form>
 
     <script>
       const logged = document.getElementById("loggedIn");
@@ -89,6 +89,9 @@
         }
         else if (text === "Logout") {
           $("#goWallet").attr("action", "/logout");
+        }
+        else if (text === "") {
+          $("#goWallet").attr("action", "/");
         }
 
         $("#goWallet").submit()
