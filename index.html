@@ -14,37 +14,37 @@
         <h1>Hey {{ session.user_name }}!</h1>
       </div>
       <div class="row row-title row-sub-title">
-        <h5>Welcome. Set your initial cash in PROFILE tab in ACCOUNT to start!</h5>
+        <h5>Welcome. LOGIN and set your initial cash in PROFILE tab in ACCOUNT to start!</h5>
       </div>
       <div class="row row-title row-sub-title">
         <h5></h5>
       </div>
-      {% endif %}
-
-      {% if logged %}
-        {% if logged == 10 %}
-        <div class="row row-title">
-          <h1>Welcome {{ session.user_name }}!</h1>
-        </div>
-        <div class="row row-title row-sub-title">
-          <h5>Confused? Take some time to read below and get a sense of how everything works. Also, check PROFILE in
-            ACCOUNT tab to set your initial cash and start building your portfolio!</h5>
-        </div>
-        {% else %}
-        <div class="row row-title">
-          <h1>Welcome back {{ session.user_name }}!</h1>
-        </div>
-        <div class="row row-title row-sub-title">
-          <h5>You can now keep working on your stuff!</h5>
-        </div>
-        {% endif %}
       {% else %}
-        <div class="row row-title">
-          <h1>Hey!</h1>
-        </div>
-        <div class="row row-title row-sub-title">
-          <h5>Register an account and start using the application we built for you!</h5>
-        </div>
+      {% if logged %}
+      {% if logged == 10 %}
+      <div class="row row-title">
+        <h1>Welcome {{ session.user_name }}!</h1>
+      </div>
+      <div class="row row-title row-sub-title">
+        <h5>Confused? Take some time to read below and get a sense of how everything works. Also, check PROFILE in
+          ACCOUNT tab to set your initial cash and start building your portfolio!</h5>
+      </div>
+      {% else %}
+      <div class="row row-title">
+        <h1>Welcome back {{ session.user_name }}!</h1>
+      </div>
+      <div class="row row-title row-sub-title">
+        <h5>You can now keep working on your stuff!</h5>
+      </div>
+      {% endif %}
+      {% else %}
+      <div class="row row-title">
+        <h1>Hey!</h1>
+      </div>
+      <div class="row row-title row-sub-title">
+        <h5>Register an account and start using the application we built for you!</h5>
+      </div>
+      {% endif %}
       {% endif %}
 
 

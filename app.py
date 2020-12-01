@@ -71,11 +71,11 @@ def login():
 
         # Gets the cash position from  the database
         cursor.execute("SELECT username, password, cashset, ID FROM users WHERE username=?",(username,))
-        user = cursor.fetchall() # gets the output from query
-        cashset = user[0][2]
+        user = cursor.fetchall() # gets the output from query        
 
         # Checks if already exist username in database
-        if len(user) > 0:            
+        if len(user) > 0: 
+            cashset = user[0][2]           
             session["user_name"] = user[0][0]
             session["user_id"] = user[0][3]
             session["recentLog"] = 1
@@ -202,6 +202,7 @@ def market():
 @login_req
 def wallet():
     temp = getStockHistory()
+    history = 0
     if temp is not None:
         history = temp[0]
 
@@ -241,7 +242,7 @@ def wallet():
         portfolio_value += temp[row] * stock_info[row]
 
     cash = getCashPosition()
-    portfolio = portfolio_value + cash[0]
+    portfolio = round(portfolio_value + cash[0], 2)
 
     unit_return = round(portfolio - initial_cash, 2)
     perc_return = round((portfolio / initial_cash) - 1, 2)
@@ -297,8 +298,8 @@ def account():
         if initialcash is not None:
             if float(initialcash) > 0:     
                 # Update user info
-                margin_accepted = initialcash * 1.5
-                cursor.execute("UPDATE users SET margin, initialcash, cash=?, cashset=1 WHERE ID=?", (margin_accepted, initialcash ,initialcash, userid))
+                margin_accepted = float(initialcash) * 1.5
+                cursor.execute("UPDATE users SET margin=?, initialcash=?, cash=?, cashset=1 WHERE ID=?", (margin_accepted, initialcash,initialcash, userid))
                 session["cash_set"] = 1
         else:
             if password:
@@ -434,11 +435,16 @@ def buyStock():
             temp_shares += row[0]
         isBuy = 2        
 
-        if temp_shares > shares:
+        if temp_shares >= shares:
             shares = int(shares) * (-1)
             cursor.execute("INSERT INTO stocks (date, symbol, number, name, ID, price, typeasset) VALUES (date(), ?, ?, ?, ?, ?, ?)", (ticker, shares, companyName, userid, price, assetType))
+
+            # Updates cash position
+            cashUpdate = cashCurrent - cashSpent
+            cursor.execute("UPDATE users SET cash=? WHERE id=?", (cashUpdate, userid))
         else:
-            buy_error = 2         
+            buy_error = 2   
+        shares = int(shares) * (-1)      
 
     cash = calculate_cash()
     # Get stock shares number

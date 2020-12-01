@@ -122,7 +122,7 @@ def getStockHistory():
         except:
             currentStockPrice = getStockPrice(symbolDict[row])
 
-        average_price = temp_price / temp_number_pos
+        average_price = round(temp_price / temp_number_pos, 2)
         total_cost = average_price * numShares         
 
         value = round((numShares * currentStockPrice), 2) 
